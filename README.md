@@ -1,7 +1,6 @@
-# rag-platform: permission-aware multi-tenant RAG on Neon + pgvector
+# TenantGate: permission-aware multi-tenant RAG on Neon + pgvector
 
-[![ci](https://github.com/OWNER/REPO/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/ci.yml)
-<!-- replace OWNER/REPO with the GitHub repository once it exists -->
+[![ci](https://github.com/S-2007/TenantGate/actions/workflows/ci.yml/badge.svg)](https://github.com/S-2007/TenantGate/actions/workflows/ci.yml)
 
 Status: **Phase 4, live permissions and attack testing.**
 - **Phase 1:** naive baseline, with no auth and no ACL.
