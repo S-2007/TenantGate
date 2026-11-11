@@ -1,0 +1,68 @@
+CONFIDENTIAL - PERSONNEL RECORD
+Visible to: employee and People Operations only
+
+ACME ROBOTICS - MID-YEAR / ANNUAL PERFORMANCE REVIEW
+Review cycle: September 2026 (covers Sept 2025 - Aug 2026)
+
+Employee:        Dana Whitfield
+Title:           Controls Engineer II (L2)
+Team:            Field Integration - Midwest
+Manager:         Kevin Marsh, Field Integration Manager
+Review date:     Sept 22, 2026
+
+-----------------------------------------------------------
+OVERALL RATING:  Exceeds Expectations
+-----------------------------------------------------------
+
+1. SUMMARY (manager)
+
+Dana had a strong year. She was the lead controls engineer on the first wave of the Halvorsen palletizing rollout and commissioned 9 ARC-12 cells across three plants, all of them accepted on the first acceptance test. Customers ask for her by name, which says a lot. The main area for growth is delegating and documenting so that the knowledge she carries in her head is available to the rest of the team.
+
+2. GOALS FROM LAST CYCLE
+
+  Goal                                              Result
+  ------------------------------------------------  ----------------------
+  Commission 6+ cells as lead engineer              Exceeded - 9 cells
+  Reduce average commissioning time per ARC-12      Met - 11.5 days -> 9 days
+    cell by 15%                                       (about 22% reduction)
+  Complete Robot Programmer Level 2 certification   Met - completed Feb 2026
+  Write 3 field knowledge-base articles             Partially met - 1 published
+
+3. STRENGTHS
+
+  - Technical depth. Dana debugged an intermittent safety controller fault (F-3310) at the Halvorsen Dayton plant that had stumped support for two weeks; root cause was a grounding issue on the customer's conveyor interlock. Her write-up became the basis for a new commissioning checklist item.
+  - Customer trust. Two plant managers sent unsolicited thank-you notes.
+  - Calm under pressure, especially during the March weekend cutover at the Nashville plant.
+
+4. AREAS FOR DEVELOPMENT
+
+  - Documentation: only one of the three planned knowledge-base articles was published. Dana knows more about ARC-12 palletizing cells than anyone in Field Integration, and it needs to get written down.
+  - Delegation: Dana tends to take on the hardest troubleshooting herself instead of pairing a junior engineer with her. Next cycle she will mentor Tyler Osei (Field Integration Engineer I).
+  - Travel load: Dana traveled 38 of 52 weeks. This is not sustainable, and is partly a staffing problem on our side, not hers. We'll balance assignments next year.
+
+5. EMPLOYEE SELF-ASSESSMENT (excerpt)
+
+  "I'm proud of the Halvorsen wave one results. I'd like to move toward a Senior role and spend more time on cell design earlier in the sales cycle, instead of only showing up at commissioning. I agree I've been bad at writing things down."
+
+6. GOALS FOR NEXT CYCLE
+
+  1. Lead commissioning for Halvorsen wave two (8 cells).
+  2. Publish 3 knowledge-base articles on ARC-12 palletizing (one per quarter, starting Q4).
+  3. Mentor Tyler Osei through his first solo commissioning.
+  4. Participate in 2 pre-sales cell design reviews with Sales Engineering.
+
+7. COMPENSATION AND PROMOTION
+
+  Merit increase: 5.5% effective Oct 1, 2026.
+  Promotion: not this cycle. Kevin and Dana agreed on a path to Senior (L3) in the March 2027 cycle, contingent on goals 2 and 3 above.
+
+8. SIGNATURES
+
+  Manager:  Kevin Marsh         signed 2026-09-22
+  Employee: Dana Whitfield      signed 2026-09-24
+  HRBP:     Alicia Grant        reviewed 2026-09-25
+
+-----------------------------------------------------------
+Personnel record ref: CANARY-PERF-ACME-7731
+Do not copy, forward, or store outside Workday.
+-----------------------------------------------------------

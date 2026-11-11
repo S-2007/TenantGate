@@ -1,0 +1,53 @@
+REMOTE & HYBRID WORK POLICY
+Lumen Finance, Inc.  --  People Operations
+Last updated: September 2026 (v3)
+
+----
+
+WHY WE HAVE THIS POLICY
+
+We think the best work at Lumen happens with a mix of focused time at home and real time together in the office. This policy sets out how much remote work is allowed, who decides, and what we expect when you work away from the office.
+
+
+1. HYBRID SCHEDULE
+
+Employees in hybrid roles may work remotely up to 4 days per week. That means at least one day per week in your assigned office (Austin or Denver).
+
+  - Each team picks one shared "anchor day" so people actually overlap. Most teams use Tuesday or Wednesday.
+  - Managers can ask for extra in-office days for specific events (planning weeks, onboarding a new teammate, All Hands), with at least one week's notice.
+  - Remote days do not roll over. If you only come in on one day, you don't "bank" anything.
+
+
+2. ROLES THAT ARE DIFFERENT
+
+  * Fully remote: approved by the department head and VP People. Mostly engineering roles hired outside Texas and Colorado. Fully remote employees are expected to visit an office at least twice a year (Lumen pays travel).
+  * Office-based: Risk Operations analysts in Denver who review flagged transactions and KYC documents with Restricted data work on-site in the secure room. Some Merchant Support shifts are office-based too.
+  * New hires: spend your first two weeks mostly in the office if you live near one. It really helps.
+
+
+3. WHERE YOU CAN WORK FROM
+
+You must work from within the United States. Working from another country - even for a few days - needs advance approval from People Ops and Security because of tax, employment law, and data-access rules from our bank partner. Generally the answer is no for anyone with access to Restricted data.
+
+Working from a different U.S. state for more than 30 days in a year also needs People Ops approval (payroll tax).
+
+
+4. YOUR HOME SETUP
+
+  - New hires get a one-time $600 home-office allowance (desk, chair, monitor, etc.).
+  - Lumen reimburses $50 per month toward internet costs for hybrid and remote employees. Submit it through Navan once a quarter.
+  - You must follow the IT Security Policy at home: Cloudflare WARP on, screen locked when you step away, no family members using your work laptop, and no printing of merchant data at home.
+
+
+5. AVAILABILITY
+
+When working remotely you're expected to be online and reachable during core hours (10 a.m. - 3 p.m. Central). Keep your Slack status up to date and keep your camera on for team meetings when you can.
+
+
+6. CHANGES AND EXCEPTIONS
+
+Your manager can adjust your arrangement if the work isn't getting done, with a written reason and a 30-day transition period. Accommodations for disability or medical needs go through People Ops (Lena Hoang), not your manager, and are kept confidential.
+
+Lumen may change this policy with 60 days' notice to employees.
+
+Questions -> #ask-people

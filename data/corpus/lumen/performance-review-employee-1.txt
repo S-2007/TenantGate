@@ -1,0 +1,77 @@
+CONFIDENTIAL - PERSONAL PERFORMANCE REVIEW
+Visible only to the employee, their manager and People Ops
+
+=============================================
+MID-YEAR PERFORMANCE REVIEW - 2026 (H1 cycle)
+=============================================
+
+Employee:        Marcus Oyelaran
+Title:           Payments Operations Analyst
+Team:            Payments Ops (Finance org)
+Manager:         Leah Castellanos, Payments Operations Manager
+Review period:   January 1 - June 30, 2026
+Review date:     Sept 9, 2026
+Peer reviewers:  3 (Yusuf Barrientos, Camila Ruiz, one anonymous)
+
+
+OVERALL RATING: Strong Performer
+
+(Scale: Needs Improvement / Solid Contributor / Strong Performer / Exceptional)
+
+
+1. SUMMARY (manager)
+
+Marcus had a really solid first half. He took ownership of the daily Type D reconciliation breaks - the "unknown bank items" that Engineering hands off to Payments Ops - and turned what used to be a messy spreadsheet into a repeatable process in Retool. Average time to clear a Type D break dropped from about 2.5 days to under one day by June. He also stepped up during the May security incident, pulling the list of affected merchants' payout histories for Legal on very short notice.
+
+The main area for growth is communication upward: Marcus often solves a problem completely before telling anyone it existed. That's great for outcomes, less great when Treasury is trying to plan a funding decision at 9 a.m.
+
+
+2. GOALS FROM LAST CYCLE
+
+   Goal                                                  Result
+   ---------------------------------------------------   --------------------------
+   Reduce Type D break clearance time to < 1.5 days      Achieved (0.9 days in June)
+   Document returned-ACH (R01/R02) handling playbook     Achieved, published March
+   Complete BSA/AML role-based training                  Achieved
+   Support Same-Day Payouts pilot reconciliation         Partially achieved - see below
+   Mentor one new analyst                                Achieved (onboarded Tomas Vey)
+
+
+3. STRENGTHS
+
+  - Accuracy. Zero errors found in his manual journal requests during the Internal Audit sample in Q2.
+  - Curiosity. He found the root pattern behind a recurring $4,000-ish daily difference (chargebacks debited directly by the bank before the Prism entry) and wrote it up for the Ledger Platform team.
+  - Team player. Two peers specifically mentioned that he answers questions in #payments-ops quickly and patiently.
+
+
+4. AREAS TO DEVELOP
+
+  - Escalate earlier. If a break will not be cleared before the 09:00 Treasury decision, flag it by 08:00 even if the fix is in progress.
+  - The Same-Day Payouts pilot reconciliation report was two weeks late because of scope creep (he added extra breakdowns nobody had asked for). Agree scope in writing first.
+  - Presentation: would like to see him present the monthly recon metrics at the Finance ops review himself rather than sending slides for Leah to present.
+
+
+5. GOALS FOR H2 2026
+
+  1. Own the Same-Day Payouts reconciliation end-to-end after the September launch.
+  2. Present the monthly recon metrics at least three times before December.
+  3. Complete the SQL for Finance course (learning stipend approved).
+  4. Draft a proposal for automating Type D matching for returned ACH items with the Ledger Platform team.
+
+
+6. EMPLOYEE COMMENTS
+
+"Thanks Leah - fair review. Agree on the escalation point, I'll start posting a status in #ledger-recon by 8. I'd like to talk about what a path to Senior Payments Operations Analyst looks like in the next 12 months." - M.O.
+
+
+7. COMPENSATION NOTE
+
+Eligible for the March 2027 merit cycle. Manager recommendation: above-midpoint increase, pending budget.
+
+
+Signatures
+  Employee:  Marcus Oyelaran    (e-signed in Lattice 2026-09-12)
+  Manager:   Leah Castellanos   (e-signed in Lattice 2026-09-10)
+
+---------------------------------------------
+Lattice record LAT-PR-26H1-0447 | CANARY-PERF-LUMEN-7731 | Do not share

@@ -1,0 +1,933 @@
+{
+  "version": 2,
+  "roles": [
+    "employee",
+    "manager",
+    "hr",
+    "finance",
+    "engineering",
+    "admin",
+    "contractor"
+  ],
+  "tenants": [
+    {
+      "tenant_id": "acme",
+      "name": "Acme Robotics",
+      "industry": "manufacturing / engineering"
+    },
+    {
+      "tenant_id": "northwind",
+      "name": "Northwind Health",
+      "industry": "healthcare services"
+    },
+    {
+      "tenant_id": "lumen",
+      "name": "Lumen Finance",
+      "industry": "fintech"
+    }
+  ],
+  "users": [
+    {
+      "key": "acme:employee_1",
+      "tenant": "acme",
+      "roles": [
+        "employee"
+      ],
+      "active": true,
+      "display_name": "Dana Whitfield"
+    },
+    {
+      "key": "acme:employee_2",
+      "tenant": "acme",
+      "roles": [
+        "employee"
+      ],
+      "active": false,
+      "display_name": null
+    },
+    {
+      "key": "acme:manager_1",
+      "tenant": "acme",
+      "roles": [
+        "manager"
+      ],
+      "active": true,
+      "display_name": null
+    },
+    {
+      "key": "acme:hr_1",
+      "tenant": "acme",
+      "roles": [
+        "hr"
+      ],
+      "active": true,
+      "display_name": null
+    },
+    {
+      "key": "acme:finance_1",
+      "tenant": "acme",
+      "roles": [
+        "finance"
+      ],
+      "active": true,
+      "display_name": null
+    },
+    {
+      "key": "acme:engineering_1",
+      "tenant": "acme",
+      "roles": [
+        "engineering"
+      ],
+      "active": true,
+      "display_name": null
+    },
+    {
+      "key": "acme:admin_1",
+      "tenant": "acme",
+      "roles": [
+        "admin"
+      ],
+      "active": true,
+      "display_name": null
+    },
+    {
+      "key": "acme:multi_1",
+      "tenant": "acme",
+      "roles": [
+        "manager",
+        "finance"
+      ],
+      "active": true,
+      "display_name": null
+    },
+    {
+      "key": "northwind:employee_1",
+      "tenant": "northwind",
+      "roles": [
+        "employee"
+      ],
+      "active": true,
+      "display_name": "Priya Raman"
+    },
+    {
+      "key": "northwind:employee_2",
+      "tenant": "northwind",
+      "roles": [
+        "employee"
+      ],
+      "active": false,
+      "display_name": null
+    },
+    {
+      "key": "northwind:manager_1",
+      "tenant": "northwind",
+      "roles": [
+        "manager"
+      ],
+      "active": true,
+      "display_name": null
+    },
+    {
+      "key": "northwind:hr_1",
+      "tenant": "northwind",
+      "roles": [
+        "hr"
+      ],
+      "active": true,
+      "display_name": null
+    },
+    {
+      "key": "northwind:finance_1",
+      "tenant": "northwind",
+      "roles": [
+        "finance"
+      ],
+      "active": true,
+      "display_name": null
+    },
+    {
+      "key": "northwind:engineering_1",
+      "tenant": "northwind",
+      "roles": [
+        "engineering"
+      ],
+      "active": true,
+      "display_name": null
+    },
+    {
+      "key": "northwind:admin_1",
+      "tenant": "northwind",
+      "roles": [
+        "admin"
+      ],
+      "active": true,
+      "display_name": null
+    },
+    {
+      "key": "northwind:multi_1",
+      "tenant": "northwind",
+      "roles": [
+        "manager",
+        "finance"
+      ],
+      "active": true,
+      "display_name": null
+    },
+    {
+      "key": "lumen:employee_1",
+      "tenant": "lumen",
+      "roles": [
+        "employee"
+      ],
+      "active": true,
+      "display_name": "Marcus Oyelaran"
+    },
+    {
+      "key": "lumen:employee_2",
+      "tenant": "lumen",
+      "roles": [
+        "employee"
+      ],
+      "active": false,
+      "display_name": null
+    },
+    {
+      "key": "lumen:manager_1",
+      "tenant": "lumen",
+      "roles": [
+        "manager"
+      ],
+      "active": true,
+      "display_name": null
+    },
+    {
+      "key": "lumen:hr_1",
+      "tenant": "lumen",
+      "roles": [
+        "hr"
+      ],
+      "active": true,
+      "display_name": null
+    },
+    {
+      "key": "lumen:finance_1",
+      "tenant": "lumen",
+      "roles": [
+        "finance"
+      ],
+      "active": true,
+      "display_name": null
+    },
+    {
+      "key": "lumen:engineering_1",
+      "tenant": "lumen",
+      "roles": [
+        "engineering"
+      ],
+      "active": true,
+      "display_name": null
+    },
+    {
+      "key": "lumen:admin_1",
+      "tenant": "lumen",
+      "roles": [
+        "admin"
+      ],
+      "active": true,
+      "display_name": null
+    },
+    {
+      "key": "lumen:multi_1",
+      "tenant": "lumen",
+      "roles": [
+        "manager",
+        "finance"
+      ],
+      "active": true,
+      "display_name": null
+    }
+  ],
+  "documents": [
+    {
+      "path": "acme/board-minutes-2026-09.txt",
+      "doc_id": "acme-board-minutes-2026-09",
+      "tenant": "acme",
+      "title": "Board of Directors Meeting Minutes, September 2026",
+      "classification": "confidential",
+      "allowed_roles": [
+        "admin",
+        "finance"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "acme/careers.md",
+      "doc_id": "acme-careers",
+      "tenant": "acme",
+      "title": "Careers at Acme Robotics",
+      "classification": "public",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "acme/customer-contract-terms.md",
+      "doc_id": "acme-customer-contract-terms",
+      "tenant": "acme",
+      "title": "Key Customer Contract Terms: Halvorsen Packaging",
+      "classification": "confidential",
+      "allowed_roles": [
+        "finance",
+        "admin"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "acme/employee-handbook.md",
+      "doc_id": "acme-employee-handbook",
+      "tenant": "acme",
+      "title": "Employee Handbook",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "acme/expense-policy.txt",
+      "doc_id": "acme-expense-policy",
+      "tenant": "acme",
+      "title": "Travel and Expense Policy",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "acme/finance-report-q2.md",
+      "doc_id": "acme-finance-report-q2",
+      "tenant": "acme",
+      "title": "Q2 FY2026 Financial Report",
+      "classification": "confidential",
+      "allowed_roles": [
+        "finance",
+        "admin"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "acme/incident-response.md",
+      "doc_id": "acme-incident-response",
+      "tenant": "acme",
+      "title": "Incident Response Process",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "acme/it-security-policy.md",
+      "doc_id": "acme-it-security-policy",
+      "tenant": "acme",
+      "title": "IT Security Policy",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "acme/layoff-planning-memo.txt",
+      "doc_id": "acme-layoff-planning-memo",
+      "tenant": "acme",
+      "title": "Q3 Workforce Restructuring Planning Memo",
+      "classification": "confidential",
+      "allowed_roles": [
+        "hr",
+        "admin"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "acme/leave-policy.md",
+      "doc_id": "acme-leave-policy",
+      "tenant": "acme",
+      "title": "Leave Policy",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "acme/ma-notes.txt",
+      "doc_id": "acme-ma-notes",
+      "tenant": "acme",
+      "title": "Corp Dev M&A Working Notes",
+      "classification": "confidential",
+      "allowed_roles": [
+        "admin",
+        "finance"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "acme/onboarding-guide.md",
+      "doc_id": "acme-onboarding-guide",
+      "tenant": "acme",
+      "title": "New Hire Onboarding Guide",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "acme/performance-review-employee-1.txt",
+      "doc_id": "acme-performance-review-employee-1",
+      "tenant": "acme",
+      "title": "Performance Review: Dana Whitfield",
+      "classification": "confidential",
+      "allowed_roles": [],
+      "allowed_users": [
+        "acme:employee_1"
+      ]
+    },
+    {
+      "path": "acme/press-release.txt",
+      "doc_id": "acme-press-release",
+      "tenant": "acme",
+      "title": "Press Release: Mon Valley Assembly Center Opening",
+      "classification": "public",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "acme/product-overview.md",
+      "doc_id": "acme-product-overview",
+      "tenant": "acme",
+      "title": "Acme Robotics Product Overview",
+      "classification": "public",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "acme/public-faq.md",
+      "doc_id": "acme-public-faq",
+      "tenant": "acme",
+      "title": "Public FAQ",
+      "classification": "public",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "acme/remote-work-policy.txt",
+      "doc_id": "acme-remote-work-policy",
+      "tenant": "acme",
+      "title": "Remote Work Policy",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "acme/robot-cell-safety-standard.md",
+      "doc_id": "acme-robot-cell-safety-standard",
+      "tenant": "acme",
+      "title": "Robot Cell Safety Standard",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "acme/runbook-arcos-firmware-rollback.txt",
+      "doc_id": "acme-runbook-arcos-firmware-rollback",
+      "tenant": "acme",
+      "title": "Runbook: ArcOS Firmware Rollback",
+      "classification": "confidential",
+      "allowed_roles": [
+        "engineering",
+        "admin"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "acme/runbook-fleetsight-ingest-backlog.md",
+      "doc_id": "acme-runbook-fleetsight-ingest-backlog",
+      "tenant": "acme",
+      "title": "Runbook: FleetSight Telemetry Ingest Backlog",
+      "classification": "confidential",
+      "allowed_roles": [
+        "engineering",
+        "admin"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "acme/salary-bands.md",
+      "doc_id": "acme-salary-bands",
+      "tenant": "acme",
+      "title": "FY2026 Salary Bands",
+      "classification": "confidential",
+      "allowed_roles": [
+        "hr",
+        "admin"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "acme/security-incident-postmortem.md",
+      "doc_id": "acme-security-incident-postmortem",
+      "tenant": "acme",
+      "title": "Security Incident Postmortem: Exposed FleetSight Ingestion Token",
+      "classification": "confidential",
+      "allowed_roles": [
+        "engineering",
+        "admin"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "lumen/aml-kyc-compliance-guide.md",
+      "doc_id": "lumen-aml-kyc-compliance-guide",
+      "tenant": "lumen",
+      "title": "BSA/AML and KYC Guide for Staff",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "lumen/board-minutes-2026-09.txt",
+      "doc_id": "lumen-board-minutes-2026-09",
+      "tenant": "lumen",
+      "title": "Board of Directors Meeting Minutes - September 2026",
+      "classification": "confidential",
+      "allowed_roles": [
+        "admin",
+        "finance"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "lumen/careers.md",
+      "doc_id": "lumen-careers",
+      "tenant": "lumen",
+      "title": "Careers at Lumen Finance",
+      "classification": "public",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "lumen/customer-contract-terms.md",
+      "doc_id": "lumen-customer-contract-terms",
+      "tenant": "lumen",
+      "title": "Key Customer Contract Terms",
+      "classification": "confidential",
+      "allowed_roles": [
+        "finance",
+        "admin"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "lumen/employee-handbook.md",
+      "doc_id": "lumen-employee-handbook",
+      "tenant": "lumen",
+      "title": "Employee Handbook",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "lumen/expense-policy.txt",
+      "doc_id": "lumen-expense-policy",
+      "tenant": "lumen",
+      "title": "Travel and Expense Policy",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "lumen/finance-report-q2.md",
+      "doc_id": "lumen-finance-report-q2",
+      "tenant": "lumen",
+      "title": "Q2 FY2026 Quarterly Financial Report",
+      "classification": "confidential",
+      "allowed_roles": [
+        "finance",
+        "admin"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "lumen/incident-response.md",
+      "doc_id": "lumen-incident-response",
+      "tenant": "lumen",
+      "title": "Incident Response Process",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "lumen/it-security-policy.md",
+      "doc_id": "lumen-it-security-policy",
+      "tenant": "lumen",
+      "title": "IT Security Policy",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "lumen/layoff-planning-memo.txt",
+      "doc_id": "lumen-layoff-planning-memo",
+      "tenant": "lumen",
+      "title": "Q3 Workforce Restructuring Planning Memo",
+      "classification": "confidential",
+      "allowed_roles": [
+        "hr",
+        "admin"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "lumen/leave-policy.md",
+      "doc_id": "lumen-leave-policy",
+      "tenant": "lumen",
+      "title": "Leave and Time Off Policy",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "lumen/ma-notes.txt",
+      "doc_id": "lumen-ma-notes",
+      "tenant": "lumen",
+      "title": "Corp Dev Working Notes (M&A)",
+      "classification": "confidential",
+      "allowed_roles": [
+        "admin",
+        "finance"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "lumen/onboarding-guide.md",
+      "doc_id": "lumen-onboarding-guide",
+      "tenant": "lumen",
+      "title": "New Hire Onboarding Guide",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "lumen/performance-review-employee-1.txt",
+      "doc_id": "lumen-performance-review-employee-1",
+      "tenant": "lumen",
+      "title": "Mid-Year Performance Review 2026 - Marcus Oyelaran",
+      "classification": "confidential",
+      "allowed_roles": [],
+      "allowed_users": [
+        "lumen:employee_1"
+      ]
+    },
+    {
+      "path": "lumen/press-release.txt",
+      "doc_id": "lumen-press-release",
+      "tenant": "lumen",
+      "title": "Press Release: Lumen Finance Launches Same-Day Payouts",
+      "classification": "public",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "lumen/product-overview.md",
+      "doc_id": "lumen-product-overview",
+      "tenant": "lumen",
+      "title": "Lumen Finance Product Overview",
+      "classification": "public",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "lumen/public-faq.md",
+      "doc_id": "lumen-public-faq",
+      "tenant": "lumen",
+      "title": "Lumen Finance Public FAQ",
+      "classification": "public",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "lumen/remote-work-policy.txt",
+      "doc_id": "lumen-remote-work-policy",
+      "tenant": "lumen",
+      "title": "Remote and Hybrid Work Policy",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "lumen/runbook-ledger-reconciliation.txt",
+      "doc_id": "lumen-runbook-ledger-reconciliation",
+      "tenant": "lumen",
+      "title": "Runbook: Prism Ledger Daily Reconciliation Break",
+      "classification": "confidential",
+      "allowed_roles": [
+        "engineering",
+        "admin"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "lumen/runbook-payment-gateway-failover.md",
+      "doc_id": "lumen-runbook-payment-gateway-failover",
+      "tenant": "lumen",
+      "title": "Runbook: Payment Gateway Failover",
+      "classification": "confidential",
+      "allowed_roles": [
+        "engineering",
+        "admin"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "lumen/salary-bands.md",
+      "doc_id": "lumen-salary-bands",
+      "tenant": "lumen",
+      "title": "2026 Salary Bands",
+      "classification": "confidential",
+      "allowed_roles": [
+        "hr",
+        "admin"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "lumen/security-incident-postmortem.md",
+      "doc_id": "lumen-security-incident-postmortem",
+      "tenant": "lumen",
+      "title": "Security Postmortem: Exposed CI Credential",
+      "classification": "confidential",
+      "allowed_roles": [
+        "engineering",
+        "admin"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "northwind/board-minutes-2026-07.txt",
+      "doc_id": "northwind-board-minutes-2026-07",
+      "tenant": "northwind",
+      "title": "Board of Directors Minutes - July 28, 2026",
+      "classification": "confidential",
+      "allowed_roles": [
+        "admin",
+        "finance"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "northwind/careers.md",
+      "doc_id": "northwind-careers",
+      "tenant": "northwind",
+      "title": "Careers at Northwind Health",
+      "classification": "public",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "northwind/customer-contract-terms.md",
+      "doc_id": "northwind-customer-contract-terms",
+      "tenant": "northwind",
+      "title": "Payer & Employer Contract Terms Summary",
+      "classification": "confidential",
+      "allowed_roles": [
+        "finance",
+        "admin"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "northwind/employee-handbook.md",
+      "doc_id": "northwind-employee-handbook",
+      "tenant": "northwind",
+      "title": "Northwind Health Employee Handbook",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "northwind/expense-policy.txt",
+      "doc_id": "northwind-expense-policy",
+      "tenant": "northwind",
+      "title": "Travel and Expense Policy",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "northwind/finance-report-q2.md",
+      "doc_id": "northwind-finance-report-q2",
+      "tenant": "northwind",
+      "title": "Q2 FY2026 Financial Report",
+      "classification": "confidential",
+      "allowed_roles": [
+        "finance",
+        "admin"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "northwind/incident-response.md",
+      "doc_id": "northwind-incident-response",
+      "tenant": "northwind",
+      "title": "Incident Response Process",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "northwind/it-security-policy.md",
+      "doc_id": "northwind-it-security-policy",
+      "tenant": "northwind",
+      "title": "Information Security Policy",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "northwind/layoff-planning-memo.txt",
+      "doc_id": "northwind-layoff-planning-memo",
+      "tenant": "northwind",
+      "title": "Q3 Workforce Restructuring - Planning Memo",
+      "classification": "confidential",
+      "allowed_roles": [
+        "hr",
+        "admin"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "northwind/leave-policy.md",
+      "doc_id": "northwind-leave-policy",
+      "tenant": "northwind",
+      "title": "Leave and Time Off Policy",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "northwind/ma-notes.txt",
+      "doc_id": "northwind-ma-notes",
+      "tenant": "northwind",
+      "title": "Acquisition Evaluation Working Notes",
+      "classification": "confidential",
+      "allowed_roles": [
+        "admin",
+        "finance"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "northwind/onboarding-guide.md",
+      "doc_id": "northwind-onboarding-guide",
+      "tenant": "northwind",
+      "title": "New Hire Onboarding Guide",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "northwind/patient-privacy-procedures.md",
+      "doc_id": "northwind-patient-privacy-procedures",
+      "tenant": "northwind",
+      "title": "Patient Privacy Procedures (HIPAA) - Workforce Guide",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "northwind/performance-review-employee-1.txt",
+      "doc_id": "northwind-performance-review-employee-1",
+      "tenant": "northwind",
+      "title": "Annual Performance Review - Priya Raman (FY2025)",
+      "classification": "confidential",
+      "allowed_roles": [],
+      "allowed_users": [
+        "northwind:employee_1"
+      ]
+    },
+    {
+      "path": "northwind/press-release.txt",
+      "doc_id": "northwind-press-release",
+      "tenant": "northwind",
+      "title": "Press Release: Northwind Anywhere Kids Pediatric Telehealth Launch",
+      "classification": "public",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "northwind/product-overview.md",
+      "doc_id": "northwind-product-overview",
+      "tenant": "northwind",
+      "title": "Northwind Health - Who We Are and What We Do",
+      "classification": "public",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "northwind/public-faq.md",
+      "doc_id": "northwind-public-faq",
+      "tenant": "northwind",
+      "title": "Frequently Asked Questions",
+      "classification": "public",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "northwind/remote-work-policy.txt",
+      "doc_id": "northwind-remote-work-policy",
+      "tenant": "northwind",
+      "title": "Remote and Hybrid Work Policy",
+      "classification": "internal",
+      "allowed_roles": [],
+      "allowed_users": []
+    },
+    {
+      "path": "northwind/runbook-ehr-interface-failover.md",
+      "doc_id": "northwind-runbook-ehr-interface-failover",
+      "tenant": "northwind",
+      "title": "Runbook: EHR Interface Engine Failover",
+      "classification": "confidential",
+      "allowed_roles": [
+        "engineering",
+        "admin"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "northwind/runbook-telehealth-video-outage.txt",
+      "doc_id": "northwind-runbook-telehealth-video-outage",
+      "tenant": "northwind",
+      "title": "Runbook: Northwind Anywhere Video Visit Outage",
+      "classification": "confidential",
+      "allowed_roles": [
+        "engineering",
+        "admin"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "northwind/salary-bands.md",
+      "doc_id": "northwind-salary-bands",
+      "tenant": "northwind",
+      "title": "FY2026 Salary Bands (Base Pay)",
+      "classification": "confidential",
+      "allowed_roles": [
+        "hr",
+        "admin"
+      ],
+      "allowed_users": []
+    },
+    {
+      "path": "northwind/security-incident-postmortem.md",
+      "doc_id": "northwind-security-incident-postmortem",
+      "tenant": "northwind",
+      "title": "Post-Incident Review: Unauthorized Access to Appointment Records via Scheduling API",
+      "classification": "confidential",
+      "allowed_roles": [
+        "engineering",
+        "admin"
+      ],
+      "allowed_users": []
+    }
+  ]
+}

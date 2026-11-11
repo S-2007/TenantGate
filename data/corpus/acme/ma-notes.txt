@@ -1,0 +1,72 @@
+STRICTLY CONFIDENTIAL - CORP DEV WORKING NOTES
+DRAFT - do not forward
+
+Deal: PROJECT-KESTREL-ACME
+Prepared by: Corp Dev (Victor Albrecht) with Finance (Theresa Kowalczyk)
+Last update: 9 Oct 2026
+Distribution: CEO, CFO, GC, board deal committee. Finance & admin only.
+
+=====================================================
+1) TARGET
+=====================================================
+Ferrox Motion GmbH, Esslingen am Neckar (near Stuttgart), Germany.
+Private, family-owned (second generation), ~140 employees.
+Makes servo drives, compact planetary gearboxes and integrated joint actuators.
+FY2025 revenue approx EUR 24.7M, EBITDA margin ~14%.
+
+Ferrox has supplied the wrist gearboxes for ARC-6 and ARC-12 since 2019. They are a single-source supplier for those parts, and their 2025 price increase (+9%) is a big part of why ARC gross margin slipped last year.
+
+=====================================================
+2) PROPOSED TERMS (as of non-binding LOI, signed Sept 26)
+=====================================================
+- Headline price: $38.4 million enterprise value, cash-free / debt-free
+- Consideration: 70% cash at close, 30% Acme stock
+- Earn-out: up to an additional EUR 3M over 2 years tied to third-party actuator revenue (sellers asked for 5M; we held at 3M)
+- Retention pool for key engineers: $1.5M over 3 years
+- Founders' son (Matthias Ferrox, managing director) to stay on 3 years as head of Acme Europe drives business
+- Exclusivity: 75 days from LOI
+
+Financing: cash on hand plus a draw on the revolver; no new equity raise. Theresa's model shows net leverage staying under 1.5x after close.
+
+=====================================================
+3) WHY
+=====================================================
+ a. Vertical integration of the most expensive purchased component in the ARC arm. Finance estimates 260-310 bps of ARC gross margin improvement by year 2.
+ b. Supply security - removes single-source risk on wrist gearboxes.
+ c. In-house actuator know-how for the next-generation Kite cobot (integrated joints).
+ d. A European foothold: engineering and service presence in Germany, which our sales team keeps asking for.
+
+=====================================================
+4) DILIGENCE STATUS
+=====================================================
+  Area              Lead             Status
+  ----------------  ---------------  ------------------------------
+  Financial / QoE   outside advisors in progress, draft due Nov 6
+  Legal             Daniel Reyes     data room review ~60% done
+  Tax               outside advisors structuring memo received
+  Technical / IP    Rafael Lindqvist  2 patents need ownership check
+  HR / works council Janelle Brooks  works council consultation required under German law
+  Customers         Victor Albrecht  top-5 customer calls scheduled
+
+Open issues:
+  - Ferrox's second-largest customer is a competitor of ours. They will probably move their business after close. Model assumes 60% of that revenue is lost within 18 months.
+  - Pension obligations for ~30 long-tenured staff - need actuarial number.
+  - Works council timing could push close into Q2 2027.
+
+=====================================================
+5) TIMELINE
+=====================================================
+  - Nov 6: QoE draft
+  - Nov 20: board deal committee review
+  - Dec: SPA negotiation
+  - Target signing: mid-December 2026
+  - Target close: Q1 2027 (subject to works council + German FDI review if applicable)
+
+=====================================================
+6) DO NOT
+=====================================================
+  - Do not contact Ferrox employees outside the agreed contacts (Matthias Ferrox, CFO Anke Ruhland).
+  - Do not discuss with the procurement team - they still negotiate the 2027 supply contract with Ferrox at arm's length and should not know.
+  - Use the codename only. The target name stays out of Slack, Jira and email subjects.
+
+next update after QoE draft.

@@ -1,0 +1,94 @@
+CONFIDENTIAL - PERSONNEL RECORD
+Visible only to the employee, their manager, and People & Culture.
+
+ANNUAL PERFORMANCE REVIEW - FY2025 CYCLE
+----------------------------------------
+
+Employee:        Priya Raman
+Job title:       Clinical Informatics Analyst II (grade N6)
+Department:      Clinical Applications, Digital Health
+Manager:         Kevin Thao, Manager, Clinical Applications
+Review period:   January 1, 2025 - December 31, 2025
+Review date:     February 11, 2026
+Hire date:       May 2022
+
+OVERALL RATING: Meets Expectations
+
+----------------------------------------
+1. SUMMARY (manager)
+----------------------------------------
+
+Priya had a solid year. She is the team's go-to person for order sets and clinical decision support in the ambulatory EHR, and clinic staff ask for her by name. Her biggest contribution was the pediatric well-child order set rebuild, which went live at all 19 pediatric clinics in September and reduced the average number of clicks to place well-child orders from 27 to 11. She also handled a heavy ticket load reliably.
+
+Areas where I want to see growth: Priya took on several projects at once in Q2 and two of them (the urgent care discharge template and the lab result routing cleanup) slipped by about six weeks each. She needs to raise risks earlier rather than absorbing them quietly. I also want her to take more ownership in cross-team meetings with Integration Engineering.
+
+----------------------------------------
+2. GOALS
+----------------------------------------
+
+Goal 1: Rebuild pediatric well-child order sets ........ ACHIEVED
+  Delivered on time; adoption 94% by December. Very positive feedback from Dr. Achebe's pediatrics council.
+
+Goal 2: Reduce open EHR build tickets older than 30 days by 50% ........ PARTIALLY ACHIEVED
+  Reduced from 212 to 131 (38% reduction). Good progress but short of target, partly due to the Q2 slips.
+
+Goal 3: Complete ambulatory EHR builder certification (internal Clinical Apps Builder track) ........ ACHIEVED
+  Passed the builder exam in October on the first attempt.
+
+Goal 4: Lead the urgent care discharge template project ........ NOT ACHIEVED IN PERIOD
+  Went live January 2026 instead of November 2025. Final product was good; communication about the delay came late.
+
+----------------------------------------
+3. COMPETENCIES
+----------------------------------------
+
+  Clinical/technical knowledge ............ Strong
+  Quality of work ......................... Strong
+  Communication ........................... Developing
+  Collaboration ........................... Solid
+  Planning and prioritization ............. Developing
+  Patients-first mindset .................. Strong
+
+----------------------------------------
+4. PEER FEEDBACK (summarized)
+----------------------------------------
+
+  - "Priya actually understands how nurses work. Her builds make sense on the floor." (RN clinic lead)
+  - "Responsive and patient when explaining changes." (Clinic manager, Brooklyn Park)
+  - "Would like earlier heads-up when timelines change." (Integration engineer)
+
+----------------------------------------
+5. EMPLOYEE SELF-ASSESSMENT (excerpt)
+----------------------------------------
+
+"I'm proud of the well-child work and the certification. I overcommitted in Q2 and didn't say no to anything, which hurt two projects. Next year I want to get better at estimating and pushing back, and I'd like to start mentoring the newer analyst on our team."
+
+----------------------------------------
+6. GOALS FOR 2026
+----------------------------------------
+
+  1. Lead the behavioral health documentation template redesign (due Q3 2026).
+  2. Weekly status note to the manager on all active projects, flagging risks red/amber/green.
+  3. Mentor one junior analyst through their first major build.
+  4. Reduce aged EHR build tickets (>30 days) to under 80 by year end.
+
+----------------------------------------
+7. COMPENSATION OUTCOME
+----------------------------------------
+
+Merit increase: 3.2%, effective April 6, 2026.
+Promotion readiness: Not yet - revisit at mid-year check-in (July 2026) based on progress on planning and communication goals.
+
+----------------------------------------
+SIGNATURES
+----------------------------------------
+
+Manager: Kevin Thao ............ signed 2026-02-11
+Employee: Priya Raman .......... acknowledged 2026-02-13
+Employee comments: "Agree with the summary. Thanks for the clear feedback on planning."
+
+HR reviewer: Ana Lucero, HR Business Partner, Digital Health
+
+----------------------------------------------------------------------
+Doc ref: CANARY-PERF-NORTHWIND-7731  |  Personnel file - do not copy
+----------------------------------------------------------------------

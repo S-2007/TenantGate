@@ -1,0 +1,70 @@
+RUNBOOK - PRISM LEDGER DAILY RECONCILIATION BREAK
+=================================================
+
+Owner: Ledger Platform team (lead: Yusuf Barrientos)
+Audience: engineering on-call, admin. Finance/Treasury are informed, not operators.
+Last updated: 2026.06.30
+
+--------------------------------------------------
+
+WHAT THIS IS
+
+Prism is Lumen's double-entry ledger. Every card sale, refund, payout, fee and loan disbursement is written to Prism as balanced journal entries. Each night at 02:00 CT the job "recon-nightly" compares Prism totals to:
+
+  (a) the settlement files from Corvane and Tessaline (card processing),
+  (b) the bank statement files (BAI2) from our operating and settlement accounts at Harbor Plains Bank, and
+  (c) the payout file we sent the previous day.
+
+If any account differs by more than $50.00, or if the count of unmatched items is above 25, the job raises a "recon break" alert in PagerDuty (service: ledger-recon). Breaks must be cleared before the 09:00 CT Treasury funding decision, because Treasury uses Prism balances to decide how much to pre-fund the settlement account.
+
+WHEN YOU GET PAGED
+
+1. Ack the page. Recon breaks are usually SEV3. Upgrade to SEV2 if the break is more than $250,000, and to SEV1 if it looks like payouts will be wrong or late.
+2. Open the recon report: Retool > Ledger > Recon Nightly > today's run.
+3. Note the break type. The four common types are below.
+
+COMMON BREAK TYPES
+
+  TYPE A - Missing settlement file
+     Symptom: entire processor column is blank.
+     Cause: processor SFTP drop was late.
+     Fix: check s3://lumen-settlement-inbound/<processor>/<date>/. If the file arrived after 02:00, re-run:
+        lumenctl recon rerun --date YYYY-MM-DD --source corvane
+     If no file by 06:00, contact the processor (contacts in 1Password "Payments-Vendors") and tell Treasury.
+
+  TYPE B - Timing differences
+     Symptom: small number of items, each matched the next day.
+     Cause: transactions captured near midnight UTC land in different files.
+     Fix: none needed if under $50,000 total and clears in the next run. Annotate the break in Retool as "timing" and resolve.
+
+  TYPE C - Duplicate journal entries
+     Symptom: Prism higher than bank by an exact multiple of a single payout or fee.
+     Cause: retried writes from payout-service when the idempotency key was missing (see INC-2291).
+     Fix: identify duplicates with the saved query "dupe-finder-v3". Reversal entries MUST follow the two-person rule: one engineer prepares the reversal in Retool, a second engineer approves. Never delete journal entries - Prism is append-only and deletes are blocked anyway.
+
+  TYPE D - Unknown bank items
+     Symptom: bank shows debits/credits with no Prism match.
+     Cause: varies - bank fees, returned ACH (R01/R02), chargebacks debited directly.
+     Fix: hand to Payments Ops (#payments-ops) with the list. Engineering does not book these manually.
+
+DO NOT
+  - do not edit the recon tolerance thresholds to make a break "go away"
+  - do not run the payout job manually while a recon break is open, unless the Treasury on-call explicitly agrees in the incident channel
+  - do not paste merchant bank account numbers into Slack. Use the Prism item ID.
+
+CLOSING OUT
+
+  - Re-run recon-nightly for the date and confirm "0 open breaks" or only annotated timing items.
+  - Post the summary in #ledger-recon: date, break type, $ amount, fix, ticket.
+  - If manual reversals were made, attach the Retool audit export to the Jira ticket. Internal Audit samples these monthly.
+  - For SEV2+ follow the normal incident and postmortem process.
+
+ESCALATION
+
+  Ledger Platform on-call -> Ledger Platform lead (Yusuf Barrientos) -> Director of Engineering, Core Platform (Anneke Sorensen)
+  Treasury on-call is PagerDuty "finance-treasury". Controller: Marisol Duarte.
+
+Revision log
+  2026-06-30  added TYPE D guidance, payout job warning (YB)
+  2026-02-11  thresholds changed from $25 to $50 per account after audit review (YB)
+  2025-10-03  first version

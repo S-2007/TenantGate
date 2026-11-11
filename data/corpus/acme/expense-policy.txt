@@ -1,0 +1,58 @@
+ACME ROBOTICS - TRAVEL AND EXPENSE POLICY
+Policy FIN-210  |  Rev. D  |  Last updated: 2026/04/01
+Owner: Finance (Theresa Kowalczyk, CFO)
+
+1. PURPOSE
+
+This policy explains what Acme will reimburse when you spend money on company business, and how to get paid back. The short version: spend company money like it's your own, keep your receipts, and submit expenses within 30 days.
+
+2. WHO THIS APPLIES TO
+
+All employees and contractors who incur business expenses, including Field Integration engineers who travel to customer sites most weeks.
+
+3. GENERAL RULES
+
+  - Expenses are submitted in Navan (formerly TripActions) within 30 days of the expense date.
+  - A receipt is required for any single expense above $25. Under that amount, a description of the expense is enough.
+  - Manager approval is required for any single expense above $500, and must be obtained before the purchase whenever possible.
+  - Expenses over $5,000 also require approval from the department VP and Finance.
+  - Do not split one purchase into several smaller charges to get under an approval threshold. Finance audits for this and it will be treated as a policy violation.
+  - Alcohol is reimbursed only at approved customer entertainment events, never for solo travel meals.
+
+4. TRAVEL
+
+4.1 Booking
+Book all flights, hotels and rental cars through Navan so we can find you if something goes wrong. Economy class for flights under 6 hours. Book at least 14 days ahead when you can.
+
+4.2 Hotels
+Use the Navan preferred rate where available. Typical caps: $189/night in most US cities, $249/night in high-cost cities (list maintained in Navan).
+
+4.3 Meals while traveling
+The meal per diem for business travel is $45 per day. The per diem covers breakfast, lunch, dinner and snacks, and is prorated to 75% on the first and last day of a trip. You do not need itemized receipts for meals covered by the per diem, but you cannot claim the per diem for a meal the company or a customer already provided.
+
+4.4 Ground transport
+Rideshare or taxi to and from airports is fine. Personal car mileage is reimbursed at the IRS standard rate. Rental cars: compact or midsize, decline the extra insurance (our corporate policy covers it).
+
+5. FIELD INTEGRATION SPECIFICS
+
+Field engineers on commissioning trips longer than two weeks may expense one round trip home every 14 days. Small tools, consumables and safety gear bought at a customer site to keep a commissioning on schedule are reimbursable - put the customer project number in the expense memo.
+
+6. CORPORATE CARD
+
+Employees who travel more than four times a year can apply for an Acme corporate card through Finance. The card is for business expenses only. Personal charges must be repaid within 15 days, and repeated personal use will get the card cancelled.
+
+7. NOT REIMBURSABLE (non-exhaustive)
+
+  * traffic tickets, towing ... (fines of any kind)
+  * in-flight wifi for personal use
+  * upgrades to business/first class without VP approval
+  * personal entertainment, minibar, gym fees at hotels
+  * lost or stolen personal items
+
+8. HOME OFFICE
+
+One-time home office equipment for approved hybrid employees is covered under the Remote Work Policy, not this one.
+
+9. QUESTIONS
+
+Ask in #finance-help on Slack or email ap@acmerobotics.example. Finance reimburses approved expenses on the next payroll cycle.

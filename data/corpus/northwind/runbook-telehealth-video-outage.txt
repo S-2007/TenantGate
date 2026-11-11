@@ -1,0 +1,76 @@
+RUNBOOK: Northwind Anywhere video visit outage
+Service: anywhere-video (session broker) + ClearVisit video vendor
+Owner team: Digital Health SRE   |   Escalation: #sre-oncall   |   Rev 9, updated 07/22/26 by J. Lindgren
+
+---------------------------------------------------------------
+WHEN TO USE THIS RUNBOOK
+---------------------------------------------------------------
+
+Use this when patients or clinicians cannot start or join Northwind Anywhere video visits. Typical alerts:
+
+  - Datadog monitor "anywhere-video join success rate < 90% (5m)"
+  - Datadog monitor "session-broker 5xx rate > 2%"
+  - Service Desk tickets from clinicians saying "waiting room spinning" or "video never connects"
+
+Severity guidance: A full outage of video visits is always declared SEV1. A partial outage (one region, one app platform, or join success between 70% and 90%) is SEV2 unless it lasts more than 30 minutes during clinic hours, in which case upgrade to SEV1.
+
+---------------------------------------------------------------
+ARCHITECTURE IN ONE PARAGRAPH
+---------------------------------------------------------------
+
+The mobile app and web client call the session-broker service (EKS cluster "anywhere-prod" in AWS us-east-2). The broker checks the appointment in the scheduling API, then requests a room token from the ClearVisit video API. Media flows directly between the patient and clinician through ClearVisit's TURN servers. So a failure can be: (a) our broker, (b) the scheduling API, (c) ClearVisit, or (d) the client app.
+
+---------------------------------------------------------------
+STEP 1 - TRIAGE (first 10 minutes)
+---------------------------------------------------------------
+
+  1. Acknowledge the page. Open an incident with /incident in #incidents if one is not open.
+  2. Check the "Anywhere Video" Datadog dashboard. Look at join success rate split by platform (iOS / Android / web).
+  3. Check the ClearVisit status page and the #vendor-clearvisit shared Slack channel.
+  4. Run the synthetic test:
+        ./scripts/synthetic-visit.sh --env prod --count 3
+     It creates three test visits with the test patient "ZZTEST, ANYWHERE" and reports join time.
+  5. Decide which bucket (a-d) the failure is in.
+
+---------------------------------------------------------------
+STEP 2 - MITIGATE
+---------------------------------------------------------------
+
+(a) Session broker failing (our 5xx, pods crashlooping)
+    - kubectl -n anywhere get pods -l app=session-broker
+    - If a deploy went out in the last 2 hours, roll back:
+        argocd app rollback session-broker
+    - If pods are OOMKilled, scale up: kubectl -n anywhere scale deploy/session-broker --replicas=12
+
+(b) Scheduling API failing
+    - Broker has a fallback flag. Enable it in LaunchDarkly: "broker-skip-appointment-validation" = ON.
+      This lets visits start without validating the appointment (validation happens later in the audit job).
+      Must be turned OFF within 4 hours. Note it in the incident channel.
+
+(c) ClearVisit failing
+    - Open a P1 ticket with ClearVisit (portal or phone in the Vendor Escalation Matrix) and request a bridge.
+    - If ClearVisit confirms a regional outage, ask them to fail our account over to their secondary region. Typical time 10-20 minutes.
+    - Tell the Communications Lead to send the "convert to phone visits" message to clinicians.
+
+(d) Client app issue (usually after an app release)
+    - Check which app version is failing. If it is the newest one, ask the mobile team to halt the phased rollout in App Store Connect / Google Play Console.
+    - Web clients: clear the CDN cache for /visit/* in CloudFront.
+
+---------------------------------------------------------------
+STEP 3 - CLINICAL WORKAROUND
+---------------------------------------------------------------
+
+While video is down, clinicians convert visits to phone visits from the visit screen ("Switch to phone"). The patient receives an automated call. Coordinate with the Clinical Liaison; the Telehealth Nursing Supervisor (currently Rosa Delgado) decides whether to pause the on-demand queue.
+
+---------------------------------------------------------------
+STEP 4 - VERIFY AND CLOSE
+---------------------------------------------------------------
+
+  - Run the synthetic test again. All three visits must connect in under 15 seconds.
+  - Join success rate above 97% for 30 minutes.
+  - Turn off any fallback flags you enabled.
+  - Record timestamps in the incident channel and hand off to the IC for the postmortem.
+
+KNOWN GOTCHAS
+  * Our ClearVisit API key rotates every 90 days. An expired key looks exactly like a vendor outage (401s from ClearVisit). Check the secret age in AWS Secrets Manager before blaming the vendor!!
+  * Daylight saving changes have broken token expiry twice. Check clock skew on broker nodes.

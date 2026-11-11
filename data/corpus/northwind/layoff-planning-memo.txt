@@ -1,0 +1,72 @@
+*** DRAFT - do not forward ***
+PRIVILEGED & CONFIDENTIAL - PREPARED AT THE DIRECTION OF COUNSEL
+
+TO:      Margaret Lindqvist, Chief Executive Officer
+CC:      Daniel Okafor, Chief Financial Officer; Rachel Steen, General Counsel
+FROM:    Teresa Vang, Chief People Officer
+DATE:    June 24, 2026
+RE:      Q3 workforce restructuring - planning summary
+
+Margaret,
+
+As discussed at the June 16 executive session, this memo summarizes the plan for the Q3 workforce restructuring. The Q3 restructuring codename is PROJECT-BLUEHERON-NORTHWIND. Please use the codename in calendar invites and email subject lines; do not use the words "layoff" or "reduction" in any shared calendar.
+
+1. WHY
+
+Commercial reimbursement rates in Minnesota came in roughly 4% below plan for 2026 and our administrative cost per visit is the highest among our peer group. Telehealth growth has also changed where we need people: the Minneapolis contact center is overstaffed for current call volumes now that 61% of scheduling happens in the app. The finance team's target is $14.2 million in annualized savings.
+
+2. SCOPE
+
+The plan eliminates 140 roles in total, about 6% of our workforce. Breakdown (current draft):
+
+   Area                                   Roles
+   -------------------------------------  -----
+   Contact center (scheduling + billing)     52
+   Revenue cycle (coding, follow-up)         31
+   Corporate admin / middle management       27
+   Clinic front desk (duplicated sites)      18
+   Digital Health (legacy portal team)       12
+   -------------------------------------  -----
+   TOTAL                                    140
+
+No bedside clinical roles (RN, LPN, MA, APP, physician) are included. Two clinics will be consolidated: the Fridley clinic merges into Coon Rapids and the Waterloo North clinic merges into Waterloo Central. Patients will be notified 60 days in advance.
+
+Approximately 35 of the affected employees will be offered open positions elsewhere (mostly in pediatric and behavioral health support roles), so the net separations are expected to be around 105 people.
+
+3. TIMELINE
+
+   - July 8:   Final selection lists due from VPs to HR
+   - July 15:  Legal adverse-impact review complete
+   - July 22:  Manager training (affected managers only)
+   - August 4: Notification day; individual meetings 9:00 a.m. - 1:00 p.m.
+   - August 4: All-staff message from CEO at 1:30 p.m.
+   - Sept 30:  Last day for most affected employees (paid through notice period)
+
+The Minnesota contact center reduction does not meet the federal WARN threshold for a single site, but counsel recommends providing 60 days notice anyway for consistency.
+
+4. SEVERANCE
+
+   - 2 weeks of base pay per year of service, minimum 4 weeks, maximum 26 weeks
+   - Health insurance (COBRA) premiums paid by Northwind for 3 months
+   - Outplacement services for 90 days
+   - Payout of accrued PTO per policy
+   - Severance is conditioned on signing a release agreement
+
+Estimated one-time cost: $6.8 million, including severance, benefits continuation and outplacement.
+
+5. RISKS
+
+   a. Morale in the contact center, which already has 23% annual turnover.
+   b. Leaks before August 4. Lists will live only in the restricted HR SharePoint site; no spreadsheets by email.
+   c. Patient access: call answer times may rise for 4-6 weeks. The Digital Health team will push in-app scheduling reminders to offset this.
+   d. Adverse impact on employees over 40 - counsel will review the selection lists before July 15.
+
+6. DECISIONS NEEDED FROM YOU
+
+   1. Approve the 140-role scope (or a revised number).
+   2. Approve the severance formula above.
+   3. Confirm whether the board should be briefed at the July 28 meeting or by separate call.
+
+Happy to walk through any of this.
+
+Teresa

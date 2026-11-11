@@ -1,0 +1,68 @@
+REMOTE AND HYBRID WORK POLICY
+Policy HR-230 | People & Culture | effective 1 Feb 2025, last updated 15 Jan 2026
+
+==============================
+1. Overview
+==============================
+
+Northwind Health supports hybrid work for roles that can be done well away from a clinic or office. Most of our work is in-person patient care, and that work cannot be done from home. This policy explains who is eligible, how many days you can work remotely, and what is expected of you while you do.
+
+==============================
+2. Eligibility
+==============================
+
+Roles are classified by People & Culture into three categories:
+
+  ON-SITE: Requires physical presence with patients or equipment. Examples: RNs, MAs, front desk, lab techs, imaging techs, facilities. Not eligible for remote work.
+
+  HYBRID: Can be done partially remotely. Examples: Digital Health engineers, finance, HR, revenue cycle, clinical informatics, contact center supervisors. These roles are eligible for the hybrid schedule in section 3.
+
+  REMOTE: Fully remote, approved case-by-case by a VP and People & Culture. Mostly contact center agents and some coding specialists. Fewer than 5% of roles.
+
+Clinicians who do scheduled telehealth shifts from home follow the Telehealth Practice Standard, not this policy, for those shifts.
+
+New employees in hybrid roles work on-site for their first 2 weeks, unless their manager agrees otherwise.
+
+==============================
+3. How many days
+==============================
+
+Employees in hybrid roles may work remotely up to 3 days per week. The remaining days are in-office "anchor days" set by each department so teams are together on the same days. For example, Digital Health's anchor days are Tuesday and Wednesday at the North Loop office; Finance's are Monday and Thursday at the Minneapolis Support Center.
+
+Remote days do not roll over. If you work remotely 1 day one week, you cannot work remotely 5 days the next week.
+
+Managers may require more in-office days during onboarding, a major project, or a performance improvement plan, with notice.
+
+==============================
+4. Where you can work from
+==============================
+
+- Your remote work location must be in Minnesota, Wisconsin or Iowa. Working from another state for more than 10 working days in a calendar year requires People & Culture approval in advance (because of tax and licensing rules).
+- Working from outside the United States is not allowed, even for a day, because of data protection requirements.
+- Your workspace must be private enough that nobody can see your screen or overhear patient information.
+
+==============================
+5. Equipment and costs
+==============================
+
+  * Northwind provides a laptop, a monitor, a headset and a keyboard/mouse for hybrid and remote employees.
+  * Fully remote employees receive an internet stipend of $40 per month through payroll. Hybrid employees do not.
+  * You are responsible for a reliable internet connection (at least 25 Mbps down / 5 Mbps up) and a safe workspace.
+  * Return all equipment when you leave or when your role changes to on-site.
+
+==============================
+6. Expectations
+==============================
+
+- Be available during core collaboration hours and keep your Teams status accurate.
+- Camera on for team meetings, as a norm, not a rule.
+- Follow the IT Security Policy: VPN connected, screen locked when you step away, no PHI printed at home.
+- Remote work is not a substitute for childcare or dependent care during working hours.
+
+==============================
+7. Changes and revocation
+==============================
+
+Remote work is a privilege of the role, not a permanent entitlement. Northwind may change eligibility for a role with 30 days notice. A manager may suspend an individual's remote days for performance or attendance reasons after discussing it with HR.
+
+Questions: your HR Business Partner, or the People Help Center in ServiceNow.

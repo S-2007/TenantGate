@@ -1,0 +1,78 @@
+STRICTLY CONFIDENTIAL - CORPORATE DEVELOPMENT
+Material non-public information. Do not discuss outside the deal team.
+DRAFT - do not forward
+
+Working notes - acquisition evaluation
+Codename: PROJECT-OSPREY-NORTHWIND
+Deal team: Daniel Okafor (CFO, sponsor), Lena Hartmann (VP Corporate Development), Rachel Steen (General Counsel), Dr. Samuel Achebe (CMO, clinical diligence)
+Updated 2026-08-27 (LH)
+
+----------------------------------------------------------------
+TARGET
+----------------------------------------------------------------
+
+Target: Cedar Valley Clinics, a physician-owned primary care and urgent care group in eastern Iowa and southwest Wisconsin.
+
+  - 9 clinics (Cedar Rapids x3, Iowa City x2, Dubuque, Davenport, Platteville WI, Prairie du Chien WI)
+  - ~410 employees, 58 physicians and APPs
+  - 2025 revenue approx. $72.5M, adjusted EBITDA approx. $6.9M
+  - Payer mix: 52% commercial, 29% Medicare/MA, 17% Medicaid, 2% self-pay
+  - Using an older EHR that is end-of-support in 2028
+
+Why it fits:
+  1. Fills our gap in eastern Iowa, where we have only our Dubuque clinic today; their Dubuque clinic would be consolidated into ours.
+  2. Their physicians want telehealth; they have none. Northwind Anywhere could launch to their ~96,000 active patients in about 6 months after close.
+  3. Strong urgent care volumes (their Cedar Rapids urgent cares see ~180 patients/day combined).
+  4. Opportunity to move them onto our EHR and cut their IT spend by roughly half.
+
+----------------------------------------------------------------
+VALUATION / OFFER
+----------------------------------------------------------------
+
+Indicative offer submitted Aug 19: total enterprise value of $61 million, cash, subject to diligence. That is about 8.8x 2025 adjusted EBITDA, in line with recent Midwest primary care deals (range 7.5x - 10x).
+
+Structure:
+  - 85% cash at close
+  - 15% earnout over 2 years tied to physician retention (at least 90% of physicians still employed at 24 months) and urgent care volume
+  - Physician owners roll into Northwind employment agreements with 3-year terms and non-competes where enforceable (note: enforceability varies by state - GC reviewing)
+
+Financing: cash on hand plus a draw on the revolving credit facility. No equity issuance needed.
+
+Synergies (deal team estimate, year 3):
+  - EHR/IT consolidation: $2.1M
+  - Revenue cycle onto our platform: $1.4M
+  - Supply chain / purchasing: $0.6M
+  - Telehealth revenue uplift: $1.8M
+  TOTAL: ~$5.9M run-rate
+
+----------------------------------------------------------------
+DILIGENCE OPEN ITEMS
+----------------------------------------------------------------
+
+  [ ] Billing compliance audit - outside firm sampling 300 claims; we heard from their CFO that they had a Medicare overpayment refund in 2024 (~$410K). Need full details.
+  [ ] Two pending malpractice claims; insurer letters requested.
+  [ ] Real estate: 6 of 9 clinics are leased from an entity owned by the founding physicians. Need fair-market-value opinion (Stark law issue if not FMV).
+  [x] Quality of earnings report - received Aug 12, adjusted EBITDA confirmed within 3%.
+  [ ] Iowa certificate of need: not required for outpatient clinics; GC confirming.
+  [ ] HSR filing: likely required given deal size; counsel to confirm threshold.
+  [ ] Culture: Dr. Achebe meeting with all 58 clinicians in September.
+
+----------------------------------------------------------------
+RISKS
+----------------------------------------------------------------
+
+  * Physician departures after close (biggest risk; earnout is meant to address it).
+  * EHR migration fatigue - their staff went through a painful upgrade in 2023.
+  * Competitive tension: at least one other regional health system has approached them. Their banker hinted a second bid is "in the mid-60s."
+  * Integration bandwidth: overlaps with Q3 workforce restructuring work. Integration team must be ring-fenced.
+
+----------------------------------------------------------------
+NEXT STEPS
+----------------------------------------------------------------
+
+  - Sept 9: management presentation at Cedar Rapids
+  - Sept 23: deal team go/no-go on final bid
+  - Oct 13: board approval (special session, executive session only)
+  - Target signing: November; target close: Q1 2027 pending HSR
+
+Do not put the target's name in any email subject line or calendar invite. Use the codename only.

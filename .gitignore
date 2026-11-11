@@ -1,0 +1,40 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# virtualenvs
+.venv/
+venv/
+env/
+
+# caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.cache/
+.hf_cache/
+
+# eval outputs (summaries we want to keep are copied into docs/RESULTS.md)
+eval/results/*
+!eval/results/.gitkeep
+
+# misc
+.DS_Store
+*.log
+
+# Dev/test login credentials written by scripts/seed.py (never commit)
+data/seed_users.json
+
+# coverage data and generated security reports
+.coverage
+htmlcov/
+tests/security/report.json
+tests/security/REPORT.md

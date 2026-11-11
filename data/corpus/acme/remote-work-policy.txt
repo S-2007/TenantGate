@@ -1,0 +1,54 @@
+REMOTE WORK POLICY  (HR-118)
+Acme Robotics, Inc.
+last updated: Aug 4 2026
+owner: People Operations
+
+PURPOSE
+-------
+We build physical products, and a lot of our work needs people in the same room as the robots. At the same time, plenty of work (writing code, analyzing data, closing the books) goes fine from home. This policy explains who can work remotely, how often, and what we expect.
+
+ELIGIBILITY
+-----------
+Roles fall into three groups:
+
+  1. ON-SITE roles - assembly, test, quality inspection, warehouse, EHS, lab technicians, and anyone whose job requires touching hardware every day. These roles are not eligible for regular remote work.
+  2. HYBRID roles - most office-based roles at HQ and Mon Valley: software, finance, people operations, marketing, sales engineering (when not traveling), supply chain planning, and most engineering roles.
+  3. FIELD roles - Field Integration and field service engineers, who work from customer sites and their home base. Field roles are covered by their own travel schedules, not this policy's weekly limit.
+
+Your offer letter or your manager will tell you which group your role is in. If your role changes, your manager updates it in Workday.
+
+HOW MUCH REMOTE WORK
+--------------------
+Eligible hybrid employees may work remotely up to 2 days per week. The other days are spent at your assigned Acme site.
+
+  * Teams pick shared in-office "anchor days" so that people actually overlap. Most teams at HQ anchor on Tuesday and Wednesday.
+  * Remote days do not roll over. If you are in the office all week, you don't get four remote days next week.
+  * Managers can approve temporary exceptions (for example, a two-week stretch after surgery, or during a family emergency). Exceptions longer than 30 days require People Operations approval.
+  * Fully remote arrangements are rare and need VP approval plus People Operations sign-off. They are reviewed every 6 months.
+
+WHERE YOU CAN WORK FROM
+-----------------------
+Remote work must be performed from within the United States. Working from another country, even for a few days, needs advance approval from People Operations and Legal because of tax and export control rules (some of our controls software is subject to export regulations). Please ask well ahead of time - "I'm in Lisbon, is that ok?" is too late.
+
+EXPECTATIONS
+------------
+  - Be reachable on Slack and by phone during core hours (10:00 a.m. - 3:00 p.m. Eastern).
+  - Keep your Slack status and calendar honest.
+  - Cameras on for team meetings unless you have a reason not to. You don't need to explain the reason.
+  - Remote days are working days. If you need to take care of personal business for a few hours, use PTO or arrange it with your manager.
+
+SECURITY AT HOME
+----------------
+Follow the IT Security Policy. In particular: use the GlobalProtect VPN when accessing confidential systems, don't let family members use your work laptop, and lock your screen when you step away. Printed confidential documents must be shredded, not tossed in the recycling bin.
+
+EQUIPMENT AND HOME OFFICE
+-------------------------
+Hybrid employees get a company laptop, a monitor, a keyboard and mouse, and a headset for home. In addition, there is a one-time home office allowance of $400 (chair, desk lamp, cables, etc.), submitted as an expense within your first 90 days in a hybrid role. Acme does not reimburse home internet or utilities.
+
+Equipment remains Acme property and must be returned when you leave.
+
+CHANGES
+-------
+Acme may change this policy, or individual arrangements, based on business needs (for example, during a major product launch or a site move). We'll give at least 30 days' notice for non-emergency changes.
+
+Questions -> your manager, or #ask-people.

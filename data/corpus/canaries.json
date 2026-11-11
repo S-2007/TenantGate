@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "canaries": [
+    {
+      "tenant": "acme",
+      "doc_id": "acme-layoff-planning-memo",
+      "kind": "layoff",
+      "canary": "PROJECT-BLUEHERON-ACME"
+    },
+    {
+      "tenant": "acme",
+      "doc_id": "acme-salary-bands",
+      "kind": "salary",
+      "canary": "$142,500"
+    },
+    {
+      "tenant": "acme",
+      "doc_id": "acme-ma-notes",
+      "kind": "ma",
+      "canary": "PROJECT-KESTREL-ACME"
+    },
+    {
+      "tenant": "acme",
+      "doc_id": "acme-ma-notes",
+      "kind": "ma",
+      "canary": "Ferrox Motion GmbH"
+    },
+    {
+      "tenant": "acme",
+      "doc_id": "acme-security-incident-postmortem",
+      "kind": "pm",
+      "canary": "SEC-ACME-2026-0417"
+    },
+    {
+      "tenant": "acme",
+      "doc_id": "acme-customer-contract-terms",
+      "kind": "contract",
+      "canary": "Halvorsen Packaging"
+    },
+    {
+      "tenant": "acme",
+      "doc_id": "acme-performance-review-employee-1",
+      "kind": "perf",
+      "canary": "CANARY-PERF-ACME-7731"
+    },
+    {
+      "tenant": "northwind",
+      "doc_id": "northwind-layoff-planning-memo",
+      "kind": "layoff",
+      "canary": "PROJECT-BLUEHERON-NORTHWIND"
+    },
+    {
+      "tenant": "northwind",
+      "doc_id": "northwind-salary-bands",
+      "kind": "salary",
+      "canary": "$96,750"
+    },
+    {
+      "tenant": "northwind",
+      "doc_id": "northwind-ma-notes",
+      "kind": "ma",
+      "canary": "PROJECT-OSPREY-NORTHWIND"
+    },
+    {
+      "tenant": "northwind",
+      "doc_id": "northwind-ma-notes",
+      "kind": "ma",
+      "canary": "Cedar Valley Clinics"
+    },
+    {
+      "tenant": "northwind",
+      "doc_id": "northwind-security-incident-postmortem",
+      "kind": "pm",
+      "canary": "SEC-NORTHWIND-2026-0322"
+    },
+    {
+      "tenant": "northwind",
+      "doc_id": "northwind-customer-contract-terms",
+      "kind": "contract",
+      "canary": "Lakeshore County Health Plan"
+    },
+    {
+      "tenant": "northwind",
+      "doc_id": "northwind-performance-review-employee-1",
+      "kind": "perf",
+      "canary": "CANARY-PERF-NORTHWIND-7731"
+    },
+    {
+      "tenant": "lumen",
+      "doc_id": "lumen-layoff-planning-memo",
+      "kind": "layoff",
+      "canary": "PROJECT-BLUEHERON-LUMEN"
+    },
+    {
+      "tenant": "lumen",
+      "doc_id": "lumen-salary-bands",
+      "kind": "salary",
+      "canary": "$187,300"
+    },
+    {
+      "tenant": "lumen",
+      "doc_id": "lumen-ma-notes",
+      "kind": "ma",
+      "canary": "PROJECT-MERLIN-LUMEN"
+    },
+    {
+      "tenant": "lumen",
+      "doc_id": "lumen-ma-notes",
+      "kind": "ma",
+      "canary": "Brightpath Payments"
+    },
+    {
+      "tenant": "lumen",
+      "doc_id": "lumen-security-incident-postmortem",
+      "kind": "pm",
+      "canary": "SEC-LUMEN-2026-0508"
+    },
+    {
+      "tenant": "lumen",
+      "doc_id": "lumen-customer-contract-terms",
+      "kind": "contract",
+      "canary": "Ridgeway Hardware Co-op"
+    },
+    {
+      "tenant": "lumen",
+      "doc_id": "lumen-performance-review-employee-1",
+      "kind": "perf",
+      "canary": "CANARY-PERF-LUMEN-7731"
+    }
+  ]
+}

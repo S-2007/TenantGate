@@ -1,0 +1,60 @@
+CONFIDENTIAL
+ACME ROBOTICS, INC.
+MINUTES OF THE REGULAR MEETING OF THE BOARD OF DIRECTORS
+
+Date:      September 10, 2026
+Time:      9:00 a.m. - 1:15 p.m. Eastern
+Location:  HQ Board Room, 2100 Smallman Street, Pittsburgh, and by video
+
+Directors present: Harold Brennan (Chair), Margaret Okafor (CEO), Dr. Simone Achterberg, Wendell Pike, Ruth Nakashima
+Directors absent:  none
+Also present:      Theresa Kowalczyk (CFO), Daniel Reyes (General Counsel, acting as Secretary), Rafael Lindqvist (CTO) for item 4, Omar Haddad (CISO) for item 5
+
+1. CALL TO ORDER
+
+Mr. Brennan called the meeting to order at 9:02 a.m. A quorum was present. The minutes of the June 11, 2026 meeting were approved unanimously without changes.
+
+2. CEO UPDATE
+
+Ms. Okafor reported that Q2 results were ahead of plan and bookings for ARC-12 palletizing cells remain strong. The Mon Valley Assembly Center is on schedule to begin ARC-20 production in October; 41 of the first 45 hourly roles have been filled. She noted a softer quoting pipeline in food and beverage, which management attributes to customers delaying capex until interest rates settle.
+
+3. FINANCE
+
+Ms. Kowalczyk reviewed the Q2 report and the full-year forecast. Full-year revenue guidance is unchanged. She presented a request for an additional $9.7 million capital budget for phase two of the Mon Valley facility (a second test bay and Kite cobot line), to be spent over FY2027.
+
+RESOLVED, that the Board approves the Mon Valley phase two capital budget of $9.7 million, subject to quarterly progress reporting to the Audit Committee. Approved 5-0.
+
+Ms. Kowalczyk also confirmed that the $20 million revolver remains undrawn and that the company is in compliance with all covenants.
+
+4. TECHNOLOGY AND PRODUCT
+
+Mr. Lindqvist presented the next-generation Kite roadmap, including integrated joint actuators planned for 2028. Dr. Achterberg asked about the functional safety certification timeline; Mr. Lindqvist said certification work would begin in Q3 2027 and take 9 to 12 months. The Board asked for a supplier risk review on actuators at the December meeting.
+
+5. CYBERSECURITY
+
+Mr. Haddad reported on the remediation of the April 2026 security incident. All eight action items are complete. He reviewed the new token and secret controls and the move to short-lived credentials. Ms. Nakashima asked whether the company's cyber insurance covered the incident costs; Mr. Reyes confirmed the claim was accepted, net of the $250,000 retention. The Board asked for an external penetration test of FleetSight before year end.
+
+6. LEGAL - PENDING LITIGATION
+
+Mr. Reyes updated the Board on Tri-State Automation Supply LLC v. Acme Robotics, Inc., filed in the Court of Common Pleas of Allegheny County in March 2026. Tri-State, a former Wayfinder distributor, alleges wrongful termination of its distribution agreement and claims damages of approximately $2.3 million. Counsel believes the company has strong defenses, because the agreement allowed termination on 180 days' notice and notice was given in writing. Mediation is scheduled for November 18, 2026. The Board authorized management to settle for an amount not exceeding $400,000 if mediation offers that opportunity. Approved 5-0.
+
+7. RESTRUCTURING
+
+Ms. Brooks (VP People) joined by video. Management reviewed the previously circulated restructuring plan relating to the Wayfinder end-of-life and ARC-20 transfer to Mon Valley, including the proposed severance formula. Discussion focused on customer transition and employee communications. The Board approved the plan and severance formula as presented. Approved 5-0. Ms. Brooks left the meeting.
+
+8. EXECUTIVE SESSION / CORPORATE DEVELOPMENT
+
+The Board met in executive session, without management other than the CEO and CFO, to discuss a potential strategic transaction. Materials were provided under separate cover. No action was taken. The deal committee (Mr. Pike, Ms. Nakashima) will review diligence findings in November.
+
+9. COMPENSATION COMMITTEE REPORT
+
+Mr. Pike reported that the committee approved the 2026 merit budget at 3.5% of base payroll and reviewed executive bonus targets. No changes to executive base pay were made.
+
+10. ADJOURNMENT
+
+There being no further business, the meeting was adjourned at 1:15 p.m. Next regular meeting: December 10, 2026.
+
+Respectfully submitted,
+Daniel Reyes, Secretary
+
+[draft minutes - pending approval at next meeting]

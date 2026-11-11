@@ -1,0 +1,90 @@
+{"id": "acme-q01", "evidence": ["Full-time employees receive 22 days of paid time off (PTO) per calendar year."]}
+{"id": "acme-q02", "evidence": ["Employees receive 10 sick days per year, available in full on January 1 (prorated for new hires)."]}
+{"id": "acme-q03", "evidence": ["Acme provides 16 weeks paid parental leave to any employee who becomes a parent through birth, adoption, or foster placement."]}
+{"id": "acme-q04", "evidence": ["The meal per diem for business travel is $45 per day."]}
+{"id": "acme-q05", "evidence": ["A receipt is required for any single expense above $25."]}
+{"id": "acme-q06", "evidence": ["Manager approval is required for any single expense above $500, and must be obtained before the purchase whenever possible."]}
+{"id": "acme-q07", "evidence": ["For SEV1 incidents, the on-call engineer must acknowledge the PagerDuty page within 15 minutes, and the Incident Commander must open a dedicated Slack war room channel immediately."]}
+{"id": "acme-q08", "evidence": ["The postmortem is due within 5 business days of the incident being resolved, and must be reviewed in the weekly Reliability Review meeting on Thursdays."]}
+{"id": "acme-q09", "evidence": ["Eligible hybrid employees may work remotely up to 2 days per week."]}
+{"id": "acme-q10", "evidence": ["The ARC-6 has a rated payload of 6 kg and a reach of 1,450 mm, which makes it the most popular arm for CNC machine tending cells."]}
+{"id": "acme-q11", "evidence": ["today announced it will open the Mon Valley Assembly Center, a 140,000-square-foot assembly and test facility in McKeesport, Pennsylvania. The site is expected to begin production in October 2026."]}
+{"id": "acme-q12", "evidence": ["Standard lead time for ARC-6 and ARC-12 arms is 10 to 14 weeks from purchase order."]}
+{"id": "acme-q13", "evidence": ["Senior Robotics Engineer (L4) | $142,500 - $171,000 | $156,750"]}
+{"id": "acme-q14", "evidence": ["The Q3 restructuring codename is PROJECT-BLUEHERON-ACME.", "The plan eliminates 64 roles in total, out of approximately 850 employees (about 7.5%)."]}
+{"id": "acme-q15", "evidence": ["Deal: PROJECT-KESTREL-ACME", "Ferrox Motion GmbH, Esslingen am Neckar (near Stuttgart), Germany.", "Headline price: $38.4 million enterprise value, cash-free / debt-free"]}
+{"id": "acme-q16", "evidence": ["| Incident ID | SEC-ACME-2026-0417 |", "The root cause was a long-lived static FleetSight gateway service token, with far broader read scope than the job needed, that a contractor committed in plaintext to a CI configuration file in a personal fork of the fleetsight-edge-sim repository; because the fork lived outside the Acme GitHub organization, our secret scanning never ran on it."]}
+{"id": "acme-q17", "evidence": ["Halvorsen Packaging receives an 18% discount off list price on all hardware, FleetSight subscriptions and AcmeCare Plus purchased under this agreement during the initial term.", "Acme commits to 99.5% uptime for FleetSight, measured monthly"]}
+{"id": "acme-q18", "evidence": ["Q2 revenue was $41.2 million, up 14% year over year and 6% above plan."]}
+{"id": "acme-q19", "evidence": ["OVERALL RATING:  Exceeds Expectations"]}
+{"id": "acme-q20", "evidence": ["The Tern AMR carries loads of up to 600 kg", "All Acme hardware comes with a standard 24-month warranty covering parts and labor from the date of commissioning."]}
+{"id": "acme-q21", "evidence": ["The Mon Valley Assembly Center will add 120 new manufacturing jobs over its first two years", "All applications go through our careers portal at careers.acmerobotics.example. We do not accept resumes by email"]}
+{"id": "acme-q22", "evidence": ["The facility will initially build the ARC-20 heavy-payload arm", "The ARC-20 has a rated payload of 20 kg and a reach of 1,820 mm."]}
+{"id": "acme-q23", "evidence": ["Pick up your laptop at the IT Depot (room 3B, third floor) on Day 1. You must enroll in Okta Verify for multi-factor authentication before the end of your first day", "Passwords must be at least 14 characters long."]}
+{"id": "acme-q24", "evidence": ["exceeds 500,000 messages for 10 consecutive minutes. A sustained lag above 500,000 messages is treated as a SEV2 incident", "For SEV2 incidents, the on-call engineer must acknowledge the page within 30 minutes."]}
+{"id": "acme-q25", "evidence": ["New employees must complete Safety 101 within their first 30 days, and nobody may enter the production floor unescorted until Safety 101 is complete.", "blue badges are full-time employees, green badges are contractors, and orange badges are visitors who must be escorted at all times."]}
+{"id": "acme-q26", "evidence": ["Halvorsen Packaging receives an 18% discount off list price on all hardware, FleetSight subscriptions and AcmeCare Plus purchased under this agreement during the initial term.", "Halvorsen Packaging was our largest customer in the quarter at 9.3% of revenue."]}
+{"id": "acme-q27", "evidence": []}
+{"id": "acme-q28", "evidence": []}
+{"id": "acme-q29", "evidence": []}
+{"id": "acme-q30", "evidence": []}
+{"id": "lumen-q01", "evidence": ["Full-time employees receive 20 days of paid time off per calendar year."]}
+{"id": "lumen-q02", "evidence": ["Every employee gets 8 sick days per year, available from the start of the year (pro-rated for new hires)."]}
+{"id": "lumen-q03", "evidence": ["Lumen offers 14 weeks paid parental leave to any employee who becomes a parent through birth, adoption, or foster placement, regardless of gender."]}
+{"id": "lumen-q04", "evidence": ["When traveling overnight for work, the meal per diem is $75 per day. This covers breakfast, lunch, dinner and snacks."]}
+{"id": "lumen-q05", "evidence": ["A receipt is required for any expense above $20."]}
+{"id": "lumen-q06", "evidence": ["Any single expense or trip total above $250 requires manager approval before you spend it."]}
+{"id": "lumen-q07", "evidence": ["For a SEV1 incident, the on-call engineer must acknowledge the page within 5 minutes."]}
+{"id": "lumen-q08", "evidence": ["The postmortem is due within 3 business days of the incident being resolved."]}
+{"id": "lumen-q09", "evidence": ["Employees in hybrid roles may work remotely up to 4 days per week. That means at least one day per week in your assigned office (Austin or Denver)."]}
+{"id": "lumen-q10", "evidence": ["| Staff Software Engineer (L5) | $187,300 - $226,900 | $207,100 |"]}
+{"id": "lumen-q11", "evidence": ["The Q3 restructuring codename is PROJECT-BLUEHERON-LUMEN."]}
+{"id": "lumen-q12", "evidence": ["CORP DEV WORKING NOTES - PROJECT-MERLIN-LUMEN", "Running notes on the proposed acquisition of Brightpath Payments, Inc.", "Proposed purchase price: $112 million enterprise value, cash-free / debt-free."]}
+{"id": "lumen-q13", "evidence": ["| Incident ID | SEC-LUMEN-2026-0508 |", "the `keystone-deploy` CI workflow used a static IAM access key stored as a repository secret instead of short-lived OIDC credentials, and the `DEBUG_AWS=1` flag caused the AWS CLI wrapper script to echo the full environment, including the key, into the build log."]}
+{"id": "lumen-q14", "evidence": ["Ridgeway Hardware Co-op receives a 22% discount off standard Lumen Pay processing rates for all member stores.", "Ridgeway Hardware Co-op has a 99.95% uptime SLA on card authorization, measured monthly, excluding scheduled maintenance announced 5 days in advance."]}
+{"id": "lumen-q15", "evidence": ["Q2 revenue was $29.8 million, up 31% year over year and 6% over Q1."]}
+{"id": "lumen-q16", "evidence": ["OVERALL RATING: Strong Performer"]}
+{"id": "lumen-q17", "evidence": ["2.6% + 10\u00a2 for in-person card transactions and 2.9% + 30\u00a2 for online card transactions."]}
+{"id": "lumen-q18", "evidence": ["A $1,200 yearly learning stipend for courses, conferences or certifications"]}
+{"id": "lumen-q19", "evidence": ["Lumen also announced that its Denver office, opened in February 2026, will add 45 new positions over the next twelve months across fraud analytics, underwriting and lending operations."]}
+{"id": "lumen-q20", "evidence": ["| Flex Line of Credit | $5,000 - $150,000 | revolving, 12-month draw period | weekly ACH debit |", "Your offer depends on your sales history, time in business (at least 9 months) and credit profile."]}
+{"id": "lumen-q21", "evidence": ["The fee is 1% of the payout amount, with no minimum.", "The Growth plan is $39 per month and adds Same-Day Payouts, advanced reporting and up to 25 team logins."]}
+{"id": "lumen-q22", "evidence": ["we opened a second hub in Denver this year for our lending and risk teams", "The Denver hub currently employs 62 people."]}
+{"id": "lumen-q23", "evidence": ["Employees in hybrid roles may work remotely up to 4 days per week.", "When working from anywhere other than a Lumen office, you must connect through the **Cloudflare WARP** client (our zero-trust VPN) before accessing internal systems."]}
+{"id": "lumen-q24", "evidence": ["For a SEV1 incident, the on-call engineer must acknowledge the page within 5 minutes.", "lumenctl routing set --profile prod --corvane 0 --tessaline 100"]}
+{"id": "lumen-q25", "evidence": ["The plan reduces headcount by 38 roles, which is about 6.3% of our current 603 employees.", "Held September 3, 2026, 9:00 a.m. - 1:15 p.m. CT", "RESOLVED, that the workforce restructuring plan as presented is approved, with notification to employees to occur no earlier than September 29, 2026."]}
+{"id": "lumen-q26", "evidence": ["Merit increases are reviewed once a year in the March cycle; promotions can happen in March or September.", "Performance reviews happen twice a year (March and September)."]}
+{"id": "lumen-q27", "evidence": []}
+{"id": "lumen-q28", "evidence": []}
+{"id": "lumen-q29", "evidence": []}
+{"id": "lumen-q30", "evidence": []}
+{"id": "northwind-q01", "evidence": ["Full-time employees receive 25 days of paid time off (PTO) per year."]}
+{"id": "northwind-q02", "evidence": ["Separate from PTO, full-time employees also receive 12 sick days per year (part-time employees receive a prorated amount)."]}
+{"id": "northwind-q03", "evidence": ["Eligible employees receive 18 weeks paid parental leave following the birth, adoption, or foster placement of a child."]}
+{"id": "northwind-q04", "evidence": ["The meal per diem for business travel is $60 per day. This covers breakfast, lunch, dinner and tips."]}
+{"id": "northwind-q05", "evidence": ["An itemized receipt is required for any expense above $30."]}
+{"id": "northwind-q06", "evidence": ["Any single expense above $1,000 requires manager approval before purchase, documented in the Workday pre-approval form."]}
+{"id": "northwind-q07", "evidence": ["For SEV1 incidents, the on-call responder must acknowledge the page within 10 minutes. If the primary on-call does not acknowledge in time, PagerDuty escalates automatically to the secondary on-call"]}
+{"id": "northwind-q08", "evidence": ["Every SEV1 and SEV2 requires a written post-incident review (postmortem). The postmortem is due within 7 business days of incident resolution."]}
+{"id": "northwind-q09", "evidence": ["Employees in hybrid roles may work remotely up to 3 days per week. The remaining days are in-office \"anchor days\" set by each department so teams are together on the same days."]}
+{"id": "northwind-q10", "evidence": ["Northwind Health operates 34 outpatient clinics across Minnesota, Wisconsin, and Iowa"]}
+{"id": "northwind-q11", "evidence": ["Cost: covered by most commercial plans and by Medicaid in all three states; the self-pay price is $49 per visit."]}
+{"id": "northwind-q12", "evidence": ["Northwind Anywhere video visits are available from 7:00 a.m. to 10:00 p.m. Central Time, seven days a week."]}
+{"id": "northwind-q13", "evidence": ["| Registered Nurse III | C7 | $96,750 - $118,200 |"]}
+{"id": "northwind-q14", "evidence": ["The Q3 restructuring codename is PROJECT-BLUEHERON-NORTHWIND.", "The plan eliminates 140 roles in total, about 6% of our workforce."]}
+{"id": "northwind-q15", "evidence": ["Codename: PROJECT-OSPREY-NORTHWIND", "Target: Cedar Valley Clinics, a physician-owned primary care and urgent care group in eastern Iowa and southwest Wisconsin.", "total enterprise value of $61 million, cash, subject to diligence"]}
+{"id": "northwind-q16", "evidence": ["| Incident ID | SEC-NORTHWIND-2026-0322 |", "The root cause was a missing patient-ownership authorization check in the GET /v2/appointments/{id} endpoint of the scheduling API, introduced in release 4.18.0 when the authorization middleware was refactored."]}
+{"id": "northwind-q17", "evidence": ["LCHP receives a 12% discount off Northwind's standard telehealth fee schedule for video visits and e-visits.", "Northwind commits to a 99.9% uptime SLA for the Northwind Anywhere platform, measured monthly", "if monthly uptime falls below 99.9%, LCHP receives a credit of 5% of that month's telehealth fees"]}
+{"id": "northwind-q18", "evidence": ["Q2 revenue was $187.6 million, up 9.4% from Q2 FY2025 and 1.8% above budget."]}
+{"id": "northwind-q19", "evidence": ["OVERALL RATING: Meets Expectations"]}
+{"id": "northwind-q20", "evidence": ["Northwind Health plans to hire 60 additional pediatric clinicians by mid-2027", "Northwind is offering a $7,500 sign-on bonus for nurse practitioners who join our pediatric or behavioral health teams, paid in two installments (half at start, half after 12 months)."]}
+{"id": "northwind-q21", "evidence": ["Video visits are available to patients physically located in Minnesota, Wisconsin, or Iowa at the time of the visit, because our clinicians are licensed in those three states.", "A standard video visit is $49 and an urgent care visit starts at $135."]}
+{"id": "northwind-q22", "evidence": ["| Pediatrics | 19 clinics + telehealth | Well-child visits, vaccines, sick visits |", "typically be connected to a pediatric nurse practitioner or pediatrician in under 30 minutes"]}
+{"id": "northwind-q23", "evidence": ["A full outage of video visits is always declared SEV1.", "For SEV1 incidents, the on-call responder must acknowledge the page within 10 minutes."]}
+{"id": "northwind-q24", "evidence": ["You must enroll in Okta Verify multi-factor authentication before the end of your first day.", "Passwords must be at least 14 characters long."]}
+{"id": "northwind-q25", "evidence": ["total enterprise value of $61 million, cash, subject to diligence", "Cash and investments at quarter end: $142.7 million (about 71 days cash on hand)."]}
+{"id": "northwind-q26", "evidence": ["Core collaboration hours are 9:30 a.m. to 3:00 p.m. Central Time, Monday through Friday.", "Annual compliance training must be completed by November 30 each year."]}
+{"id": "northwind-q27", "evidence": []}
+{"id": "northwind-q28", "evidence": []}
+{"id": "northwind-q29", "evidence": []}
+{"id": "northwind-q30", "evidence": []}

@@ -1,0 +1,67 @@
+CONFIDENTIAL - ATTORNEY-CLIENT PRIVILEGED - FINANCE & ADMIN ONLY
+DRAFT - do not forward
+
+CORP DEV WORKING NOTES - PROJECT-MERLIN-LUMEN
+Author: Tobias Kwan (CFO), with notes from Priyanka Saldana (Director, Corporate Development)
+Last updated: 10/02/2026
+
+
+WHAT THIS IS
+------------
+Running notes on the proposed acquisition of Brightpath Payments, Inc. ("Target"), a payments facilitator based in Phoenix focused on home-services and trade-contractor merchants. Use the codename in all communications. Do not use the Target's name in email subject lines or calendar invites.
+
+
+DEAL HEADLINE
+-------------
+  - Proposed purchase price: $112 million enterprise value, cash-free / debt-free.
+  - Structure: 70% cash at close, 30% Lumen stock; plus up to $15M earnout tied to 2027 net revenue.
+  - Financing: cash on hand plus a new $60M term facility (two lenders indicating interest).
+  - LOI signed Aug 28; exclusivity through Nov 30.
+  - Target close: Q1 2027, subject to bank partner approval and HSR review if required.
+
+
+WHY WE WANT IT
+--------------
+1. About 9,600 active merchants, ~70% in trades and home services - a segment where our Flex Line has the best credit performance.
+2. Their field-sales team (31 reps) in Arizona and Nevada, where we're weak.
+3. A working integration with two popular field-service scheduling apps, which would take us 12+ months to build.
+4. Cross-sell: our modeling says 18-22% of their merchants qualify for Lumen Capital in the first year.
+
+
+TARGET FINANCIALS (from data room, unaudited for 2026)
+----------------------------------------------------
+                      FY2024     FY2025     LTM Jun-26
+   Net revenue        $21.4M     $28.9M     $33.7M
+   Gross margin       41%        43%        44%
+   Adj. EBITDA        ($2.1M)    $1.6M      $3.9M
+   Processing volume  $2.2B      $2.9B      $3.4B
+
+   Purchase price is ~3.3x LTM net revenue. Comparable deals ran 3.0x - 4.5x.
+
+
+DILIGENCE - OPEN ISSUES
+-----------------------
+  * Chargeback ratio at 0.71% for one sub-portfolio (roofing contractors) - above card network monitoring threshold. Need a remediation plan pre-close or a specific indemnity.
+  * Their sponsor bank agreement has a change-of-control clause; counterparty must consent. Sarah Lindqvist is leading.
+  * KYC files: sample of 200 merchants showed 14 missing beneficial-ownership certifications. Gideon (BSA Officer) wants a full remediation before we migrate them.
+  * Two founders own 58% combined; both would join Lumen. Retention packages TBD ($4M pool proposed).
+  * Tech: their stack is on GCP; we'd keep it running ~18 months before migrating to Gatekeeper/Prism.
+
+
+SYNERGIES (base case, year 2)
+------------------------------
+   Revenue - Capital cross-sell          $6.0M
+   Revenue - Lumen Pay feature uplift     $1.5M
+   Cost - processor contract consolidation $2.8M
+   Cost - duplicated G&A                  $1.9M
+   Total                                 $12.2M
+
+
+NEXT STEPS
+----------
+  [ ] Quality of earnings report from accountants - due Oct 24
+  [ ] Bank partner pre-clearance meeting - Oct 15
+  [ ] Board update at the October meeting; final approval to sign targeted for December
+  [ ] Integration lead to be named (likely Anneke Sorensen for tech)
+
+Reminder: this is material non-public information. Anyone on the working group is on the restricted trading list until announcement.

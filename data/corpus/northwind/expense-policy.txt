@@ -1,0 +1,61 @@
+NORTHWIND HEALTH - TRAVEL AND EXPENSE POLICY
+Policy FIN-110   |   Owner: Finance (Controller's Office)   |   Revised 2026/04/01
+
+1. PURPOSE
+
+This policy sets the rules for business travel and other expenses paid with your own money or a Northwind corporate card. The goal is simple: spend Northwind's money the way you would spend your own, and keep enough documentation that an auditor can follow what happened.
+
+2. WHO THIS APPLIES TO
+
+All employees, contractors with an approved expense agreement, and board members traveling on Northwind business.
+
+3. BOOKING TRAVEL
+
+  - Book flights, hotels and rental cars through Navan (our travel tool). Bookings made outside Navan are reimbursed only if they were cheaper and you attach proof.
+  - Economy class for all flights. Flights over 5 hours may be booked in economy plus/extra legroom.
+  - Hotels: up to $220 per night in Minneapolis, Chicago and Milwaukee; up to $175 per night elsewhere, before taxes.
+  - Mileage for personal vehicle use is reimbursed at the current IRS rate. Driving between clinics for a float shift counts; your normal commute does not.
+  - Rental cars: compact or mid-size. Decline the extra insurance - our corporate policy covers it.
+
+4. MEALS
+
+The meal per diem for business travel is $60 per day. This covers breakfast, lunch, dinner and tips. On your first and last travel days you receive 75% of the per diem. If a meal is provided (for example at a conference), you should not claim it.
+
+Team meals and meals with external guests are not covered by the per diem; they are reimbursed at actual cost with a receipt and the names of attendees. Alcohol is never reimbursable at team meals unless the event was approved in advance by a VP.
+
+5. RECEIPTS
+
+An itemized receipt is required for any expense above $30. Credit card statements alone are not receipts. If you lose a receipt for an expense above that amount, fill out the Missing Receipt Affidavit in Workday - you can do this a maximum of three times per year.
+
+6. APPROVALS
+
+  a) Your manager approves every expense report in Workday.
+  b) Any single expense above $1,000 requires manager approval before purchase, documented in the Workday pre-approval form. Examples: conference registration, a new piece of equipment, an expensive training course.
+  c) Expenses above $5,000 also need approval from your department VP and Finance.
+  d) Purchases of medical supplies, devices or software are NOT expenses. They must go through Procurement (Coupa) no matter the amount.
+
+7. CORPORATE CARDS
+
+Corporate cards are issued to employees who travel at least four times a year or who regularly buy things for a clinic. Personal charges on the corporate card are prohibited. If one happens by mistake, report it within 5 business days and repay it.
+
+8. SUBMITTING EXPENSES
+
+Submit expense reports in Workday within 30 days of the expense. Reports submitted after 90 days will not be reimbursed. Reimbursements are paid with the next regular payroll after approval.
+
+9. THINGS WE DON'T REIMBURSE
+
+  - Traffic or parking tickets
+  - Personal entertainment (movies, minibar, spa)
+  - Upgrades to flights or hotel rooms
+  - Gifts to patients
+  - Gifts to colleagues over $50 (and these require VP approval)
+  - Childcare or pet care while traveling
+  - Lost luggage beyond what the airline pays
+
+10. CONTINUING EDUCATION
+
+Licensed clinicians can use their CME allowance for course fees, conference registration and required license renewals. Travel for CME follows this policy. Submit CME expenses under the "CME" category so they draw from your allowance, not your department budget.
+
+11. VIOLATIONS
+
+Falsifying an expense report is a serious violation and can lead to termination and repayment. Questions go to the Controller's Office: expenses@northwindhealth.example.

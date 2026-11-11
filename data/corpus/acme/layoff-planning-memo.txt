@@ -1,0 +1,73 @@
+DRAFT - do not forward
+CONFIDENTIAL - ATTORNEY-CLIENT PRIVILEGED - PREPARED AT THE REQUEST OF COUNSEL
+
+TO:      Margaret Okafor, CEO; Theresa Kowalczyk, CFO
+CC:      Daniel Reyes, General Counsel
+FROM:    Janelle Brooks, VP People
+DATE:    July 21, 2026
+RE:      Q3 workforce restructuring - planning summary
+
+Margaret, Theresa -
+
+As discussed at the July 14 leadership offsite, this memo summarizes the current plan for the Q3 restructuring. The Q3 restructuring codename is PROJECT-BLUEHERON-ACME. Please use the codename in all calendar invites, email subjects and documents. Do not refer to "layoffs" or "RIF" in Slack, including DMs.
+
+1. WHY
+------
+The legacy Wayfinder AGV line (wire-guided carts, sold 2014-2022) is being end-of-lifed now that Tern has replaced it in every new deal. Wayfinder service revenue fell 41% year over year in H1 and the support, refurbishment and spare-parts teams that serve it are significantly over capacity. At the same time, we are moving ARC-20 production to the Mon Valley Assembly Center, which leaves duplicated roles at HQ for that line.
+
+We expect the combined actions to reduce annual operating expense by roughly $6.1M.
+
+2. SCOPE
+--------
+The plan eliminates 64 roles in total, out of approximately 850 employees (about 7.5%).
+
+  Group                                   Roles
+  --------------------------------------  -----
+  Wayfinder service & refurbishment         27
+  Wayfinder spare parts / logistics         11
+  HQ ARC-20 assembly (not transferring)     14
+  Customer Support (legacy queue)            6
+  Corporate G&A                              6
+  --------------------------------------  -----
+  TOTAL                                     64
+
+Separately, we expect around 30 HQ ARC-20 assembly employees to accept transfers to Mon Valley. Those are not counted in the 64.
+
+No reductions are planned in Robotics & Controls Engineering, FleetSight, or Field Integration.
+
+3. TIMING
+---------
+  - Aug 4: final selection lists from department heads due to People Ops
+  - Aug 11-15: legal / adverse impact review (outside counsel)
+  - Aug 25: manager training (small group, under NDA)
+  - Sept 15: notification day. All affected employees notified in person or by video between 9:00 and 12:00
+  - Sept 15 - Nov 14: 60-day notice period. Because the HQ site action may reach WARN Act thresholds, all affected employees will receive 60 days of pay and benefits whether or not WARN technically applies.
+
+4. SEVERANCE (proposed)
+-----------------------
+  - 2 weeks of base pay per year of service, minimum 6 weeks, maximum 26 weeks
+  - COBRA premiums paid for 3 months
+  - Pro-rated 2026 bonus for eligible employees, paid at the normal time
+  - Outplacement services for 3 months
+  - Severance conditioned on a signed separation agreement and release
+
+Estimated one-time cost: $3.4M (severance, benefits continuation, outplacement, legal).
+
+5. RISKS
+--------
+  a) Selection criteria for the HQ ARC-20 assembly group must be documented carefully; that group skews older and longer-tenured than the overall workforce. Outside counsel will run the adverse impact analysis.
+  b) Customer risk: about 210 Wayfinder units are still in service at 19 customers. We will offer those customers a Tern trade-in program and a final 18-month parts supply through a third-party refurbisher.
+  c) Leak risk ahead of Sept 15, especially given the Mon Valley press coverage. Keep the circle small.
+
+6. COMMUNICATIONS
+-----------------
+Lena Sorensen will draft internal FAQ and talking points by Aug 29, reviewed by Legal. No external press release is planned; if asked, we'll describe it as completing the Wayfinder end-of-life.
+
+7. DECISIONS NEEDED
+-------------------
+  - Approve severance formula (above)
+  - Approve whether Mon Valley transfer offers go out before or after notification day (People Ops recommends after, on Sept 16)
+
+Happy to walk through this before the board call.
+
+- Janelle

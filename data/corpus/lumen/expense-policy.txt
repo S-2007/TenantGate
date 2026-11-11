@@ -1,0 +1,66 @@
+LUMEN FINANCE - TRAVEL & EXPENSE POLICY
+Policy no. FIN-004   |   Owner: Finance (Controller: Marisol Duarte)
+Last updated: 5 May 2026
+
+----------------------------------------------------------------------
+
+1. PURPOSE
+
+This policy explains what Lumen will reimburse when you spend money on company business, and how to get paid back. The short version: spend Lumen's money the way you'd spend your own if you were careful, keep your receipts, and submit within 30 days.
+
+All expenses are submitted through Navan (formerly TripActions). Corporate cards are issued to employees who travel more than four times a year or who regularly buy software and supplies for their team.
+
+
+2. APPROVALS
+
+  - Any single expense or trip total above $250 requires manager approval before you spend it. Get the approval in Navan (pre-trip request) or in writing in Slack/email and attach it.
+  - Expenses above $5,000 also need approval from your department head and Finance.
+  - Software subscriptions of any amount need a Security review ticket first (see IT Security Policy, section on third-party apps). No exceptions, even for a $9/month tool.
+  - You can never approve your own expenses, or expenses for someone who you report to.
+
+
+3. RECEIPTS
+
+A receipt is required for any expense above $20. The receipt must show the vendor, date, amount, and what was bought. Credit card statements alone are not a receipt.
+
+Lost a receipt? Complete the Missing Receipt Declaration in Navan. More than two missing-receipt declarations in a quarter will be flagged to your manager.
+
+
+4. TRAVEL
+
+Air: Book economy through Navan at least 14 days before departure where possible. Premium economy is allowed for flights over 5 hours. Business class requires CFO approval.
+
+Hotels: Use the Navan rate cap for the city (Austin and Denver caps are $230 and $210 per night). Going over the cap needs manager approval with a reason, e.g. conference hotel.
+
+Ground: Rideshare and taxis are fine. Rental cars only if it's cheaper than rideshare for the trip, and always decline the extra insurance - our corporate policy covers it. Personal car mileage is reimbursed at the IRS standard rate.
+
+Austin <-> Denver: The company has a negotiated fare with one airline; Navan shows it first. Use it unless the timing doesn't work.
+
+
+5. MEALS
+
+When traveling overnight for work, the meal per diem is $75 per day. This covers breakfast, lunch, dinner and snacks. You don't need to itemize individual meals within the per diem, but receipts over $20 still need to be attached. On partial travel days (first and last day of a trip) the per diem is 75% of the full amount.
+
+Team meals and client meals are not covered by the per diem. They are reimbursed at actual cost with the names of attendees listed. Alcohol is reimbursable for client meals only, within reason (no more than two drinks per person).
+
+
+6. NOT REIMBURSABLE
+
+  * Personal entertainment, in-room movies, minibar
+  * Upgrades (seat, room, car) you chose for comfort
+  * Traffic or parking tickets
+  * Gifts to colleagues (use the People team's gifting budget)
+  * Expenses for a spouse/partner/family member traveling with you
+  * Anything bought from a merchant whose account you are reviewing or underwriting (also a conflict of interest - see Handbook 6.1)
+
+
+7. SUBMITTING & PAYMENT
+
+Submit within 30 days of the expense. Reimbursements are paid in the next payroll run after approval. Expenses older than 90 days are not reimbursed unless the Controller makes an exception.
+
+Corporate card holders must reconcile their card in Navan by the 5th of each month. Cards with transactions unreconciled for more than 60 days are suspended.
+
+
+8. QUESTIONS
+
+Ask in #ask-finance or email ap@lumenfinance.example. Abuse of this policy (fake receipts, split transactions to avoid the approval limit, etc.) is treated as misconduct and may lead to termination.

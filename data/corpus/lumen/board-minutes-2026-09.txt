@@ -1,0 +1,63 @@
+CONFIDENTIAL - BOARD OF DIRECTORS
+LUMEN FINANCE, INC.
+
+MINUTES OF THE REGULAR MEETING OF THE BOARD OF DIRECTORS
+Held September 3, 2026, 9:00 a.m. - 1:15 p.m. CT
+Location: Austin HQ, 5th floor boardroom, and by video
+
+DRAFT - subject to board approval at the next meeting - do not forward
+
+
+PRESENT (Directors): Elena Vasquez-Hart (CEO, Chair); Martin Okonkwo-Bell (Lead Independent Director); Hélène Marchetti; Dev Raghunathan; Carla Juncosa (Audit Committee Chair)
+ABSENT: none
+ALSO PRESENT: Tobias Kwan (CFO); Ravi Menon (CTO); Adaeze Okafor (Chief Risk Officer); Sarah Lindqvist (General Counsel, Secretary of the meeting); Joanne Albright (VP People, for item 5 only)
+
+
+1. CALL TO ORDER
+
+The Chair called the meeting to order at 9:02 a.m. A quorum was present. The minutes of the June 11, 2026 meeting were approved without changes.
+
+
+2. CEO UPDATE
+
+Ms. Vasquez-Hart reviewed progress against the 2026 plan. Payments growth remains ahead of plan; lending is behind plan after the deliberate tightening of the Sales-Based Advance product in May. Same-Day Payouts will launch nationally on September 15 following a successful pilot. The Denver hub now has 62 employees.
+
+
+3. FINANCE AND AUDIT COMMITTEE REPORT
+
+Mr. Kwan presented the Q2 results (previously circulated). Ms. Juncosa reported that the Audit Committee met on August 20 and reviewed the Q2 management accounts, the credit loss provisioning method, and the status of the 2025 internal audit findings. One finding (static CI credentials) has been closed following the May security incident. The Committee recommends the board approve the engagement of the external auditor for FY2026 at an estimated fee of $640,000.
+
+RESOLVED, that the engagement of the external auditor for the FY2026 audit is approved. (Unanimous.)
+
+
+4. RISK AND SECURITY
+
+Ms. Okafor presented the quarterly risk dashboard. 30+ day delinquency rose to 4.9%. The board asked management to present a restaurant-segment stress test at the December meeting.
+
+Mr. Menon summarized the May security incident and the completed remediation actions. Directors asked whether the merchant notifications had generated complaints or regulatory inquiries; Ms. Lindqvist reported 23 merchant inquiries, no regulatory action, and that the bank partner had closed its review on August 14. Mr. Raghunathan asked for a tabletop exercise for the board in Q1 2027. Management agreed.
+
+
+5. WORKFORCE RESTRUCTURING
+
+Ms. Albright presented the proposed Q3 workforce restructuring (materials circulated under the internal codename). The proposal reduces headcount across Merchant Support, Lending Operations, Sales, Marketing, one legacy Engineering team and G&A, with an estimated one-time cost of $2.45 million and annual savings of about $4.1 million. Directors discussed the severance terms, the treatment of employees on protected leave, and communication plans for merchants and remaining staff. Mr. Okonkwo-Bell noted that the Compensation Committee reviewed and supported the plan on September 1.
+
+RESOLVED, that the workforce restructuring plan as presented is approved, with notification to employees to occur no earlier than September 29, 2026. (Approved 4-0; Ms. Marchetti abstained, citing a personal relationship with a member of the affected Marketing team, disclosed in advance.)
+
+
+6. STRATEGIC MATTERS (EXECUTIVE SESSION WITH CFO AND GC)
+
+The board received an update from the CFO on a potential strategic acquisition under exclusivity. Detailed discussion is recorded in a separate privileged memorandum held by the General Counsel. No action was taken. Management will return in October with diligence findings.
+
+
+7. OTHER BUSINESS
+
+The board confirmed the 2027 meeting calendar: February 10, May 12, September 1 and December 8, with an additional October 2026 special session for the strategic matter above.
+
+
+8. ADJOURNMENT
+
+There being no further business, the meeting was adjourned at 1:15 p.m.
+
+
+Respectfully submitted,
+Sarah Lindqvist, Secretary of the Meeting

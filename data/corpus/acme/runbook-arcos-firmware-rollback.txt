@@ -1,0 +1,72 @@
+RUNBOOK - ArcOS FIRMWARE ROLLBACK (SKYLIFT OTA)
+================================================
+
+Owner ......... Controls Software team (lead: Hector Villanueva)
+Applies to .... ARC-6 / ARC-12 / ARC-20 and Kite controllers on ArcOS 4.x
+Last updated .. 2026-09-02
+Audience ...... engineering, platform admins ONLY. Do not share with customers.
+
+WHEN TO USE THIS
+----------------
+Use this runbook when a firmware release pushed through Skylift (our OTA service) is causing problems in the field: unexpected faults, controllers failing to boot, safety controller mismatch errors, or a spike in support tickets that started right after a rollout.
+
+Skylift rollouts are staged: 1% of connected controllers, then 10%, then 50%, then 100%, with at least 24 hours between stages. In most cases you are rolling back a partial stage, which is much easier than rolling back everything.
+
+IMPORTANT SAFETY NOTE
+A firmware rollback reboots the controller. Never trigger a rollback on a robot that might be mid-cycle without the customer's knowledge. Skylift only applies a rollback when the controller reports state IDLE or E-STOPPED, but customers must still be notified before you schedule it.
+
+STEP 1 - PAUSE THE ROLLOUT
+--------------------------
+Stop the bleeding first.
+
+    skylift rollout pause --release arcos-4.8.2
+
+This stops any additional controllers from receiving the release. It does not change controllers that already updated.
+
+Post in #controls-release:  "Paused arcos-4.8.2 at <stage>%, investigating <symptom>."
+
+STEP 2 - CONFIRM THE RELEASE IS THE CAUSE
+-----------------------------------------
+  a) In FleetSight admin, filter fault events by firmware version. Compare the fault rate of controllers on the new version vs the previous version over the same window.
+  b) Look for the specific fault codes. Common ones after a bad release:
+       F-2107  joint encoder checksum
+       F-3310  safety controller CRC mismatch
+       F-0412  watchdog reset loop
+  c) If the fault rate on the new version is more than 3x the previous version, treat the release as bad and continue to Step 3.
+
+STEP 3 - DECLARE AN INCIDENT
+----------------------------
+A bad firmware release that is still pushing to customers is a SEV1 per the Incident Response Process. A paused rollout with limited field impact is normally SEV2. The Incident Commander makes the final call.
+
+STEP 4 - ROLL BACK
+------------------
+The previous signed image is always retained on the controller's B partition, so a rollback does not need to download anything.
+
+    skylift rollback create --release arcos-4.8.2 --target-version arcos-4.8.1 --cohort affected
+    skylift rollback status --id <rollback-id>
+
+Rollbacks require approval from TWO people: the on-call controls engineer and either the Controls Software lead or a platform admin. Skylift enforces this; the second approver runs:
+
+    skylift rollback approve --id <rollback-id>
+
+Expected time: most controllers revert within 20 minutes of reaching IDLE. Controllers that are offline will roll back the next time they connect.
+
+STEP 5 - AIR-GAPPED / USB SITES
+-------------------------------
+Sites without FleetSight do not get OTA updates and therefore are only affected if a technician installed the release by USB. Customer Support will contact those customers and ship (or email a link to) the previous signed USB image. Do not send unsigned builds to anyone, ever.
+
+STEP 6 - VERIFY
+---------------
+  - Fault rate for the affected cohort back to baseline for 2 hours
+  - No controllers stuck in "rollback pending" for more than 24 hours (follow up with support for those)
+  - Release marked BLOCKED in Skylift so nobody re-starts it by accident:
+        skylift release block --release arcos-4.8.2 --reason "<jira ticket>"
+
+STEP 7 - FOLLOW UP
+------------------
+Open a Jira ticket in CTRL with the label POSTMORTEM and link the incident channel. The fix ships as a new version number (e.g. 4.8.3). We never re-publish a version number that was rolled back.
+
+Contacts:
+  Controls Software on-call ... PagerDuty "ArcOS Controls"
+  Skylift platform ............ #skylift-platform
+  Customer comms .............. Customer Support duty manager

@@ -1,0 +1,37 @@
+FOR IMMEDIATE RELEASE
+
+Lumen Finance Launches Same-Day Payouts for Small Businesses Nationwide
+
+New feature lets merchants access card sales the same afternoon; Denver risk and lending hub to add 45 jobs
+
+AUSTIN, Texas -- September 15, 2026 -- Lumen Finance, the payments and lending platform for small businesses, today announced the nationwide launch of Same-Day Payouts, which lets merchants move card sales into their bank account the same business day instead of waiting for standard next-day settlement.
+
+Same-Day Payouts is available immediately to all merchants on the Lumen Pay Growth plan. Sales captured before 2:00 p.m. Central Time are paid out by 6:00 p.m. Central Time the same business day, to any U.S. bank account that supports real-time or same-day ACH. The fee is 1% of the payout amount, with no minimum.
+
+During a twelve-week pilot with 1,850 merchants in Texas, Colorado and Arizona, participating businesses used Same-Day Payouts on an average of 9 days per month, most often on Fridays and before payroll. Restaurants and trade contractors were the heaviest users.
+
+"Small business owners told us the same thing over and over: the money is mine, why do I have to wait for it?" said Elena Vasquez-Hart, co-founder and CEO of Lumen Finance. "Same-Day Payouts closes that gap. A taqueria owner can run her lunch service and pay her produce supplier before dinner."
+
+Lumen also announced that its Denver office, opened in February 2026, will add 45 new positions over the next twelve months across fraud analytics, underwriting and lending operations. The Denver hub currently employs 62 people.
+
+"Faster money movement only works if the risk controls keep up," said Ravi Menon, Chief Technology Officer. "Every same-day payout is screened in real time by Beacon, our fraud engine, and the Denver team is central to that work."
+
+How Same-Day Payouts works
+
+  1. A merchant turns on Same-Day Payouts in Lumen Hub (Settings > Payouts).
+  2. Each business day, eligible card sales captured before the 2:00 p.m. CT cutoff are batched.
+  3. Lumen screens the batch with Beacon and sends the funds through the RTP network or same-day ACH.
+  4. The merchant sees the deposit, and the 1% fee, itemized in their payout report.
+
+Merchants can switch the feature on or off at any time. Sales captured after the cutoff, on weekends, or on federal bank holidays settle on the next business day.
+
+About Lumen Finance
+
+Lumen Finance builds payments and lending tools for small businesses. Founded in 2018 and headquartered in Austin, Texas, Lumen serves about 41,000 merchants across the United States through Lumen Pay, Lumen Capital and the Lumen Hub dashboard. Lending products are issued by Harbor Plains Bank, Member FDIC.
+
+Media contact:
+Tasha Greenleaf
+Communications Manager, Lumen Finance
+press@lumenfinance.example
+
+###

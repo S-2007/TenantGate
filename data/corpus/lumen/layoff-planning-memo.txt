@@ -1,0 +1,70 @@
+CONFIDENTIAL -- PRIVILEGED & CONFIDENTIAL / PREPARED AT THE DIRECTION OF COUNSEL
+DRAFT - do not forward
+
+MEMORANDUM
+
+TO:      Elena Vasquez-Hart (CEO); Sarah Lindqvist (General Counsel)
+FROM:    Joanne Albright, VP People
+CC:      Tobias Kwan (CFO); Lena Hoang (Sr. HR Business Partner)
+DATE:    July 22, 2026
+RE:      Q3 workforce restructuring - planning summary
+
+
+1. Summary
+
+The Q3 restructuring codename is PROJECT-BLUEHERON-LUMEN. Please use only the codename in calendar invites, document titles and Slack.
+
+The plan reduces headcount by 38 roles, which is about 6.3% of our current 603 employees. The goal is to bring operating expenses in line with the revised FY2026 plan after the slowdown in Sales-Based Advance originations and the decision to consolidate Merchant Support tooling. Target notification date is Tuesday, September 29, 2026.
+
+
+2. Where the reductions fall
+
+   Team                                   Roles   Notes
+   -----------------------------------    -----   ----------------------------------
+   Merchant Support (Austin)                14    after chatbot + new help center rollout
+   Lending Operations - SBA advances        9     product line being narrowed
+   Sales (outbound SMB)                     6     moving to partner-led channel
+   Marketing                                4     brand team consolidated
+   Engineering (Lumen Hub legacy web)       3     legacy app sunset
+   G&A (facilities, recruiting coord.)      2
+                                          ----
+   Total                                    38
+
+No reductions are planned in Risk & Fraud, Compliance, Security or Payments Platform. We are still hiring in Denver for underwriting and fraud analytics, which may raise questions; managers need a clear answer (talking points to follow from Comms).
+
+
+3. Severance and support (proposed)
+
+  - Base severance: 8 weeks of base pay, plus 1 additional week per full year of service, capped at 20 weeks total.
+  - COBRA premiums paid by Lumen for 3 months.
+  - Equity: accelerate vesting for the next quarterly tranche for anyone affected.
+  - Outplacement services through Ridgeline Careers for 90 days.
+  - Unused PTO paid out regardless of state.
+  - Laptops may be kept after IT wipes them (approx. cost $18,000 total).
+
+Estimated one-time cost: $2.45 million (severance $1.9M, COBRA $310K, outplacement $95K, other $145K). Annualized savings: approximately $4.1 million.
+
+
+4. Legal considerations (S. Lindqvist to confirm)
+
+  - WARN Act: the reduction is spread across two sites, which keeps us below the federal threshold, and Texas has no state mini-WARN. We will still provide at least 2 weeks' notice period pay in lieu.
+  - Adverse impact analysis by age, gender and race must be done before final selection. Lena Hoang to run with outside counsel by August 21.
+  - Two employees in scope are currently on parental leave and one on approved medical leave; Legal to review individually. No one on protected leave will be notified during their leave.
+  - Visa holders: one H-1B employee in the Engineering list - immigration counsel to advise on the 60-day grace period.
+
+
+5. Timeline
+
+   Jul 29   Exec review of team-level numbers
+   Aug 21   Adverse impact analysis complete
+   Sep 03   Board sign-off (Compensation Committee + full board)
+   Sep 15   Manager briefings (affected managers only)
+   Sep 29   Notification day; 1:1 conversations 9:00-12:00 CT, all-hands 1:00 CT
+   Oct 30   Last working day for affected employees (paid through)
+
+
+6. Confidentiality
+
+Distribution is limited to the people on this memo plus the Compensation Committee. Do not discuss with managers until the Sep 15 briefing. Selection spreadsheets live only in the restricted People-Legal Drive folder - do not download.
+
+-- JA
