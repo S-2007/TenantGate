@@ -123,7 +123,14 @@ class SentenceTransformerEmbedder:
         from sentence_transformers import SentenceTransformer  # heavy import, keep lazy
 
         self.name = model_name
-        self._model = SentenceTransformer(model_name, device="cpu")
+        try:
+            # Cached model: load with NO network call. Hugging Face Hub checks can stall for
+            # minutes (seen: a 2-minute hang on the first /ask), and the app must not depend on
+            # huggingface.co at request time.
+            self._model = SentenceTransformer(model_name, device="cpu", local_files_only=True)
+        except Exception:  # noqa: BLE001 - not cached yet: download once
+            logger.info("embedding model %s not in the local cache; downloading", model_name)
+            self._model = SentenceTransformer(model_name, device="cpu")
         get_dim = (
             getattr(self._model, "get_embedding_dimension", None)
             or self._model.get_sentence_embedding_dimension

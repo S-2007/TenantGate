@@ -120,3 +120,55 @@ def ask(
         model=result.llm_model,
         request_id=request_id,
     )
+
+
+class DocumentSummary(BaseModel):
+    """A document the caller may read (no content, no ACL details)."""
+
+    doc_id: str
+    title: str
+    classification: str
+
+
+@router.get("/documents", response_model=list[DocumentSummary])
+def my_documents(user: AuthUser = Depends(get_current_user)) -> list[DocumentSummary]:  # noqa: B008
+    """Titles of every document the caller may read.
+
+    Filtered three times, like retrieval: explicit tenant WHERE, RLS on ``documents`` (bound to
+    the caller in this transaction), then ``can_access`` on each row.
+    """
+    from sqlalchemy import select
+
+    from app.auth.policy import DocACL, can_access
+    from app.db.models import Document
+    from app.db.rls import apply_rls_context
+
+    with transaction() as s:
+        if not apply_rls_context(s, user):
+            return []
+        rows = s.execute(
+            select(
+                Document.id,
+                Document.title,
+                Document.classification,
+                Document.tenant_id,
+                Document.allowed_roles,
+                Document.allowed_users,
+            )
+            .where(Document.tenant_id == user.tenant_id)
+            .order_by(Document.classification, Document.title)
+        ).all()
+    return [
+        DocumentSummary(doc_id=r.id, title=r.title, classification=r.classification)
+        for r in rows
+        if can_access(
+            user,
+            DocACL(
+                r.id,
+                r.tenant_id,
+                r.classification,
+                frozenset(r.allowed_roles),
+                frozenset(r.allowed_users),
+            ),
+        )  # fmt: skip
+    ]

@@ -36,6 +36,9 @@ dev = [
 [tool.setuptools.packages.find]
 include = ["app*", "eval*", "scripts*"]
 
+[tool.setuptools.package-data]
+app = ["web/*"]  # the static web UI (HTML/CSS/JS)
+
 [tool.ruff]
 line-length = 100
 target-version = "py311"

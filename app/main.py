@@ -5,12 +5,14 @@ from __future__ import annotations
 import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI, Request
 from fastapi.concurrency import run_in_threadpool
 from fastapi.exception_handlers import request_validation_exception_handler
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse, PlainTextResponse
+from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.audit.log import AuditRecord, status_for, write_audit
 from app.config import get_settings
@@ -32,6 +34,19 @@ security_log = logging.getLogger("app.security")
 IDENTITY_HINT_HEADERS = ("x-tenant-id", "x-tenant", "x-user-id", "x-user", "x-roles", "x-role")
 IDENTITY_HINT_PARAMS = ("tenant_id", "tenant", "user_id", "roles", "role")
 
+WEB_DIR = Path(__file__).parent / "web"
+# The UI loads only its own files: no inline script, no third-party code, no framing.
+UI_SECURITY_HEADERS = {
+    "Content-Security-Policy": (
+        "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; "
+        "connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; "
+        "frame-ancestors 'none'"
+    ),
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "no-referrer",
+    "X-Frame-Options": "DENY",
+}
+
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> AsyncIterator[None]:
@@ -40,6 +55,12 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
     from app.auth.passwords import dummy_hash
 
     dummy_hash()  # pay the one-off hashing cost now, not on the first unknown-email login
+    s = get_settings()
+    if s.embedding_model != "hash":
+        from app.ingestion.embedder import get_embedder
+
+        # Load the model at startup so the first user's question isn't the one that waits.
+        await run_in_threadpool(get_embedder, s.embedding_model, s.embedding_dim)
     yield
     reset_engine()
 
@@ -166,6 +187,15 @@ def create_app() -> FastAPI:
     app.include_router(router)
     app.include_router(audit_router)
     app.include_router(admin_router)
+
+    # Minimal web UI: static files only, no external scripts, strict CSP.
+    app.mount("/static", StaticFiles(directory=WEB_DIR), name="static")
+
+    @app.get("/", include_in_schema=False)
+    def web_ui() -> FileResponse:
+        """The single-page UI (talks to this same API with a bearer token kept in memory)."""
+        return FileResponse(WEB_DIR / "index.html", headers=UI_SECURITY_HEADERS)
+
     return app
 
 

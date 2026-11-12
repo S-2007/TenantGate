@@ -120,6 +120,16 @@ python -m uvicorn app.main:app --port 8000
 
 Or run the API in Docker (it still talks to your Neon project via `.env`): `docker compose up --build`.
 
+**Web UI:** open **http://127.0.0.1:8000/**. Sign in as a demo user (click an email chip; the dev
+password is in `data/seed_users.json`), then:
+- **Ask** questions: each answer shows its cited sources and which documents the model was given.
+- **My documents** lists what you are allowed to read.
+- **Admin** (admins only) shows who retrieved a document and lets you change who can read it.
+
+Try the same question as `employee_1`, `hr_1` and a user of another company. The page is plain
+HTML and JavaScript served by the API itself, with a strict Content-Security-Policy, no third-party
+code, and the token kept only in memory. Swagger is at `/docs`.
+
 **4. Demo**, in a second terminal: `bash scripts/demo.sh` (or `make demo`) runs all five
 scenarios below with PASS/FAIL checks. On Windows, run it from **Git Bash**: a plain `bash`
 there can resolve to WSL, which can't see your Windows Python. To do it by hand:

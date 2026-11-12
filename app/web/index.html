@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TenantGate</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo">⛨</span> TenantGate <span class="sub">permission-aware RAG</span></div>
+    <div id="whoami" class="whoami hidden">
+      <span id="who-email"></span>
+      <span id="who-tenant" class="pill"></span>
+      <span id="who-roles"></span>
+      <button id="logout" class="ghost">Log out</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- LOGIN -->
+    <section id="login-view" class="card narrow">
+      <h1>Sign in</h1>
+      <p class="muted">Every answer is limited to the documents <em>you</em> may read. Try the same
+        question as different users to see the difference.</p>
+      <form id="login-form" autocomplete="off">
+        <label>Email <input id="email" type="email" required placeholder="employee_1@acme.example"></label>
+        <label>Password <input id="password" type="password" required placeholder="dev password from data/seed_users.json"></label>
+        <button type="submit" class="primary">Sign in</button>
+        <p id="login-error" class="error hidden"></p>
+      </form>
+      <div class="demo-users">
+        <p class="muted small">Demo users (click to fill the email). The dev password is in
+          <code>data/seed_users.json</code>.</p>
+        <div id="user-chips" class="chips"></div>
+      </div>
+    </section>
+
+    <!-- APP -->
+    <section id="app-view" class="hidden">
+      <nav class="tabs">
+        <button class="tab active" data-tab="chat">Ask</button>
+        <button class="tab" data-tab="docs">My documents</button>
+        <button class="tab admin-only hidden" data-tab="admin">Admin</button>
+      </nav>
+
+      <div id="tab-chat" class="tabpane">
+        <div class="card">
+          <form id="ask-form" class="ask">
+            <input id="question" type="text" maxlength="2000" required
+                   placeholder="Ask about your company's documents, e.g. How many PTO days do I get per year?">
+            <button type="submit" class="primary" id="ask-btn">Ask</button>
+          </form>
+          <div id="examples" class="chips"></div>
+        </div>
+        <div id="answers"></div>
+      </div>
+
+      <div id="tab-docs" class="tabpane hidden">
+        <div class="card">
+          <h2>Documents you can read</h2>
+          <p class="muted small">Filtered by your tenant and roles (SQL + row-level security +
+            policy check). Other users see a different list.</p>
+          <div id="doc-counts" class="chips"></div>
+          <table class="table"><thead><tr><th>Title</th><th>Classification</th><th>Doc id</th></tr></thead>
+            <tbody id="doc-rows"></tbody></table>
+        </div>
+      </div>
+
+      <div id="tab-admin" class="tabpane hidden">
+        <div class="card">
+          <h2>Who retrieved a document?</h2>
+          <form id="audit-form" class="row">
+            <input id="audit-doc" list="doc-ids" placeholder="doc id, e.g. acme-salary-bands" required>
+            <select id="audit-days"><option value="1">last 1 day</option><option value="7">last 7 days</option>
+              <option value="30" selected>last 30 days</option></select>
+            <button class="primary" type="submit">Look up</button>
+          </form>
+          <div id="audit-out"></div>
+        </div>
+        <div class="card">
+          <h2>Change who can read a document</h2>
+          <p class="muted small">Applied atomically to the document and all its chunks; the very next
+            query of every user sees the change.</p>
+          <form id="acl-form">
+            <div class="row">
+              <input id="acl-doc" list="doc-ids" placeholder="doc id" required>
+              <select id="acl-class">
+                <option value="confidential">confidential (only the roles below)</option>
+                <option value="internal">internal (all employees)</option>
+                <option value="public">public (everyone in your company)</option>
+              </select>
+            </div>
+            <div id="acl-roles" class="checks"></div>
+            <button class="primary" type="submit">Save access</button>
+          </form>
+          <div id="acl-out"></div>
+        </div>
+        <datalist id="doc-ids"></datalist>
+      </div>
+    </section>
+  </main>
+
+  <footer class="muted small">
+    API docs: <a href="/docs">/docs</a> · health: <a href="/health">/health</a> · metrics: <a href="/metrics">/metrics</a>
+  </footer>
+</body>
+</html>

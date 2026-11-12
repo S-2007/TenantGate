@@ -73,3 +73,25 @@ def test_ask_rejects_body_tenant_id(seeded, client):
         "/ask", json={"question": "hi", "tenant_id": str(world.tid("itest-b"))}, headers=h
     )
     assert r.status_code == 422
+
+
+def test_documents_endpoint_lists_exactly_what_each_user_may_read(seeded, client):
+    """GET /documents (used by the web UI) == can_access over the seed plan, per test user."""
+    from app.auth.policy import AuthUser, DocACL, can_access
+
+    plan = world.plan()
+    for u in plan.users:
+        if not u.is_active:
+            continue
+        user = AuthUser(id=u.id, tenant_id=u.tenant_id, roles=frozenset(u.roles))
+        expected = {
+            d.id
+            for d in plan.documents
+            if can_access(user, DocACL(d.id, d.tenant_id, d.classification,
+                                       frozenset(d.allowed_roles), frozenset(d.allowed_users)))
+        }  # fmt: skip
+        r = client.get("/documents", headers=_bearer(client, u.key))
+        assert r.status_code == 200, r.text
+        got = {d["doc_id"] for d in r.json()}
+        assert got == expected, (u.key, got ^ expected)
+        assert "allowed_roles" not in r.text and "allowed_users" not in r.text  # no ACL details
