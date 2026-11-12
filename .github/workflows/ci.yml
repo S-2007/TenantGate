@@ -27,7 +27,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     needs: lint
-    timeout-minutes: 90   # ~50 min observed: round trips from the runner to Neon dominate
+    timeout-minutes: 120  # ~50 min before Phase 6 (Neon round trips dominate); Phase 6 adds upload tests + the dynamic-tenant suite
     # Fork PRs cannot read secrets, so they cannot create a Neon branch. Skip instead of failing.
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
     env:

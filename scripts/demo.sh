@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
-# Five demo scenarios against a running API (seeded dev branch). Read-only except scenario (e),
-# which changes one ACL and ALWAYS restores it (trap), even if the script is interrupted.
+# Demo scenarios against a running API (seeded dev branch): (a)-(e) always; (f)-(g) when the
+# API runs with REGISTRATION_ENABLED=true (Phase 6: a new company registers and uploads).
+# Read-only for the seeded tenants except scenario (e), which changes one ACL and ALWAYS
+# restores it (trap), even if the script is interrupted. (f) leaves a small "demo-<run>"
+# company on the dev branch (its uploaded document is deleted at the end).
 #
 #   python -m uvicorn app.main:app --port 8000     # in another terminal
 #   bash scripts/demo.sh                           # or: make demo
@@ -81,6 +84,68 @@ restore; trap - EXIT
 R=$(ask "$HR" "$Q_SALARY")
 [[ " $(echo "$R" | docs_of) " == *" $DOC "* ]] && pass "access restored immediately" || fail "access not restored"
 
+# ---------------------------------------------------------------- Phase 6 (self-service)
+N=5
+if [[ "$(curl -s "$API/tenants/registration-info" | json "d['enabled']")" == "True" ]]; then
+  N=7
+  title "(f) A new company registers itself, adds users, uploads an HR-only file"
+  RUN=$("$PY" -c "import secrets;print(secrets.token_hex(3))")
+  SLUG="demo-$RUN"
+  NPW=$("$PY" -c "import secrets;print('Dm-'+secrets.token_urlsafe(14))")   # throwaway, never printed
+  REG=$(curl -s -X POST "$API/tenants/register" -H 'content-type: application/json' \
+    -d "{\"company_name\":\"Demo Co $RUN\",\"slug\":\"$SLUG\",\"admin_email\":\"admin@$SLUG.example\",\"admin_password\":\"$NPW\"}")
+  NADM=$(echo "$REG" | json "d['access_token']")
+  echo "  registered $SLUG (tenant $(echo "$REG" | json "d['tenant_id'][:8]")); its first user is its admin"
+  curl -sf -o /dev/null -X POST "$API/admin/users" -H "Authorization: Bearer $NADM" -H 'content-type: application/json' \
+    -d "{\"email\":\"hr@$SLUG.example\",\"roles\":[\"hr\",\"employee\"],\"password\":\"$NPW\"}"
+  curl -sf -o /dev/null -X POST "$API/admin/users" -H "Authorization: Bearer $NADM" -H 'content-type: application/json' \
+    -d "{\"email\":\"emp@$SLUG.example\",\"roles\":[\"employee\"],\"password\":\"$NPW\"}"
+  TMP=$(mktemp -d)
+  printf 'Demo Co %s pay scale, HR only. Senior engineers earn 131,000 per year. Code DEMO-PAY-%s.\n' "$RUN" "$RUN" > "$TMP/pay.txt"
+  UP=$(curl -s -X POST "$API/documents/upload" -H "Authorization: Bearer $NADM" \
+    -F "file=@$TMP/pay.txt" -F "title=Demo Co Pay Scale" -F "classification=confidential" -F "allowed_roles=hr")
+  NDOC=$(echo "$UP" | json "d['doc_id']")
+  ST=processing
+  for _ in $(seq 1 60); do
+    ST=$(curl -s "$API/documents/$NDOC/status" -H "Authorization: Bearer $NADM" | json "d['status']")
+    [[ "$ST" != "processing" ]] && break
+    sleep 1
+  done
+  [[ "$ST" == "ready" ]] && pass "upload $NDOC is ready" || fail "upload status $ST"
+  nlogin() {
+    curl -sf -X POST "$API/auth/login" -H 'content-type: application/json' \
+      -d "{\"email\":\"$1@$SLUG.example\",\"password\":\"$NPW\"}" | json "d['access_token']"
+  }
+  NHR=$(nlogin hr)
+  NEMP=$(nlogin emp)
+  Q_PAY="What do senior engineers earn at Demo Co $RUN?"
+  R=$(ask "$NHR" "$Q_PAY"); echo "$R" | show
+  [[ " $(echo "$R" | docs_of) " == *" $NDOC "* ]] && pass "the new company's HR user gets the uploaded doc" || fail "HR did not get $NDOC"
+  R=$(ask "$NEMP" "$Q_PAY")
+  [[ " $(echo "$R" | docs_of) " != *" $NDOC "* ]] && pass "its employee does not" || fail "$NDOC leaked to the employee"
+  R=$(ask "$HR" "$Q_PAY DEMO-PAY-$RUN")
+  [[ " $(echo "$R" | docs_of) " != *" $NDOC "* && "$R" != *"131,000"* ]] && pass "Acme HR (another company) sees nothing of it" || fail "cross-company leak"
+  CODE=$(curl -s -o /dev/null -w '%{http_code}' "$API/documents/$NDOC" -H "Authorization: Bearer $ADM")
+  [[ "$CODE" == "404" ]] && pass "Acme admin gets 404 for the new company's doc id" || fail "Acme admin got $CODE"
+
+  title "(g) Hostile uploads are refused before anything is stored"
+  printf 'MZ fake executable content' > "$TMP/payroll.pdf"
+  CODE=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$API/documents/upload" -H "Authorization: Bearer $NADM" \
+    -F "file=@$TMP/payroll.pdf" -F "classification=internal")
+  [[ "$CODE" == "415" ]] && pass "an .exe renamed payroll.pdf -> 415" || fail "renamed exe got $CODE"
+  ACME_T=$(curl -s "$API/auth/me" -H "Authorization: Bearer $EMP" | json "d['tenant_id']")
+  CODE=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$API/documents/upload" -H "Authorization: Bearer $NADM" \
+    -F "file=@$TMP/pay.txt" -F "classification=internal" -F "tenant_id=$ACME_T")
+  [[ "$CODE" == "422" ]] && pass "a smuggled tenant_id form field -> 422" || fail "smuggled tenant_id got $CODE"
+  CODE=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$API/documents/upload" -H "Authorization: Bearer $NEMP" \
+    -F "file=@$TMP/pay.txt" -F "classification=internal")
+  [[ "$CODE" == "403" ]] && pass "an employee may not upload -> 403" || fail "employee upload got $CODE"
+  curl -s -o /dev/null -X DELETE "$API/documents/$NDOC" -H "Authorization: Bearer $NADM"
+  rm -rf "$TMP"
+else
+  title "(f)-(g) self-service: SKIPPED (start the API with REGISTRATION_ENABLED=true to run them)"
+fi
+
 title "Result"
 curl -s "$API/metrics" | grep -E '^acl_violations_total' | sed 's/^/  /'
-if [[ $FAILS -eq 0 ]]; then printf '  \033[32mALL 5 SCENARIOS PASSED\033[0m\n'; else printf '  \033[31m%s CHECK(S) FAILED\033[0m\n' "$FAILS"; exit 1; fi
+if [[ $FAILS -eq 0 ]]; then printf '  \033[32mALL %s SCENARIOS PASSED\033[0m\n' "$N"; else printf '  \033[31m%s CHECK(S) FAILED\033[0m\n' "$FAILS"; exit 1; fi

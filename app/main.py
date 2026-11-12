@@ -69,6 +69,19 @@ def create_app() -> FastAPI:
     """Application factory."""
     app = FastAPI(title="Permission-aware multi-tenant RAG", version="0.1.0", lifespan=lifespan)
     app.state.audit_writer = write_audit  # swapped for an in-memory list in unit tests
+    ui_origin = get_settings().ui_origin.strip()
+    if ui_origin:  # Phase 6: a UI served from another origin. Bearer tokens only, no cookies.
+        from fastapi.middleware.cors import CORSMiddleware
+
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=[ui_origin],
+            allow_credentials=False,
+            allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
+            allow_headers=["Authorization", "Content-Type", "X-Request-ID"],
+            expose_headers=["X-Request-ID", "Retry-After"],
+            max_age=600,
+        )
 
     @app.get("/health")
     def health() -> JSONResponse:
@@ -182,11 +195,15 @@ def create_app() -> FastAPI:
     from app.api import router  # noqa: E402
     from app.audit.api import router as audit_router  # noqa: E402
     from app.auth.router import router as auth_router  # noqa: E402
+    from app.tenants.api import router as tenants_router  # noqa: E402
+    from app.uploads.api import router as uploads_router  # noqa: E402
 
     app.include_router(auth_router)
     app.include_router(router)
     app.include_router(audit_router)
     app.include_router(admin_router)
+    app.include_router(tenants_router)
+    app.include_router(uploads_router)
 
     # Minimal web UI: static files only, no external scripts, strict CSP.
     app.mount("/static", StaticFiles(directory=WEB_DIR), name="static")

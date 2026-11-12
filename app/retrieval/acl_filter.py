@@ -8,6 +8,7 @@ equivalent to ``app.auth.policy.can_access`` evaluated on each chunk's ACL colum
          OR (visibility = 'employees' AND :is_employee)             -- internal
          OR (visibility = 'restricted'                              -- confidential
              AND (allowed_roles && :roles OR :user_id = ANY(allowed_users))))
+    AND EXISTS (SELECT 1 FROM documents d WHERE d.id = chunks.doc_id AND d.status = 'ready')
 
 Every value is a bound parameter; nothing from the user is concatenated into SQL. The coarse
 ``visibility`` column (generated from ``classification`` at write time, migration 0003) keeps
@@ -18,11 +19,22 @@ An inactive user, a missing user or a malformed tenant id gets ``FALSE`` (no row
 
 from __future__ import annotations
 
-from sqlalchemy import Boolean, ColumnElement, Text, and_, any_, bindparam, false, or_
+from sqlalchemy import (
+    Boolean,
+    ColumnElement,
+    Text,
+    and_,
+    any_,
+    bindparam,
+    exists,
+    false,
+    or_,
+    select,
+)
 from sqlalchemy.dialects.postgresql import ARRAY, UUID
 
 from app.auth.policy import EMPLOYEE_ROLES, KNOWN_ROLES, AuthUser, _as_uuid
-from app.db.models import Chunk
+from app.db.models import Chunk, Document
 
 
 def build_acl_clause(user: AuthUser | None) -> ColumnElement[bool]:
@@ -55,4 +67,6 @@ def build_acl_clause(user: AuthUser | None) -> ColumnElement[bool]:
             ),
             and_(Chunk.visibility == "restricted", confidential_match),
         ),
+        # Phase 6: chunks of a document that is still processing (or failed) are never served.
+        exists(select(1).where(Document.id == Chunk.doc_id, Document.status == "ready")),
     )

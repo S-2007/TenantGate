@@ -10,6 +10,7 @@ import uuid
 
 from pgvector.sqlalchemy import Vector
 from sqlalchemy import (
+    BigInteger,
     Boolean,
     Computed,
     DateTime,
@@ -46,6 +47,11 @@ class Tenant(Base):
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
     slug: Mapped[str] = mapped_column(Text, nullable=False, unique=True)
     name: Mapped[str] = mapped_column(Text, nullable=False)
+    # Phase 6 (migration 0007): 'seed' or 'self_service'
+    source: Mapped[str] = mapped_column(Text, nullable=False, server_default="seed")
+    created_at: Mapped[dt.datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=func.now()
+    )
 
 
 class User(Base):
@@ -90,6 +96,15 @@ class Document(Base):
     updated_at: Mapped[dt.datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
+    # Phase 6 (migration 0007): upload lifecycle. Only 'ready' documents are retrievable.
+    status: Mapped[str] = mapped_column(Text, nullable=False, server_default="ready")
+    source: Mapped[str] = mapped_column(Text, nullable=False, server_default="seed")
+    uploaded_by: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
+    original_filename: Mapped[str | None] = mapped_column(Text, nullable=True)
+    content_type: Mapped[str | None] = mapped_column(Text, nullable=True)
+    size_bytes: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
+    chunk_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    last_error: Mapped[str | None] = mapped_column(Text, nullable=True)
 
 
 class Chunk(Base):

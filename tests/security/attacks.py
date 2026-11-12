@@ -34,6 +34,8 @@ class HttpAttack:
     headers: dict = field(default_factory=dict)
     token: str = "persona"  # persona | none | <named tampering recipe>
     same_body_as: str | None = None  # name of another attack whose body must be identical
+    files: dict | None = None  # Phase 6: multipart upload {"file": (name, bytes, ctype)}
+    data: dict | None = None  # Phase 6: multipart form fields
 
 
 # ---------------------------------------------------------------- /ask attack families

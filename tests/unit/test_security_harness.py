@@ -41,3 +41,35 @@ def test_leak_and_failure_classification():
     assert runner.is_leak("canary 'X' in response")
     assert runner.is_leak("404 body differs (existence leak)")
     assert not runner.is_leak("expected (404,), got 401")
+
+
+def test_own_uploads_exception_is_narrow():
+    """D-045: only the persona's OWN uploads become listable metadata; nothing else is relaxed."""
+    import uuid
+
+    from app.auth.policy import AuthUser
+    from tests.security.oracle import Persona, find_leaks
+
+    u = AuthUser(id=uuid.uuid4(), tenant_id=uuid.uuid4(), roles=frozenset({"admin"}))
+    p = Persona(key="a:admin", email="x", user=u, tenant="a", allowed_docs=frozenset({"pub"}),
+                forbidden_docs=frozenset({"mine-hr", "other-co"}), forbidden_canaries=("SECRET-1",),
+                forbidden_titles=("Alpha HR Salary Review", "Beta Co Forecast"),
+                uploaded_docs=frozenset({"mine-hr"}))  # fmt: skip
+    titles = {"mine-hr": "Alpha HR Salary Review", "other-co": "Beta Co Forecast"}
+    q = p.for_own_uploads_listing(titles)
+    text = "mine-hr Alpha HR Salary Review"
+    assert find_leaks(q, retrieved_docs=(), cited_docs=(), text=text) == []
+    # another company's doc, its title and any canary are still leaks
+    leaks = find_leaks(
+        q, retrieved_docs=(), cited_docs=(), text="other-co Beta Co Forecast SECRET-1"
+    )
+    assert len(leaks) == 3
+    # and the original persona (used for /ask and every other endpoint) is unchanged
+    assert find_leaks(p, retrieved_docs=(), cited_docs=(), text=text)
+
+
+def test_audit_check_only_counts_ask_requests():
+    from tests.security.runner import Finding
+
+    assert Finding("f", "a", "p", 200, []).path == "/ask"
+    assert Finding("f", "a", "p", 200, [], path="/documents/mine").path != "/ask"

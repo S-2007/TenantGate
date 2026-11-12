@@ -31,6 +31,7 @@ class Finding:
     status: int
     problems: list[str]
     request_id: str | None = None
+    path: str = "/ask"  # Phase 6: only /ask requests write retrieval audit rows
 
 
 LEAK_MARKERS = ("forbidden", "canary", "existence leak")  # data reached the wrong persona
@@ -72,7 +73,9 @@ class Tokens:
         if hit and time.time() - hit[1] < self.REFRESH_S:
             return hit[0]
         p = self.oracle.personas[key]
-        r = self.client.post("/auth/login", json={"email": p.email, "password": PASSWORD})
+        r = self.client.post(
+            "/auth/login", json={"email": p.email, "password": p.password or PASSWORD}
+        )
         if r.status_code != 200:
             return None
         tok = r.json()["access_token"]
@@ -149,6 +152,7 @@ def _check_ask(persona: Persona, r: httpx.Response) -> list[str]:
 def run_suite(
     base_url: str, oracle: Oracle, asks: list[AskAttack], https: list[HttpAttack],
     controls: list[tuple[str, str, str]], *, personas_per_question: int = 4, workers: int = 8,
+    all_persona_families: frozenset[str] = frozenset(),
 ) -> RunResult:  # fmt: skip
     client = httpx.Client(base_url=base_url, timeout=120)
     tokens = Tokens(client, oracle)
@@ -158,6 +162,9 @@ def run_suite(
 
     jobs: list[tuple] = []
     for i, a in enumerate(asks):  # round-robin: every persona attacks ~equally often
+        if a.family in all_persona_families:  # Phase 6: e.g. uploaded injection, every persona
+            jobs += [("ask", a, k) for k in active]
+            continue
         for j in range(personas_per_question):
             jobs.append(("ask", a, active[(i * personas_per_question + j) % len(active)]))
     jobs += [("http", h, h.persona) for h in https]
@@ -175,7 +182,8 @@ def run_suite(
         tok = tokens.login(key) if atk.token == "persona" else tokens.tampered(atk.token, key)
         if tok:
             headers["Authorization"] = f"Bearer {tok}"
-        r = client.request(atk.method, atk.path, json=atk.json, params=atk.params, headers=headers)
+        r = client.request(atk.method, atk.path, json=atk.json, params=atk.params, headers=headers,
+                           files=atk.files, data=atk.data)  # fmt: skip
         problems = (
             [] if r.status_code in atk.expect else [f"expected {atk.expect}, got {r.status_code}"]
         )
@@ -186,6 +194,8 @@ def run_suite(
             if m in low and r.status_code != 200
         ]
         persona = oracle.personas.get(key) if key else None
+        if persona is not None and atk.path == "/documents/mine":  # uploader metadata (D-045)
+            persona = persona.for_own_uploads_listing(oracle.doc_titles)
         if persona is not None:
             if atk.path == "/ask" and r.status_code == 200:
                 problems += _check_ask(persona, r)
@@ -198,7 +208,13 @@ def run_suite(
                 problems.append("canary in an error body")
         bodies[atk.name] = r.text
         return Finding(
-            atk.family, atk.name, key, r.status_code, problems, r.headers.get("x-request-id")
+            atk.family,
+            atk.name,
+            key,
+            r.status_code,
+            problems,
+            r.headers.get("x-request-id"),
+            path=atk.path,
         )
 
     res = RunResult()
@@ -228,7 +244,10 @@ def check_audit(oracle: Oracle, res: RunResult) -> list[str]:
 
     from app.db.session import admin_transaction
 
-    asks = [f for f in res.findings if f.request_id and f.persona and f.status == 200]
+    asks = [
+        f for f in res.findings
+        if f.request_id and f.persona and f.status == 200 and f.path == "/ask"
+    ]  # fmt: skip
     by_rid = {uuid.UUID(f.request_id): f for f in asks}
     problems: list[str] = []
     with admin_transaction() as s:

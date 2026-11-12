@@ -52,8 +52,11 @@ def login(
 
     Unknown email, wrong password and deactivated account all get the same 401 with the same
     message, and all run exactly one Argon2 verification, so neither the body nor the timing
-    says which case it was.
+    says which case it was. Rate-limited per client IP (Phase 6, LOGIN_RATE_PER_MINUTE).
     """
+    from app.ratelimit import enforce
+
+    enforce(request, "login", get_settings().login_rate_per_minute, 60)
     try:
         rec = repo.get_by_email(req.email)
     except ConnectionError as exc:

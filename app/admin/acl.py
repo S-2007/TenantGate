@@ -41,11 +41,28 @@ class AclInvalid(AclChangeError):
     status = 422
 
 
-_SQLSTATE = {"42501": AclForbidden, "P0002": AclNotFound, "22023": AclInvalid, "23514": AclInvalid}
-_PUBLIC_MESSAGES = {AclForbidden: "admin role required", AclNotFound: "not found"}
+class AclConflict(AclChangeError):
+    """Phase 6: duplicate (23505) or a quota / cap reached (54000)."""
+
+    status = 409
 
 
-def _map(exc: DBAPIError) -> AclChangeError:
+_SQLSTATE = {
+    "42501": AclForbidden,
+    "P0002": AclNotFound,
+    "22023": AclInvalid,
+    "23514": AclInvalid,
+    "23505": AclConflict,
+    "54000": AclConflict,
+}
+_PUBLIC_MESSAGES = {
+    AclForbidden: "admin role required",
+    AclNotFound: "not found",
+    AclConflict: "already exists",
+}
+
+
+def _map(exc: DBAPIError, *, forbidden_detail: bool = False) -> AclChangeError:
     code = getattr(exc.orig, "sqlstate", None)
     cls = _SQLSTATE.get(code or "")
     if cls is None:
@@ -55,7 +72,29 @@ def _map(exc: DBAPIError) -> AclChangeError:
         diag = getattr(exc.orig, "diag", None)
         msg = getattr(diag, "message_primary", None) if code == "22023" else None
         return AclInvalid(msg or "the requested ACL is not valid")
+    if code == "54000":  # our own quota message ("document quota reached for this company")
+        diag = getattr(exc.orig, "diag", None)
+        return AclConflict(getattr(diag, "message_primary", None) or "quota reached")
+    if code == "42501" and forbidden_detail:  # Phase 6 functions say which permission is missing
+        diag = getattr(exc.orig, "diag", None)
+        msg = getattr(diag, "message_primary", None)
+        return AclForbidden(msg if msg and msg != "not allowed" else _PUBLIC_MESSAGES[cls])
     return cls(_PUBLIC_MESSAGES[cls])
+
+
+def call_definer(user: AuthUser | None, sql: str, params: dict) -> dict:
+    """Run one SECURITY DEFINER function as ``user`` (None = no identity, e.g. registration).
+
+    Phase 6 entry point shared by tenants/users/uploads; same SQLSTATE mapping as ACL changes.
+    """
+    try:
+        with transaction() as s:
+            if user is not None and not apply_rls_context(s, user):
+                raise AclForbidden("not allowed")
+            out = s.execute(text(sql), params).scalar_one()
+    except DBAPIError as exc:
+        raise _map(exc, forbidden_detail=True) from exc
+    return out if isinstance(out, dict) else json.loads(out)
 
 
 def _call(admin: AuthUser, sql: str, params: dict) -> dict:

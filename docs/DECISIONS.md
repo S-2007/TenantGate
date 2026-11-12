@@ -754,3 +754,135 @@ because of that:
 **Rerun:** 4,230 requests, LEAKS: 0, failures: 0, positive controls passed. The CI-sized run
 (about 4 min) was never affected, because it finishes before any token expires; the fix
 protects longer runs.
+
+## D-042 Self-service registration and user management go through definer functions (Phase 6)
+- The app role stays **SELECT-only** on tenants, users, documents and chunks. Every new write
+  path is one SECURITY DEFINER function from migration 0007: `register_tenant`,
+  `admin_create_user`, `upload_document_begin` / `_complete` / `_fail`, `delete_document`, and
+  the read helpers `document_meta` / `my_uploads`. Each function authorizes the caller against
+  the database (an active user of the bound tenant, with the right role), applies the quota, and
+  writes the audit row in the same transaction. This is the same pattern as D-033.
+- **Identity is never chosen by the client.** The tenant id, user id and document id are
+  generated server-side. The first user of a new company is always exactly `admin`. Every
+  function reads the tenant from `app_tenant_id()`, the identity bound to the transaction from
+  the verified token. Extra form or body fields (`tenant_id`, `doc_id`, `uploaded_by`, …) get a
+  422 and a security log line.
+- **Quotas can't be raced.** Each one is checked under a transaction-scoped advisory lock (per
+  tenant, or global for the tenant cap) in the same transaction as the insert. The limits are
+  MAX_TENANTS, MAX_USERS_PER_TENANT, MAX_DOCUMENTS_PER_TENANT and MAX_CHUNKS_PER_TENANT, all
+  set in .env. Exceeding one returns 409 with the database's own message.
+- **Registration is off by default** (`REGISTRATION_ENABLED=false`). With `REGISTRATION_CODE`
+  set, the code is compared in constant time. Reserved slugs are rejected by the database.
+- **Collisions return one generic 409.** A duplicate slug and a duplicate email (in any company)
+  get the same body, which doesn't say which one collided. Emails are globally unique because
+  login is by email. This means registration can still confirm that *some* account uses an
+  email. That is accepted, and mitigated by the rate limit and the optional invite code.
+- **Rate limits are a fixed window per client IP and in-process:** login 20/min, register
+  5/hour, upload 10/min. With N instances the effective limit is N×. A shared store (Redis, or a
+  Postgres table) is the upgrade for a multi-instance deployment. No proxy header is trusted
+  for the IP.
+- **Assignable roles:** `contractor` can't be given at creation, because it is the "outsider"
+  persona of the access model. The existing PATCH roles endpoint can still set it.
+
+## D-043 Upload pipeline: untrusted bytes, two-step lifecycle, ACL copied by the database
+- **Streaming size limit.** The multipart body is parsed from `request.stream()` through a byte
+  counter, so a missing or false Content-Length doesn't help: past MAX_UPLOAD_MB + 64 KB the
+  request gets a 413 mid-stream. An oversized Content-Length gets a 413 before any byte is read.
+  Starlette spools the file to disk above 1 MB. Only one `file` part is accepted, and text
+  fields are capped at 16 KB.
+- **File type.** The type is decided by magic bytes, which must agree with the extension and
+  with ALLOWED_UPLOAD_TYPES (txt, md, pdf, docx). The client's Content-Type is ignored.
+- **.docx checks.** The zip central directory is inspected before anything is inflated:
+  - entry count;
+  - total declared size;
+  - per-entry ratio above 100:1 (zip bomb);
+  - encrypted entries;
+  - `..` and absolute paths;
+  - `vbaProject.bin` (macros).
+
+  `document.xml` is then inflated with a hard cap, because declared sizes can lie.
+- **.pdf checks.** Encrypted PDFs are rejected, page count is capped by MAX_PDF_PAGES, and text
+  extraction stops when the character budget is spent. Scanned PDFs without a text layer fail
+  with a clear message. OCR is out of scope.
+- **Sanitising.** The extracted text is NFC-normalised. Control, zero-width and bidi-override
+  characters are removed, because they can hide text from a human reviewer. The stored file
+  name is the base name only, character-filtered, at most 120 chars, and is never used as a
+  path.
+- **Lifecycle.**
+  1. `begin` (in the request) creates the documents row with status `processing`. The database
+     validates the ACL shape there, and `allowed_users` must be *active users of the same
+     tenant*.
+  2. Extraction, chunking and embedding run in a FastAPI background task as the uploader.
+  3. `complete` inserts the chunks and flips the status to `ready` in **one transaction**.
+     `fail` stores `last_error` and leaves no chunks.
+- **The chunks' ACL is copied inside `upload_document_complete` from the documents row.** The
+  Python code sends text and vectors only, so a bug in the upload code can't give a chunk a
+  wider ACL or another tenant than its document.
+- **Replace keeps the old version searchable** until the new chunks commit, and bumps
+  `acl_version`. A failed replacement keeps the old version and records the error.
+- **Not done:** antivirus scanning, OCR, and a durable job queue. BackgroundTasks die with the
+  process: a document can stay `processing`, which is never retrievable, and `verify_index`
+  reports it after 15 minutes. Deleting and re-uploading recovers it. A queue (for example a
+  Postgres SKIP LOCKED table) is the upgrade.
+
+## D-044 Only `ready` documents are retrievable, in all three layers
+- **Layer 1:** `build_acl_clause` adds `EXISTS (documents d WHERE d.id = chunks.doc_id AND
+  d.status = 'ready')`.
+- **Layer 2:** the `chunks_tenant_acl` RLS policy has the same EXISTS.
+- **Layer 3:** the post-check drops a chunk whose document isn't ready, with reason
+  `document_not_ready`, which is a SECURITY_ALERT and a metric label.
+- **Why all three, when chunks only appear at `ready` anyway:** the invariant "no chunk of a
+  non-ready document" is enforced by one function. The filter makes a bug there (or a manual
+  edit) fail closed. Mutation test (iii) proves each layer alone hides such a chunk.
+- **GET /documents** lists only ready documents. Uploaders see every status at GET
+  /documents/mine.
+- **Cost:** the EXISTS is a primary-key probe per candidate row. It is re-measured in
+  RESULTS.md (Phase 6).
+- **verify_index** adds three checks:
+  - `chunk_of_non_ready_document`;
+  - `ready_document_chunk_count_mismatch`;
+  - `upload_by_user_of_other_tenant`.
+
+  It also reports, as info, uploads stuck in processing or failed. `reconcile_acls --fix`
+  deletes chunks of non-ready or tenant-mismatched documents, and repairs drifted ACL copies as
+  before.
+
+## D-045 An uploader sees the metadata of their own uploads (found by the extended suite)
+**What the suite found.** The first run of the extended suite reported "LEAKS: 4":
+- **Three of them were real behaviour that needed a decision.** `GET /documents/mine` showed
+  each company's admin the ids and titles of HR-only, finance-only and personal documents that
+  the admin had uploaded but may not read.
+- **The fourth was a harness bug.** The audit check expected a retrieval audit row for every
+  successful request with a persona, including the new GET probes. Only `/ask` writes those
+  rows, so the check now counts `/ask` only. A unit test covers this.
+
+**Decision.** An uploader may see the *metadata* (id, title, status, size, chunk count, last
+error) of documents they uploaded themselves, even when the ACL doesn't let them read the
+content:
+- They had the file, and they need the status to manage it (replace, delete, see a failure).
+- Content and canaries stay forbidden.
+- Retrieval, citations, `GET /documents` and every other endpoint follow the ACL with no
+  exception.
+- No other company's metadata is affected.
+
+**Oracle change.** The oracle encodes exactly this, and only for `/documents/mine`:
+`Persona.for_own_uploads_listing` removes the persona's *own* uploads from the forbidden ids
+and titles. A unit test proves another company's ids and titles, and every canary, still count
+as leaks, and that the original persona used everywhere else is unchanged.
+
+**Alternative rejected.** Hiding these rows from the uploader would remove the only status view
+for an admin uploading HR-only files.
+
+**Re-run:** the RESULTS.md rows dated 2026-11-12, P6-D.
+
+## D-046 Quotas must fit the Neon plan, not only abuse limits
+At the measured ~6.9 kB per chunk (with all indexes), the defaults allow 50 companies × 20,000
+chunks, which would be about 6.9 GB. That is more than a free-tier project should hold.
+
+**Rule.** Choose quotas so that `MAX_TENANTS × MAX_CHUNKS_PER_TENANT × 6.9 kB` plus the audit
+table stays under the plan's storage limit. Check the current plan page; plan limits change,
+so they are not copied here. For a free-tier demo, use for example MAX_TENANTS=20 and
+MAX_CHUNKS_PER_TENANT=2000, which comes to about 280 MB.
+
+The audit table grows with every `/ask` and has no retention job yet (future work: partition by
+month, then drop or archive old partitions).

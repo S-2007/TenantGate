@@ -78,3 +78,25 @@ Emails are `<slot>@<tenant>.example` (a reserved TLD). The dev password lives in
 
 Another tenant's document or user gets 404, identical to one that does not exist. An admin
 cannot remove their own admin role or deactivate themselves.
+
+
+## Phase 6 additions
+
+**Uploaded documents follow the same rules.** Their ACL is set at upload time:
+- the classification;
+- for confidential documents, roles and/or named users, who must be active users of the
+  *same* company.
+
+It can be changed later with the existing ACL PATCH.
+
+**Only `ready` documents exist for retrieval.** Documents still processing, or that failed, are
+invisible to everyone in all three layers.
+
+**Uploader metadata (D-045).** The uploader may see the metadata (title, status, size, chunk
+count, last error) of their own uploads at `GET /documents/mine` and `GET /documents/{id}`,
+even when the ACL excludes them. Content is never shown this way.
+
+**Who may manage a document.**
+- Upload: roles in `UPLOAD_ROLES` (default `admin`).
+- Replace or delete: the uploader, or an admin of the same company.
+- Everyone else, and every other company, gets 404.

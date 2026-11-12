@@ -71,6 +71,7 @@ def api_server(security_world, tmp_path_factory):
         "DB_POOL_SIZE": "8",
         "DB_MAX_OVERFLOW": "4",
         "ENV": "ci" if os.environ.get("CI") else "test",
+        "REGISTRATION_ENABLED": "true",  # Phase 6: the suite registers its own companies
     }
     # Logs go to a file: an unread PIPE fills up (~64 KB) and blocks the server mid-request.
     log_path = tmp_path_factory.mktemp("api") / "server.log"
@@ -106,9 +107,21 @@ def api_server(security_world, tmp_path_factory):
         proc.terminate()
         raise RuntimeError("API server did not start")
     yield url
+    from tests.security.dynamic import purge
+
+    purge()  # Phase 6: companies registered by the suite
     proc.terminate()
     log_file.close()
     try:
         proc.wait(timeout=15)
     except subprocess.TimeoutExpired:
         proc.kill()
+
+
+@pytest.fixture(scope="session")
+def dynamic_world(api_server, security_world):
+    """Phase 6: Alpha/Beta/Gamma Co registered through the API + the merged oracle."""
+    from tests.security.dynamic import build_dynamic_world, extend_oracle
+
+    w = build_dynamic_world(api_server)
+    return w, extend_oracle(security_world, w)

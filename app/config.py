@@ -110,6 +110,31 @@ class Settings(BaseSettings):
     db_max_overflow: int = Field(default=2, ge=0, le=20)
     corpus_path: str = "data/corpus"
 
+    # --- self-service tenants (Phase 6) ---
+    # Registration is OFF unless explicitly enabled. With a REGISTRATION_CODE set, the caller
+    # must send it (an invite code for a demo), compared in constant time.
+    registration_enabled: bool = False
+    registration_code: str = ""
+    max_tenants: int = Field(default=50, ge=1, le=10_000)
+    # Fixed-window limits per client IP (in-process; see D-042 for the multi-instance caveat).
+    register_rate_per_hour: int = Field(default=5, ge=1)
+    login_rate_per_minute: int = Field(default=20, ge=1)
+    upload_rate_per_minute: int = Field(default=10, ge=1)
+    # Per-tenant quotas, enforced inside the SECURITY DEFINER functions (cannot be raced).
+    max_users_per_tenant: int = Field(default=50, ge=1)
+    max_documents_per_tenant: int = Field(default=200, ge=1)
+    max_chunks_per_tenant: int = Field(default=20_000, ge=1)
+
+    # --- uploads (Phase 6) ---
+    max_upload_mb: float = Field(default=5.0, gt=0, le=50)
+    allowed_upload_types: str = "txt,md,pdf,docx"
+    upload_roles: str = "admin"  # comma list; who may upload (deny by default: admins only)
+    max_pdf_pages: int = Field(default=200, ge=1)
+    max_extracted_chars: int = Field(default=2_000_000, ge=1000)
+    max_docx_uncompressed_mb: float = Field(default=30.0, gt=0)
+    # Extra allowed browser origin for CORS (empty = same-origin only; the bundled UI needs none).
+    ui_origin: str = ""
+
     # --- misc ---
     env: Literal["development", "test", "ci", "production"] = "development"
     store_query_text: bool = True
@@ -164,6 +189,25 @@ class Settings(BaseSettings):
                 "DATABASE_URL_DIRECT points at a '-pooler' host; migrations must use the "
                 "direct (non-pooled) Neon connection string"
             )
+
+    # ---------- Phase 6 helpers ----------
+    @property
+    def upload_types(self) -> frozenset[str]:
+        """Allowed upload extensions (lower case, no dot)."""
+        return frozenset(
+            t.strip().lower().lstrip(".") for t in self.allowed_upload_types.split(",") if t.strip()
+        ) & frozenset({"txt", "md", "pdf", "docx"})
+
+    @property
+    def upload_role_set(self) -> frozenset[str]:
+        """Roles allowed to upload (unknown role names are ignored: they grant nothing)."""
+        from app.auth.policy import KNOWN_ROLES
+
+        return frozenset(r.strip() for r in self.upload_roles.split(",") if r.strip()) & KNOWN_ROLES
+
+    @property
+    def max_upload_bytes(self) -> int:
+        return int(self.max_upload_mb * 1024 * 1024)
 
     # ---------- LLM chains ----------
     def answer_specs(self, *, fallback: bool = True) -> tuple[tuple[str, str], ...]:

@@ -7,6 +7,7 @@ that is not in this set.
 
 from __future__ import annotations
 
+import dataclasses
 import json
 import uuid
 from dataclasses import dataclass, field
@@ -50,6 +51,20 @@ class Persona:
     forbidden_docs: frozenset[str]
     forbidden_canaries: tuple[str, ...]
     forbidden_titles: tuple[str, ...] = field(default=())
+    password: str | None = None  # Phase 6: dynamic personas have their own (None = PASSWORD)
+    # Phase 6 policy (D-045): an uploader may see the METADATA (id, title, status) of documents
+    # they uploaded themselves, even when the ACL doesn't let them read the content. Applies to
+    # GET /documents/mine only; content and canaries stay forbidden.
+    uploaded_docs: frozenset[str] = frozenset()
+
+    def for_own_uploads_listing(self, titles: dict[str, str]) -> Persona:
+        own = self.uploaded_docs
+        return dataclasses.replace(
+            self,
+            forbidden_docs=self.forbidden_docs - own,
+            forbidden_titles=tuple(t for t in self.forbidden_titles
+                                   if t not in {titles[d] for d in own if d in titles}),
+        )  # fmt: skip
 
     @property
     def active(self) -> bool:

@@ -74,6 +74,16 @@ HR = AuthUser(id=U, tenant_id=T, roles=frozenset({"hr"}))
             DocumentRecord("d1", T, "confidential", ("finance",), (), 3),
             "document_policy_denied",
         ),
+        (
+            _row(),
+            DocumentRecord("d1", T, "confidential", ("hr",), (), 3, "processing"),
+            "document_not_ready",
+        ),
+        (
+            _row(),
+            DocumentRecord("d1", T, "confidential", ("hr",), (), 3, "failed"),
+            "document_not_ready",
+        ),
     ],
 )
 def test_second_check_reasons(row, doc, reason, caplog):

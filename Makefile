@@ -3,7 +3,7 @@ PY ?= python
 LABEL ?= baseline_no_acl
 
 .DEFAULT_GOAL := help
-.PHONY: help up down run migrate migrate-test test test-unit lint fmt seed ingest verify app-role eval benchmark review policy-cov reconcile security demo
+.PHONY: help up down run migrate migrate-test test test-unit lint fmt seed ingest verify app-role eval benchmark review policy-cov reconcile security demo benchmark-p6 run-selfservice
 
 help:          ## list targets
 	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sed -e 's/:.*## /	/' | awk -F'	' '{printf "  %-12s %s
@@ -61,6 +61,12 @@ eval:          ## Phase 1 eval as the row personas (LABEL=name; needs a running 
 
 benchmark:     ## Phase 5 benchmarks on throwaway Neon branches (CMD=latency|scale|neon|denied|all)
 	$(PY) -m scripts.benchmark $(or $(CMD),all)
+
+benchmark-p6:  ## Phase 6 benchmarks on throwaway Neon branches (CMD=upload|tenants)
+	$(PY) -m scripts.benchmark_phase6 $(or $(CMD),tenants)
+
+run-selfservice: ## run the API locally with self-service registration enabled (dev branch)
+	REGISTRATION_ENABLED=true $(PY) -m uvicorn app.main:app --reload
 
 reconcile:     ## check chunk ACLs against their documents (FIX=1 to repair)
 	$(PY) -m scripts.reconcile_acls $(if $(FIX),--fix,)

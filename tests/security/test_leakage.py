@@ -14,6 +14,13 @@ from pathlib import Path
 import pytest
 
 from tests.security.attacks import ask_attacks, http_attacks, positive_controls
+from tests.security.dynamic import (
+    ALL_PERSONA_FAMILIES,
+    check_integrity,
+    dynamic_ask_attacks,
+    dynamic_controls,
+    upload_attacks,
+)
 from tests.security.runner import check_audit, run_suite, summary
 
 pytestmark = [pytest.mark.neon, pytest.mark.security]
@@ -40,19 +47,24 @@ def _markdown(rep: dict) -> str:
     return "\n".join(lines)
 
 
-def test_no_leaks_for_any_persona_or_attack(api_server, security_world):
-    o = security_world
-    asks, https, controls = ask_attacks(o), http_attacks(o), positive_controls(o)
-    assert (
-        len(asks) + len(https) >= 200
-        and len({a.family for a in asks} | {h.family for h in https}) >= 12
-    )
+def test_no_leaks_for_any_persona_or_attack(api_server, dynamic_world):
+    """Seeded tenants + companies registered at test time (Phase 6), one oracle for all."""
+    w, o = dynamic_world
+    asks = ask_attacks(o) + dynamic_ask_attacks(w)
+    https = http_attacks(o) + upload_attacks(o, w)
+    controls = positive_controls(o) + dynamic_controls(w)
+    upload_fams = {h.family for h in https if h.family.startswith(("upload", "registration"))}
+    assert len(asks) + len(https) >= 400, len(asks) + len(https)
+    assert len(upload_fams) >= 6, upload_fams
+    assert len({a.family for a in asks} | {h.family for h in https}) >= 20
     t0 = time.perf_counter()
     res = run_suite(
         api_server, o, asks, https, controls,
         personas_per_question=int(os.environ.get("SECURITY_PERSONAS_PER_QUESTION", "4")),
+        all_persona_families=ALL_PERSONA_FAMILIES,
     )  # fmt: skip
-    res.audit_problems = check_audit(o, res)
+    time.sleep(5)  # let the last background ingestions (bomb uploads) finish before the audit
+    res.audit_problems = check_audit(o, res) + check_integrity(w)
     rep = summary(o, asks, https, res, time.perf_counter() - t0)
     (OUT / "report.json").write_text(json.dumps(rep, indent=2, default=str), encoding="utf-8")
     md = _markdown(rep)

@@ -7,7 +7,8 @@ layer assumes both could be wrong. For every retrieved chunk, in the same transa
 2. the authoritative ``documents`` row (read under the same RLS context) must exist ->
    ``document_missing``, must have the chunk's tenant -> ``tenant_mismatch``, must have the same
    ``acl_version`` -> ``stale_acl`` (the chunk copy is out of date), and ``can_access`` on the
-   document's own ACL must allow it -> ``document_policy_denied``
+   document's own ACL must allow it -> ``document_policy_denied``, and the document must be
+   ``ready`` (not processing / failed) -> ``document_not_ready`` (Phase 6)
 
 Failures are dropped, never "fixed". Every reason except ``stale_acl`` is a SECURITY ALERT (one
 structured log line per chunk) and increments ``acl_violations_total{reason}``. ``stale_acl`` is
@@ -87,6 +88,7 @@ class DocumentRecord:
     allowed_roles: tuple[str, ...]
     allowed_users: tuple[uuid.UUID, ...]
     acl_version: int
+    status: str = "ready"
 
 
 DocLoader = Callable[[Session, Sequence[str]], dict[str, DocumentRecord]]
@@ -99,7 +101,7 @@ def load_document_acls(session: Session, doc_ids: Sequence[str]) -> dict[str, Do
     rows = session.execute(
         text(
             "SELECT id, tenant_id, classification::text AS classification, allowed_roles, "
-            "allowed_users, acl_version FROM documents WHERE id = ANY(:ids)"
+            "allowed_users, acl_version, status FROM documents WHERE id = ANY(:ids)"
         ),
         {"ids": list(doc_ids)},
     )
@@ -111,6 +113,7 @@ def load_document_acls(session: Session, doc_ids: Sequence[str]) -> dict[str, Do
             tuple(r.allowed_roles),
             tuple(r.allowed_users),
             r.acl_version,
+            r.status,
         )
         for r in rows
     }
@@ -135,6 +138,8 @@ def _reason(user: AuthUser, c: RetrievedChunk, doc: DocumentRecord | None) -> st
         return "document_missing"
     if doc.tenant_id != c.tenant_id:
         return "tenant_mismatch"
+    if doc.status != "ready":
+        return "document_not_ready"
     if doc.acl_version != c.acl_version:
         return "stale_acl"
     if not can_access(user, _doc_acl(doc)):

@@ -55,6 +55,18 @@ CHECKS: dict[str, str] = {
     "user_unknown_tenant": """
         SELECT u.id::text FROM users u
         LEFT JOIN tenants t ON t.id = u.tenant_id WHERE t.id IS NULL""",
+    # Phase 6: chunks are inserted in the same transaction that marks a document 'ready', and a
+    # failed upload's chunks are deleted, so no chunk may belong to a non-ready document
+    "chunk_of_non_ready_document": """
+        SELECT c.chunk_id::text FROM chunks c JOIN documents d ON d.id = c.doc_id
+        WHERE d.status <> 'ready'""",
+    "ready_document_chunk_count_mismatch": """
+        SELECT d.id FROM documents d
+        WHERE d.status = 'ready' AND d.chunk_count IS NOT NULL
+          AND d.chunk_count <> (SELECT count(*) FROM chunks c WHERE c.doc_id = d.id)""",
+    "upload_by_user_of_other_tenant": """
+        SELECT d.id FROM documents d JOIN users u ON u.id = d.uploaded_by
+        WHERE u.tenant_id <> d.tenant_id""",
 }
 
 # Reported, but not violations (a seeded document that has not been ingested yet is fine).
@@ -62,6 +74,12 @@ INFO: dict[str, str] = {
     "documents_without_chunks": """
         SELECT d.id FROM documents d
         WHERE NOT EXISTS (SELECT 1 FROM chunks c WHERE c.doc_id = d.id)""",
+    # Phase 6: not retrievable meanwhile (chunks of non-ready documents are filtered), but an
+    # upload still 'processing' after 15 minutes means its background job died.
+    "uploads_stuck_processing": """
+        SELECT d.id FROM documents d
+        WHERE d.status = 'processing' AND d.updated_at < now() - interval '15 minutes'""",
+    "uploads_failed": "SELECT d.id FROM documents d WHERE d.status = 'failed'",
 }
 
 

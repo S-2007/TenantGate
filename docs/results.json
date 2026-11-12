@@ -549,5 +549,456 @@
       "p50": 751.0,
       "p95": 842.4
     }
+  },
+  "tenants_scale": {
+    "timestamp": "2026-11-12T15:58:03+00:00",
+    "environment": {
+      "region": "aws-ap-southeast-1",
+      "compute_cu_min": 0.25,
+      "compute_cu_max": 2,
+      "suspend_timeout_seconds": 0,
+      "embedding": "hash-384 (synthetic corpus)",
+      "top_k": 5
+    },
+    "corpus": {
+      "tenants": 10,
+      "chunks": 6340,
+      "tiny_tenant_chunks": 40,
+      "other_tenant_chunks_each": 700
+    },
+    "queries_timed_per_config": 300,
+    "results": {
+      "tiny_tenant_40_chunks": {
+        "configs": {
+          "no_filter": {
+            "client_ms": {
+              "n": 300,
+              "p50": 120.25,
+              "p95": 177.73,
+              "mean": 128.22
+            },
+            "server_exec_ms": {
+              "n": 100,
+              "p50": 0.9,
+              "p95": 1.02,
+              "mean": 0.92
+            },
+            "hnsw_plan_share": 1.0,
+            "queries_short_of_k": 0,
+            "avg_rows": 5.0
+          },
+          "where_only": {
+            "client_ms": {
+              "n": 300,
+              "p50": 116.0,
+              "p95": 170.56,
+              "mean": 122.84
+            },
+            "server_exec_ms": {
+              "n": 100,
+              "p50": 0.26,
+              "p95": 0.32,
+              "mean": 0.28
+            },
+            "hnsw_plan_share": 0.0,
+            "queries_short_of_k": 0,
+            "avg_rows": 5.0
+          },
+          "where_only_without_ready_exists": {
+            "client_ms": {
+              "n": 300,
+              "p50": 118.84,
+              "p95": 181.49,
+              "mean": 128.27
+            },
+            "server_exec_ms": {
+              "n": 100,
+              "p50": 0.08,
+              "p95": 0.1,
+              "mean": 0.09
+            },
+            "hnsw_plan_share": 0.0,
+            "queries_short_of_k": 0,
+            "avg_rows": 5.0
+          },
+          "where_and_rls": {
+            "client_ms": {
+              "n": 300,
+              "p50": 120.73,
+              "p95": 185.97,
+              "mean": 133.84
+            },
+            "server_exec_ms": {
+              "n": 100,
+              "p50": 0.17,
+              "p95": 0.56,
+              "mean": 0.25
+            },
+            "hnsw_plan_share": 0.0,
+            "queries_short_of_k": 0,
+            "avg_rows": 5.0
+          },
+          "where_and_rls_iterative_off": {
+            "client_ms": {
+              "n": 300,
+              "p50": 115.71,
+              "p95": 194.63,
+              "mean": 127.99
+            },
+            "server_exec_ms": {
+              "n": 100,
+              "p50": 0.17,
+              "p95": 0.19,
+              "mean": 0.18
+            },
+            "hnsw_plan_share": 0.0,
+            "queries_short_of_k": 0,
+            "avg_rows": 5.0
+          }
+        },
+        "overhead_where_and_rls_vs_no_filter_ms": {
+          "client_p50": 0.48,
+          "client_p95": 8.24,
+          "server_p50": -0.73,
+          "server_p95": -0.46
+        },
+        "ready_exists_cost_server_ms": {
+          "p50": 0.18,
+          "p95": 0.22
+        },
+        "recall_at_5": {
+          "strict_order_ef100": {
+            "queries": 100,
+            "recall": 1.0
+          },
+          "iterative_off_ef40": {
+            "queries": 100,
+            "recall": 1.0
+          }
+        }
+      },
+      "large_tenants": {
+        "configs": {
+          "no_filter": {
+            "client_ms": {
+              "n": 300,
+              "p50": 123.09,
+              "p95": 242.68,
+              "mean": 146.25
+            },
+            "server_exec_ms": {
+              "n": 100,
+              "p50": 0.85,
+              "p95": 1.0,
+              "mean": 0.9
+            },
+            "hnsw_plan_share": 1.0,
+            "queries_short_of_k": 0,
+            "avg_rows": 5.0
+          },
+          "where_only": {
+            "client_ms": {
+              "n": 300,
+              "p50": 127.72,
+              "p95": 248.35,
+              "mean": 148.93
+            },
+            "server_exec_ms": {
+              "n": 100,
+              "p50": 0.94,
+              "p95": 2.14,
+              "mean": 1.17
+            },
+            "hnsw_plan_share": 1.0,
+            "queries_short_of_k": 0,
+            "avg_rows": 5.0
+          },
+          "where_only_without_ready_exists": {
+            "client_ms": {
+              "n": 300,
+              "p50": 126.21,
+              "p95": 370.66,
+              "mean": 163.35
+            },
+            "server_exec_ms": {
+              "n": 100,
+              "p50": 0.96,
+              "p95": 1.76,
+              "mean": 1.15
+            },
+            "hnsw_plan_share": 1.0,
+            "queries_short_of_k": 0,
+            "avg_rows": 5.0
+          },
+          "where_and_rls": {
+            "client_ms": {
+              "n": 300,
+              "p50": 122.63,
+              "p95": 224.8,
+              "mean": 141.13
+            },
+            "server_exec_ms": {
+              "n": 100,
+              "p50": 2.77,
+              "p95": 3.97,
+              "mean": 2.89
+            },
+            "hnsw_plan_share": 0.0,
+            "queries_short_of_k": 0,
+            "avg_rows": 5.0
+          },
+          "where_and_rls_iterative_off": {
+            "client_ms": {
+              "n": 300,
+              "p50": 119.46,
+              "p95": 207.11,
+              "mean": 131.57
+            },
+            "server_exec_ms": {
+              "n": 100,
+              "p50": 2.7,
+              "p95": 3.06,
+              "mean": 2.66
+            },
+            "hnsw_plan_share": 0.0,
+            "queries_short_of_k": 0,
+            "avg_rows": 5.0
+          }
+        },
+        "overhead_where_and_rls_vs_no_filter_ms": {
+          "client_p50": -0.46,
+          "client_p95": -17.88,
+          "server_p50": 1.92,
+          "server_p95": 2.97
+        },
+        "ready_exists_cost_server_ms": {
+          "p50": -0.02,
+          "p95": 0.38
+        },
+        "recall_at_5": {
+          "strict_order_ef100": {
+            "queries": 100,
+            "recall": 1.0
+          },
+          "iterative_off_ef40": {
+            "queries": 100,
+            "recall": 1.0
+          }
+        }
+      }
+    },
+    "note": "tiny-tenant queries are drawn from ALL tenants' text, so the nearest neighbours are mostly other tenants' chunks: the hardest case for a filtered HNSW scan"
+  },
+  "new_company_eval": {
+    "timestamp": "2026-11-12T16:32:30+00:00",
+    "company": "freshly registered (slug nova-eval-<run>)",
+    "summary": {
+      "questions": 10,
+      "answerable": 6,
+      "hit_rate": 1.0,
+      "citation_ok": 1.0,
+      "fact_correct": 1.0,
+      "false_refusal": 0.0,
+      "must_refuse": 4,
+      "forbidden_doc_retrieved": 0,
+      "forbidden_fact_in_answer": 0,
+      "refusal_ok": 1.0,
+      "models": [
+        "qwen/qwen3.8-27b"
+      ]
+    },
+    "rows": [
+      {
+        "persona": "emp",
+        "question": "What time does the Nova Robotics office open?",
+        "model": "qwen/qwen3.8-27b",
+        "answer": "The Nova Robotics office opens at 8:30 [C1].",
+        "answerable": true,
+        "hit": true,
+        "cited_ok": true,
+        "fact_ok": true,
+        "refused": false
+      },
+      {
+        "persona": "emp",
+        "question": "How many days per week can I work remotely?",
+        "model": "qwen/qwen3.8-27b",
+        "answer": "You can work remotely up to 3 days per week [C1].",
+        "answerable": true,
+        "hit": true,
+        "cited_ok": true,
+        "fact_ok": true,
+        "refused": false
+      },
+      {
+        "persona": "emp",
+        "question": "How much home office equipment is reimbursed per year?",
+        "model": "qwen/qwen3.8-27b",
+        "answer": "Home office equipment is reimbursed up to 450 euros per year [C1].",
+        "answerable": true,
+        "hit": true,
+        "cited_ok": true,
+        "fact_ok": true,
+        "refused": false
+      },
+      {
+        "persona": "hr",
+        "question": "What do level R3 robotics engineers earn?",
+        "model": "qwen/qwen3.8-27b",
+        "answer": "Level R3 robotics engineers earn between 84,000 and 97,000 euros [C1].",
+        "answerable": true,
+        "hit": true,
+        "cited_ok": true,
+        "fact_ok": true,
+        "refused": false
+      },
+      {
+        "persona": "finance",
+        "question": "What is the total R&D budget for FY27?",
+        "model": "qwen/qwen3.8-27b",
+        "answer": "The total R&D budget for FY27 is 6.4 million euros [C1].",
+        "answerable": true,
+        "hit": true,
+        "cited_ok": true,
+        "fact_ok": true,
+        "refused": false
+      },
+      {
+        "persona": "hr",
+        "question": "What are the core collaboration hours?",
+        "model": "qwen/qwen3.8-27b",
+        "answer": "The core collaboration hours are 10:00 to 15:00 [C1].",
+        "answerable": true,
+        "hit": true,
+        "cited_ok": true,
+        "fact_ok": true,
+        "refused": false
+      },
+      {
+        "persona": "emp",
+        "question": "What do level R4 robotics engineers earn?",
+        "model": "qwen/qwen3.8-27b",
+        "answer": "I don't know based on the available documents.",
+        "answerable": false,
+        "forbidden_retrieved": false,
+        "fact_leak": false,
+        "refused": true
+      },
+      {
+        "persona": "emp",
+        "question": "What is the FY27 R&D budget?",
+        "model": "qwen/qwen3.8-27b",
+        "answer": "I don't know based on the available documents.",
+        "answerable": false,
+        "forbidden_retrieved": false,
+        "fact_leak": false,
+        "refused": true
+      },
+      {
+        "persona": "hr",
+        "question": "By how much is the marketing budget cut in FY27?",
+        "model": "qwen/qwen3.8-27b",
+        "answer": "I don't know based on the available documents.",
+        "answerable": false,
+        "forbidden_retrieved": false,
+        "fact_leak": false,
+        "refused": true
+      },
+      {
+        "persona": "finance",
+        "question": "What are the compensation bands for level R3?",
+        "model": "qwen/qwen3.8-27b",
+        "answer": "I don't know based on the available documents.",
+        "answerable": false,
+        "forbidden_retrieved": false,
+        "fact_leak": false,
+        "refused": true
+      }
+    ]
+  },
+  "upload_latency": {
+    "timestamp": "2026-11-12T16:45:29+00:00",
+    "environment": {
+      "region": "aws-ap-southeast-1",
+      "compute_cu_min": 0.25,
+      "compute_cu_max": 2,
+      "suspend_timeout_seconds": 0,
+      "api": "local uvicorn (Windows laptop) -> Neon over WAN",
+      "embedding": "BAAI/bge-small-en-v1.5 on CPU",
+      "llm": "fake",
+      "poll_interval_ms": 100
+    },
+    "by_size": {
+      "small_txt_2kb": {
+        "files": 10,
+        "failed": 0,
+        "bytes_each": 2084,
+        "chunks_each": {
+          "n": 10,
+          "p50": 1.0,
+          "p95": 1.0,
+          "mean": 1.0
+        },
+        "upload_to_ready_ms": {
+          "n": 10,
+          "p50": 2147.13,
+          "p95": 4543.07,
+          "mean": 2442.53
+        },
+        "ready_to_first_retrieval_ms": {
+          "n": 7,
+          "p50": 2043.78,
+          "p95": 2394.46,
+          "mean": 2036.45
+        }
+      },
+      "medium_docx_60kb": {
+        "files": 10,
+        "failed": 0,
+        "bytes_each": 49857,
+        "chunks_each": {
+          "n": 10,
+          "p50": 29.0,
+          "p95": 29.0,
+          "mean": 29.0
+        },
+        "upload_to_ready_ms": {
+          "n": 10,
+          "p50": 6896.21,
+          "p95": 8168.69,
+          "mean": 7137.07
+        },
+        "ready_to_first_retrieval_ms": {
+          "n": 7,
+          "p50": 2001.43,
+          "p95": 2292.25,
+          "mean": 2062.32
+        }
+      },
+      "large_pdf_400kb": {
+        "files": 5,
+        "failed": 0,
+        "bytes_each": 478932,
+        "chunks_each": {
+          "n": 5,
+          "p50": 203.0,
+          "p95": 204.0,
+          "mean": 203.2
+        },
+        "upload_to_ready_ms": {
+          "n": 5,
+          "p50": 39006.97,
+          "p95": 61082.71,
+          "mean": 44197.83
+        },
+        "ready_to_first_retrieval_ms": {
+          "n": 2,
+          "p50": 1914.37,
+          "p95": 2810.86,
+          "mean": 2362.61
+        }
+      }
+    },
+    "method": "sequential uploads; client-side wall time; ready->retrieval = time from the status poll that saw 'ready' to the first /ask that retrieved the document"
   }
 }

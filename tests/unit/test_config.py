@@ -122,6 +122,16 @@ def test_env_example_and_env_list_the_same_variables():
         "NEON_API_KEY",
         "NEON_PROJECT_ID",
     }
-    assert names(".env.example") == expected
+    # Phase 6 settings: documented in .env.example; optional in a local .env because every one
+    # has a safe default (registration OFF, uploads admin-only, conservative limits).
+    phase6 = {
+        "REGISTRATION_ENABLED", "REGISTRATION_CODE", "MAX_TENANTS", "LOGIN_RATE_PER_MINUTE",
+        "REGISTER_RATE_PER_HOUR", "UPLOAD_RATE_PER_MINUTE", "MAX_USERS_PER_TENANT",
+        "MAX_DOCUMENTS_PER_TENANT", "MAX_CHUNKS_PER_TENANT", "MAX_UPLOAD_MB",
+        "ALLOWED_UPLOAD_TYPES", "UPLOAD_ROLES", "MAX_PDF_PAGES", "MAX_EXTRACTED_CHARS",
+        "MAX_DOCX_UNCOMPRESSED_MB", "UI_ORIGIN",
+    }  # fmt: skip
+    assert names(".env.example") == expected | phase6
     if Path(".env").exists():
-        assert names(".env") == expected
+        local = names(".env")
+        assert expected <= local and local <= expected | phase6, sorted(local ^ expected)

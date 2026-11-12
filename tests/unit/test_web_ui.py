@@ -42,3 +42,27 @@ def test_app_js_never_writes_raw_html():
 
 def test_documents_endpoint_requires_auth(client):
     assert client.get("/documents").status_code == 401
+
+
+def test_phase6_sections_and_endpoints_are_wired():
+    html = (WEB / "index.html").read_text(encoding="utf-8")
+    js = (WEB / "app.js").read_text(encoding="utf-8")
+    for anchor in ('id="register-form"', 'id="upload-form"', 'id="mine-rows"', 'id="user-form"',
+                   'data-tab="users"'):  # fmt: skip
+        assert anchor in html
+    for path in ("/tenants/register", "/tenants/registration-info", "/documents/upload",
+                 "/documents/mine", "/documents/upload-info", "/admin/users"):  # fmt: skip
+        assert path in js
+    # the client never sends identity or ids it shouldn't choose
+    assert (
+        "tenant_id"
+        not in js.split(
+            "// ---------------------------------------------------------------- register"
+        )[1].split("enterApp")[0]
+    )
+
+
+def test_upload_info_requires_auth(client):
+    assert client.get("/documents/upload-info").status_code == 401
+    assert client.get("/documents/mine").status_code == 401
+    assert client.post("/documents/upload").status_code == 401

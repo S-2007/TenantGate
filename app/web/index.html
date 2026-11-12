@@ -35,6 +35,27 @@
           <code>data/seed_users.json</code>.</p>
         <div id="user-chips" class="chips"></div>
       </div>
+      <p class="small" id="register-link-row">New company? <a href="#" id="show-register">Register your company</a></p>
+    </section>
+
+    <!-- REGISTER (Phase 6) -->
+    <section id="register-view" class="card narrow hidden">
+      <h1>Register your company</h1>
+      <p class="muted">Creates a new, isolated tenant and its first admin. Nothing in it is
+        visible to any other company, and you can't see theirs.</p>
+      <p id="register-closed" class="error hidden">Registration is currently disabled on this server.</p>
+      <form id="register-form" autocomplete="off">
+        <label>Company name <input id="reg-name" required minlength="2" maxlength="80" placeholder="Gamma Labs"></label>
+        <label>Short id (slug) <input id="reg-slug" required minlength="3" maxlength="40"
+               pattern="[a-z0-9][a-z0-9-]{1,38}[a-z0-9]" placeholder="gamma-labs"></label>
+        <label>Admin email <input id="reg-email" type="email" required placeholder="admin@gamma.example"></label>
+        <label>Admin password <input id="reg-password" type="password" required minlength="12"
+               placeholder="at least 12 characters"></label>
+        <label id="reg-code-row" class="hidden">Registration code <input id="reg-code" maxlength="200"></label>
+        <button type="submit" class="primary">Create company</button>
+        <p id="register-error" class="error hidden"></p>
+      </form>
+      <p class="small"><a href="#" id="show-login">Back to sign in</a></p>
     </section>
 
     <!-- APP -->
@@ -42,6 +63,7 @@
       <nav class="tabs">
         <button class="tab active" data-tab="chat">Ask</button>
         <button class="tab" data-tab="docs">My documents</button>
+        <button class="tab admin-only hidden" data-tab="users">Users</button>
         <button class="tab admin-only hidden" data-tab="admin">Admin</button>
       </nav>
 
@@ -65,6 +87,56 @@
           <div id="doc-counts" class="chips"></div>
           <table class="table"><thead><tr><th>Title</th><th>Classification</th><th>Doc id</th></tr></thead>
             <tbody id="doc-rows"></tbody></table>
+        </div>
+        <div class="card upload-only hidden">
+          <h2>Upload a document</h2>
+          <p class="muted small" id="upload-hint"></p>
+          <form id="upload-form">
+            <div class="row">
+              <input id="up-file" type="file" required>
+              <input id="up-title" maxlength="200" placeholder="Title (defaults to the file name)">
+            </div>
+            <div class="row">
+              <select id="up-class">
+                <option value="internal">internal (all employees)</option>
+                <option value="public">public (everyone in your company)</option>
+                <option value="confidential">confidential (only the roles / users below)</option>
+              </select>
+            </div>
+            <div id="up-roles" class="checks"></div>
+            <div id="up-users" class="checks hidden"></div>
+            <button class="primary" type="submit" id="up-btn">Upload</button>
+            <progress id="up-progress" max="100" value="0" class="hidden"></progress>
+            <p id="up-out"></p>
+          </form>
+        </div>
+        <div class="card upload-only hidden">
+          <h2>My uploads</h2>
+          <p class="muted small">Status updates automatically. A document is searchable only when it is
+            <strong>ready</strong>. Replacing keeps the old version searchable until the new one is ready.</p>
+          <table class="table"><thead><tr><th>Title</th><th>Status</th><th>Access</th><th>Chunks</th><th>Size</th><th></th></tr></thead>
+            <tbody id="mine-rows"></tbody></table>
+          <input id="replace-file" type="file" class="hidden">
+        </div>
+      </div>
+
+      <div id="tab-users" class="tabpane hidden">
+        <div class="card">
+          <h2>Add a user</h2>
+          <form id="user-form">
+            <div class="row">
+              <input id="nu-email" type="email" required placeholder="new.user@yourcompany.example">
+              <input id="nu-password" type="password" required minlength="12" placeholder="initial password (12+ chars)">
+            </div>
+            <div id="nu-roles" class="checks"></div>
+            <button class="primary" type="submit">Create user</button>
+            <p id="nu-out"></p>
+          </form>
+        </div>
+        <div class="card">
+          <h2>Users in your company</h2>
+          <table class="table"><thead><tr><th>Email</th><th>Roles</th><th>Status</th><th></th></tr></thead>
+            <tbody id="user-rows"></tbody></table>
         </div>
       </div>
 

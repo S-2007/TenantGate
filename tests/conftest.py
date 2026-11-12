@@ -34,6 +34,13 @@ os.environ.update(
         "DATABASE_URL": _TEST_URL or _UNUSED_URL,
         "DATABASE_URL_DIRECT": _TEST_URL_DIRECT or _UNUSED_URL,
         "JWT_SECRET": os.environ.get("JWT_SECRET") or "test-only-secret-" + "x" * 32,
+        # Phase 6: registration on for tests; rate limits high (tests/unit/test_tenants.py
+        # exercises the limiter itself with low limits)
+        "REGISTRATION_ENABLED": "true",
+        "REGISTRATION_CODE": "",
+        "LOGIN_RATE_PER_MINUTE": "100000",
+        "REGISTER_RATE_PER_HOUR": "100000",
+        "UPLOAD_RATE_PER_MINUTE": "100000",
     }
 )
 

@@ -51,7 +51,15 @@ def main(argv: list[str] | None = None) -> int:
         reset_admin_engine()
     print(
         json.dumps(
-            {"drifted": len(rep.drifted), "fixed": rep.fixed, "sample": rep.drifted[:10]},
+            {
+                "drifted": len(rep.drifted),
+                "fixed": rep.fixed,
+                "sample": rep.drifted[:10],
+                # Phase 6: chunks of non-ready (uploading / failed) documents or wrong tenant
+                "orphans": len(rep.orphans),
+                "orphans_deleted": rep.orphans_deleted,
+                "orphan_sample": rep.orphans[:10],
+            },
             indent=2,
         )
     )

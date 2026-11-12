@@ -155,7 +155,8 @@ def my_documents(user: AuthUser = Depends(get_current_user)) -> list[DocumentSum
                 Document.allowed_roles,
                 Document.allowed_users,
             )
-            .where(Document.tenant_id == user.tenant_id)
+            # Phase 6: uploads still processing / failed are listed in /documents/mine only
+            .where(Document.tenant_id == user.tenant_id, Document.status == "ready")
             .order_by(Document.classification, Document.title)
         ).all()
     return [

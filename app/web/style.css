@@ -66,3 +66,18 @@ button:disabled { opacity: .6; cursor: wait; }
 footer { text-align: center; padding: 24px 12px; }
 a { color: var(--accent); }
 @media (max-width: 600px) { .ask { flex-direction: column; } }
+
+/* Phase 6: uploads, statuses, users */
+.status { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 999px;
+          border: 1px solid currentColor; text-transform: uppercase; letter-spacing: .02em; }
+.status.ok { color: var(--ok); } .status.error { color: var(--bad); }
+.status.pending { color: var(--warn); animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .45; } }
+@media (prefers-reduced-motion: reduce) { .status.pending { animation: none; } }
+.actions { white-space: nowrap; text-align: right; }
+.actions button { margin-left: 4px; }
+button.small { font-size: 12.5px; padding: 3px 10px; }
+button.danger { color: var(--bad); border-color: var(--bad); }
+progress { width: 100%; height: 8px; margin-top: 10px; accent-color: var(--accent); }
+.checks input:disabled + span { color: var(--muted); }
+input[type="file"] { padding: 6px; }

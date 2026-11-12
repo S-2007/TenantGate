@@ -48,6 +48,7 @@ VIOLATION_REASONS = (
     "document_missing",
     "tenant_mismatch",
     "document_policy_denied",
+    "document_not_ready",
 )
 
 ACL_VIOLATIONS = Counter(
