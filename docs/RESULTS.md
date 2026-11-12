@@ -55,3 +55,98 @@ fact: new runs get new rows.
 | 2026-11-11 | P4-B | mutation meta-tests (207 persona x query pairs each) | intact: 0 leaks, pass; (a) no tenant condition + RLS off + check off: **730 leaks, FAIL**; (b) owner role BYPASSRLS + no WHERE + check off: **1,019 leaks, FAIL**; (c) no set_config: 0 leaks (fail closed) but positive controls fail, **FAIL**; (d) RLS bound to the wrong identity: **1,270 leaks, FAIL**; WHERE only / RLS only / post-check only: 0 leaks, pass | `python -m pytest -q -s tests/security/test_mutations.py` | All 8 meta-tests pass |
 | 2026-11-11 | P4 | **CI-equivalent run on a fresh throwaway Neon branch** (same steps and order as `.github/workflows/ci.yml`) | unit 509 passed; reset schema + migrations 0001 to 0006; integration 90 passed, 1 skipped (opt-in benchmark); security 9 passed, 1 skipped (semantic-cache placeholder), **LEAKS: 0**; reconcile gate drifted 0; branch deleted (HTTP 200) | scratchpad CI emulation script | GitHub Actions itself not run: the repo has no remote yet |
 | 2026-11-11 | P4 | wall time of that run | unit 24 s, integration 11 m 52 s, security 10 m 48 s | same | Dominated by ~400 ms round trips to Neon ap-southeast-1 |
+| 2026-11-12 | P4 | **GitHub Actions CI** (S-2007/TenantGate, push to main) | green: lint + test job (unit, throwaway Neon branch, reset + migrate, integration, security suite with LEAKS: 0 and mutation tests, reconcile gate, report published, branch deleted) | `.github/workflows/ci.yml` | about 50 min for the test job (timeout 60); dominated by runner (US) to Neon ap-southeast-1 round trips |
+| 2026-11-12 | P5-A | **Benchmark environment** | Neon aws-ap-southeast-1, autoscaling 0.25 to 2 CU, Postgres 18.6, pgvector 0.8.6; client = developer laptop over WAN (warm round trip about 100 to 130 ms); bge-small-en-v1.5, top_k 5, HNSW m=16 ef_construction=64, ef_search=100, iterative_scan=strict_order | `python -m scripts.benchmark all` (each section on a throwaway branch of dev, deleted afterwards) | Raw JSON: docs/results.json, eval/results/*_bench_*.json |
+| 2026-11-12 | P5-A2 | filtering latency overhead, 184 chunks, 540 timed queries per config after 50 warm-up (eval questions as their personas) | client p50/p95: no filter 131.91/162.23 ms; WHERE+RLS 129.72/160.05 ms (**delta -2.19 / -2.18 ms**). Server execution p50/p95: no filter 0.28/0.31 ms; WHERE+RLS 0.21/0.24 ms (**delta -0.07 ms**). WHERE only 0.15/0.32; RLS only 0.16/0.19 (server) | `python -m scripts.benchmark latency` | At this size the filter is free: the client time is the network round trip |
+| 2026-11-12 | P5-A2 | post-filtering (unfiltered top-10, then can_access, keep 5), 90 queries | **72.2 %** of queries short of k=5; average 3.28 results | same | Pre-filter: 0 queries short of k |
+| 2026-11-12 | P5-A5 | second-check drop rate | normal operation: **0 of 450** chunks dropped (0 %); fault injection (WHERE removed, RLS bypassed): **265 of 450 dropped (58.9 %)**, all forbidden | same | |
+| 2026-11-12 | P5-A6 | **scale: 20,000 synthetic chunks** (2,000 docs, 3 tenants; 15 % public, 45 % internal, 40 % confidential), hash-384 embeddings | chunks table 81 MB, database 90 MB; load 112.6 s; HNSW build 8.0 s | `python -m scripts.benchmark scale` | Throwaway branch, deleted; within the free-tier storage limit |
+| 2026-11-12 | P5-A6 | scale: filtering overhead, 300 timed queries per config | server execution p50/p95: no filter 1.15/1.68 ms; WHERE+RLS 1.26/1.48 ms (**delta +0.11 ms p50**); client p50/p95: 116.72/147.69 vs 121.32/183.47 ms (delta +4.6 / +35.8 ms); HNSW plan used in 100 % of queries | same | Client deltas are WAN noise at this scale; the server delta is the filter's real cost |
+| 2026-11-12 | P5-A6 | scale: **recall@5 with the ACL filter** vs exact filtered top-5 (index scans disabled), 300 queries | iterative_scan strict_order, ef_search 100: **0.9993**; iterative_scan off, ef_search 40: **0.9347** | same | |
+| 2026-11-12 | P5-A6 | scale: post-filtering (top-10, then can_access), 100 queries | **80 %** of queries short of k=5; average 2.03 results | same | |
+| 2026-11-12 | P5-A2 | scale: without the GIN (allowed_roles, allowed_users) and tenant btree indexes (dropped in a rolled-back transaction) | WHERE-only server p50/p95 1.20/1.33 ms vs 1.18/1.48 ms with them: **no measurable effect** | same | The planner serves kNN + filter through HNSW; the ACL indexes serve audit/reconcile/verify queries, not this one |
+| 2026-11-12 | P5-A7 | Neon connections (warm compute), 20 new connections + 100 warm SELECT 1 each | pooled: new connection p50 670.7 ms, SELECT 1 p50/p95 102.1/152.4 ms; direct: 671.7 ms, 107.9/141.5 ms | `python -m scripts.benchmark neon` | Connection setup = TLS + auth over WAN |
+| 2026-11-12 | P5-A7 | **Neon cold start** after an API suspend (4 trials, alternating direct/pooled) | first query incl. connect: 1887.9, 2193.8, 1458.2, 1957.5 ms (**p50 1957.5 ms**); retries needed: **0** | same | connect_with_retry (4 attempts, backoff from 0.5 s) never needed a retry; the query-level retry (D-035) absorbed the one pooler blip seen in Phase 4 |
+| 2026-11-12 | P5-A4 | **access-denied correctness**: each eval question asked by unauthorized personas | 102 unauthorized asks over 78 answerable questions (24 by a same-tenant persona without the role, 78 cross-tenant): **0** answers used a restricted source; 51 refusals | `python -m scripts.benchmark denied` | Service layer as the dev app role, fake LLM; a violation = any source doc retrieved or cited |
+| 2026-11-12 | P5-A4 | **EVAL `final_secured`** (http mode, logged in as each row's persona) | hit@5 0.974; recall@5 0.942; correct 0.867; citation_ok 0.923; refusal_ok 1.000; false_refusal 0.038; foreign_tenant_rate 0.000; answers: gpt-oss-120b 83, qwen3.8-27b 7; judge gpt-oss-20b on all 90 | `python -m eval.run_eval --label final_secured --mode http --base-url http://127.0.0.1:8000`; CSV `eval/results/20261112T095954Z_final_secured.csv` | Nearly the same model mix as the baseline (82/8) |
+| 2026-11-12 | P5-A4 | final vs baseline, **same model** (rows answered by gpt-oss-120b in both runs, n=82) | correct 0.427 to **0.866**; foreign_tenant_rate 0.495 to **0.000** | analysis of both CSVs | Control: the 15 of those rows whose baseline retrieval had no foreign chunk: correct 0.667 in both runs. The gain is the removed cross-tenant context |
+| 2026-11-12 | P5-A1 | **full adversarial suite, full cross product** | **330 attack queries** (15 families) as all **24 personas**: **4,230 requests**, **LEAKS: 0**, other failures 0, positive controls ok; status codes 200 x 4119, 404 x 77, 422 x 18, 401 x 13, 403 x 3; 1013 s | `SECURITY_PERSONAS_PER_QUESTION=21 python -m pytest -q -s tests/security/test_leakage.py` | First attempt reported 122 "leaks": a harness bug (tokens expired after 15 min, see D-041), fixed and rerun; 0 of the 122 were data exposure |
+
+## Final results (Phase 5)
+
+Every number below is in the log above, with its date and exact command, and in
+`docs/results.json`. The README copies these two blocks verbatim (`tests/unit/test_docs_sync.py`).
+
+<!-- BEGIN:final-results -->
+| Metric | baseline_no_acl (no ACL) | secured_prefilter (Phase 3) | final_secured (Phase 5) |
+|---|---:|---:|---:|
+| hit@5 | 0.949 | 0.974 | 0.974 |
+| recall@5 | 0.885 | 0.942 | 0.942 |
+| correct (LLM judge) | 0.456 | 0.878 | 0.867 |
+| citation_ok | 0.641 | 0.962 | 0.923 |
+| refusal correctness (unanswerable) | 0.917 | 1.000 | 1.000 |
+| false refusals | 0.154 | 0.026 | 0.038 |
+| share of retrieved chunks from another tenant | 0.500 | 0.000 | 0.000 |
+| answers by gpt-oss-120b / qwen3.8-27b / gpt-oss-20b | 82 / 8 / 0 | 5 / 75 / 10 | 83 / 7 / 0 |
+
+Same model (gpt-oss-120b in both runs, n = 82): correct 0.427 → 0.866. Control (15 of those rows
+whose baseline retrieval was already clean): 0.667 → 0.667, so the gain comes from removing
+cross-tenant context, not from the model.
+
+| Measure | Result |
+|---|---|
+| Cross-tenant leaks, full adversarial suite | 0 in 4,230 requests (330 attack queries × 24 personas, 15 families) |
+| Access-denied correctness | 0 of 102 unauthorized asks used a restricted source |
+| ACL filtering overhead, server-side, 20,000 chunks | +0.11 ms p50 (1.15 → 1.26 ms) |
+| ACL filtering overhead, client incl. WAN, 184 chunks, 540 queries | −2.19 ms p50 (131.91 vs 129.72 ms): within network noise |
+| Recall@5 with the ACL filter, 20,000 chunks | 0.9993 (HNSW iterative scan) vs 0.9347 (iterative scan off) |
+| Post-filtering (retrieve 10, then drop) | 72.2 % (184 chunks) / 80 % (20,000) of queries return fewer than 5; pre-filtering: 0 % |
+| Revocation, 50 runs | first query after the PATCH denied 50/50; p50 751 ms / p95 842 ms PATCH-return → denied query (one round trip) |
+| Second-check drops | 0 of 450 chunks in normal operation; 265 of 450 with WHERE + RLS disabled (fault injection) |
+| Neon cold start (first query after suspend) | p50 1,957.5 ms over 4 runs; 0 connect retries needed |
+| Neon pooled vs direct, warm SELECT 1 p50 | 102.1 ms vs 107.9 ms (WAN round trip from the developer laptop) |
+
+Environment: Neon aws-ap-southeast-1, 0.25–2 CU autoscaling, Postgres 18.6, pgvector 0.8.6;
+bge-small-en-v1.5 (384-d), top_k 5, HNSW m 16 / ef_construction 64 / ef_search 100.
+<!-- END:final-results -->
+
+<!-- BEGIN:leak-suite -->
+330 attack queries in 15 families, including cross-tenant targeting, canary codenames,
+privilege escalation, prompt injection, jailbreaks, multilingual and encoded variants, SQL
+injection in questions and parameters, a poisoned document, semantic-similarity bait, existence
+probing, parameter and token tampering, and admin-endpoint enumeration. Asked as all 24 personas
+(4,230 requests): **LEAKS: 0**, 0 other failures, positive controls passed. CI runs the same
+suite on every push, with 4 personas per question (915 requests). Mutation tests prove the suite
+can fail: removing the protections produces 730, 1,019 or 1,270 leaks (or failed positive
+controls when RLS fails closed), and each single layer alone still gives 0 leaks.
+<!-- END:leak-suite -->
+
+### Resume lines (every number measured above)
+
+1. Built a multi-tenant RAG service (FastAPI, Neon Postgres + pgvector) with pre-retrieval ACL
+   filtering, database row-level security and append-only audit logging, verified by a
+   330-query adversarial test suite in CI with zero cross-tenant leaks and 0.11 ms server-side
+   filtering overhead at 20,000 chunks.
+2. Eliminated cross-tenant context in a multi-tenant RAG pipeline (share of retrieved chunks
+   from other tenants 50 % → 0 %), raising answer correctness from 0.43 to 0.87 on the same LLM,
+   while keeping recall@5 at 0.999 under ACL filters with pgvector iterative HNSW scans.
+3. Made permission changes atomic across documents, vector chunks and the audit log (one
+   Postgres transaction), so revocations applied on the very next query in 50 of 50 trials.
+   Mutation tests proved the leakage suite fails (730–1,270 leaks) whenever the protections are
+   removed.
+
+Not measured, so not claimed: latency with the API deployed next to the database. All client
+times above include the WAN round trip from a laptop.
+
+### Limitations
+
+- **LLM-side prompt injection** is not fully preventable by retrieval filtering. A poisoned
+  allowed document can steer an answer. It can't exfiltrate data the model never received.
+- **Embedding inversion:** stored vectors can leak information about their text to anyone with
+  raw table access.
+- **Latency side channels:** response time and result counts are not padded.
+- **Key management:** HS256 with a shared secret in `.env`, and no rotation (RS256 plan in D-021).
+- **No field-level redaction:** access is per document.
+- **Neon free tier:** scale-to-zero cold starts (about 2 s), storage and branch limits, and shared
+  compute. Free-tier LLM rate limits force model mixing in evaluations, which is disclosed per run.
+| 2026-11-12 | P5-B5 | **clean-clone run** (exactly the files a commit contains: 202; no .env, no seed_users.json, no results) against a fresh EMPTY throwaway Neon branch, following the README quickstart literally | migrate, seed, ingest, verify_index (ok), create_app_role, API /health healthy; lint clean; **unit + integration 604 passed** (1 skipped: opt-in benchmark); **security suite + mutation tests 9 passed, LEAKS: 0**; eval pipeline ran end to end (fake LLM: hit@5 0.974, foreign_tenant_rate 0.000); reconcile drifted 0; second clean clone (quickstart + demo): **demo.sh ALL 5 SCENARIOS PASSED** | scratchpad clean-clone script (snapshot of `git ls-files -co --exclude-standard`, two throwaway branches, always deleted) | Reused the existing venv (same pinned versions); CI does a fresh install on every push. First demo attempt failed in the harness only: Windows resolved `bash` to WSL. README now says to use Git Bash |

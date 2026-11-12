@@ -2,12 +2,17 @@
 PY ?= python
 LABEL ?= baseline_no_acl
 
-.PHONY: up down run migrate migrate-test test test-unit lint fmt seed ingest verify app-role eval benchmark review policy-cov reconcile security
+.DEFAULT_GOAL := help
+.PHONY: help up down run migrate migrate-test test test-unit lint fmt seed ingest verify app-role eval benchmark review policy-cov reconcile security demo
+
+help:          ## list targets
+	@grep -E '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | sed -e 's/:.*## /	/' | awk -F'	' '{printf "  %-12s %s
+", $$1, $$2}'
 
 up:            ## build + start the API container (talks to Neon via .env)
 	docker compose up --build -d
 
-down:
+down:          ## stop the API container
 	docker compose down
 
 run:           ## run the API on the host with uvicorn (still talks to Neon)
@@ -22,14 +27,14 @@ migrate-test:  ## apply migrations to the test branch (guarded against productio
 test:          ## all tests; Neon-backed ones need TEST_DATABASE_URL (skipped locally if unset)
 	$(PY) -m pytest -q
 
-test-unit:
+test-unit:     ## unit tests only (no database)
 	$(PY) -m pytest -q tests/unit
 
-lint:
+lint:          ## ruff lint + format check (what CI runs)
 	$(PY) -m ruff check .
 	$(PY) -m ruff format --check .
 
-fmt:
+fmt:           ## auto-format and auto-fix
 	$(PY) -m ruff format .
 	$(PY) -m ruff check --fix .
 
@@ -51,14 +56,17 @@ policy-cov:    ## can_access truth table with branch coverage
 review:        ## regenerate data/eval/REVIEW.md
 	$(PY) -m scripts.gen_eval review
 
-eval:
+eval:          ## Phase 1 eval as the row personas (LABEL=name; needs a running API for --mode http)
 	$(PY) -m eval.run_eval --label $(LABEL)
 
-benchmark:
-	$(PY) -m scripts.benchmark
+benchmark:     ## Phase 5 benchmarks on throwaway Neon branches (CMD=latency|scale|neon|denied|all)
+	$(PY) -m scripts.benchmark $(or $(CMD),all)
 
 reconcile:     ## check chunk ACLs against their documents (FIX=1 to repair)
 	$(PY) -m scripts.reconcile_acls $(if $(FIX),--fix,)
 
 security:      ## adversarial leakage suite + mutation meta-tests (Neon test branch)
 	$(PY) -m pytest -q -s tests/security
+
+demo:          ## the five demo scenarios against a running API (API=http://127.0.0.1:8000)
+	bash scripts/demo.sh

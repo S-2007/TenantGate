@@ -8,12 +8,13 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /srv
 # CPU-only torch keeps the image ~1.5 GB smaller; the 384-d bge model is fast enough on CPU.
-RUN pip install --index-url https://download.pytorch.org/whl/cpu torch
+COPY requirements.lock ./
+RUN pip install --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple -c requirements.lock torch
 COPY pyproject.toml README.md ./
 COPY app ./app
 COPY eval ./eval
 COPY scripts ./scripts
-RUN pip install .
+RUN pip install -c requirements.lock .
 
 # Bake the embedding model into the image so cold starts don't download it.
 ARG EMBEDDING_MODEL=BAAI/bge-small-en-v1.5

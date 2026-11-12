@@ -33,6 +33,14 @@ class Finding:
     request_id: str | None = None
 
 
+LEAK_MARKERS = ("forbidden", "canary", "existence leak")  # data reached the wrong persona
+
+
+def is_leak(problem: str) -> bool:
+    """Data exposure, as opposed to a harness or expectation failure (e.g. a wrong status)."""
+    return any(m in problem for m in LEAK_MARKERS)
+
+
 @dataclass
 class RunResult:
     findings: list[Finding] = field(default_factory=list)  # one per request
@@ -41,7 +49,13 @@ class RunResult:
 
     @property
     def leaks(self) -> list[Finding]:
-        return [f for f in self.findings if f.problems]
+        """Requests whose response exposed data the persona may not see."""
+        return [f for f in self.findings if any(is_leak(p) for p in f.problems)]
+
+    @property
+    def failures(self) -> list[Finding]:
+        """Requests that did not behave as expected (status, errors, attack not exercised)."""
+        return [f for f in self.findings if any(not is_leak(p) for p in f.problems)]
 
 
 class Tokens:
@@ -49,16 +63,21 @@ class Tokens:
 
     def __init__(self, client: httpx.Client, oracle: Oracle) -> None:
         self.client, self.oracle = client, oracle
-        self._cache: dict[str, str] = {}
+        self._cache: dict[str, tuple[str, float]] = {}
+
+    REFRESH_S = 600  # tokens live 15 min; long runs (~16 min for the full cross product) re-login
 
     def login(self, key: str) -> str | None:
-        if key not in self._cache:
-            p = self.oracle.personas[key]
-            r = self.client.post("/auth/login", json={"email": p.email, "password": PASSWORD})
-            if r.status_code != 200:
-                return None
-            self._cache[key] = r.json()["access_token"]
-        return self._cache[key]
+        hit = self._cache.get(key)
+        if hit and time.time() - hit[1] < self.REFRESH_S:
+            return hit[0]
+        p = self.oracle.personas[key]
+        r = self.client.post("/auth/login", json={"email": p.email, "password": PASSWORD})
+        if r.status_code != 200:
+            return None
+        tok = r.json()["access_token"]
+        self._cache[key] = (tok, time.time())  # last writer wins; both tokens are valid
+        return tok
 
     def tampered(self, recipe: str, key: str | None) -> str | None:
         s = get_settings()
@@ -113,9 +132,8 @@ def _response_text(r: httpx.Response) -> str:
 
 def _check_ask(persona: Persona, r: httpx.Response) -> list[str]:
     problems: list[str] = []
-    if r.status_code >= 500:
-        problems.append(f"HTTP {r.status_code}")
-    if r.status_code != 200:
+    if r.status_code != 200:  # the attack was not exercised: a failure, never a silent pass
+        problems.append(f"HTTP {r.status_code} (attack not exercised)")
         return problems + find_leaks(
             persona, retrieved_docs=(), cited_docs=(), text=_response_text(r)
         )
@@ -240,13 +258,19 @@ def summary(oracle: Oracle, asks, https, res: RunResult, seconds: float) -> dict
     fam_q = Counter(a.family for a in asks) + Counter(h.family for h in https)
     fam_req = Counter(f.family for f in res.findings)
     fam_leak = Counter(f.family for f in res.leaks)
+    fam_fail = Counter(f.family for f in res.failures)
     return {
         "attack_queries_total": len(asks) + len(https),
         "ask_questions": len(asks),
         "http_attacks": len(https),
         "requests_total": len(res.findings),
         "families": {
-            k: {"queries": fam_q[k], "requests": fam_req[k], "leaks": fam_leak[k]}
+            k: {
+                "queries": fam_q[k],
+                "requests": fam_req[k],
+                "leaks": fam_leak[k],
+                "failures": fam_fail[k],
+            }
             for k in sorted(fam_q)
         },  # fmt: skip
         "personas": sorted(oracle.personas),
@@ -254,6 +278,8 @@ def summary(oracle: Oracle, asks, https, res: RunResult, seconds: float) -> dict
         "leaks": len(res.leaks) + len(res.audit_problems),
         "leak_details": [f.__dict__ for f in res.leaks][:50]
         + [{"audit": p} for p in res.audit_problems[:50]],
+        "failures": len(res.failures),
+        "failure_details": [f.__dict__ for f in res.failures][:50],
         "positive_controls": res.controls,
         "positive_controls_ok": all(c["ok"] for c in res.controls),
         "status_codes": dict(Counter(f.status for f in res.findings)),

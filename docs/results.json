@@ -1,0 +1,553 @@
+{
+  "latency": {
+    "timestamp": "2026-11-12T09:13:33+00:00",
+    "environment": {
+      "region": "aws-ap-southeast-1",
+      "compute_cu_min": 0.25,
+      "compute_cu_max": 2,
+      "suspend_timeout_seconds": 0,
+      "chunks": 184,
+      "embedding_model": "BAAI/bge-small-en-v1.5",
+      "top_k": 5,
+      "hnsw": "ef_search=100, iterative_scan=strict_order",
+      "client": "developer laptop over WAN to Neon"
+    },
+    "queries_timed_per_config": 540,
+    "warmup": 50,
+    "explain_per_config": 150,
+    "configs": {
+      "no_filter": {
+        "client_ms": {
+          "n": 540,
+          "p50": 131.91,
+          "p95": 162.23,
+          "mean": 136.57
+        },
+        "server_exec_ms": {
+          "n": 150,
+          "p50": 0.28,
+          "p95": 0.31,
+          "mean": 0.31
+        },
+        "hnsw_plan_share": 0.0,
+        "queries_short_of_k": 0,
+        "avg_rows": 5.0
+      },
+      "where_only": {
+        "client_ms": {
+          "n": 540,
+          "p50": 132.25,
+          "p95": 161.76,
+          "mean": 137.32
+        },
+        "server_exec_ms": {
+          "n": 150,
+          "p50": 0.15,
+          "p95": 0.32,
+          "mean": 0.16
+        },
+        "hnsw_plan_share": 0.0,
+        "queries_short_of_k": 0,
+        "avg_rows": 5.0
+      },
+      "rls_only": {
+        "client_ms": {
+          "n": 540,
+          "p50": 131.03,
+          "p95": 167.71,
+          "mean": 136.69
+        },
+        "server_exec_ms": {
+          "n": 150,
+          "p50": 0.16,
+          "p95": 0.19,
+          "mean": 0.17
+        },
+        "hnsw_plan_share": 0.0,
+        "queries_short_of_k": 0,
+        "avg_rows": 5.0
+      },
+      "where_and_rls": {
+        "client_ms": {
+          "n": 540,
+          "p50": 129.72,
+          "p95": 160.05,
+          "mean": 134.03
+        },
+        "server_exec_ms": {
+          "n": 150,
+          "p50": 0.21,
+          "p95": 0.24,
+          "mean": 0.21
+        },
+        "hnsw_plan_share": 0.0,
+        "queries_short_of_k": 0,
+        "avg_rows": 5.0
+      }
+    },
+    "overhead_where_and_rls_vs_no_filter_ms": {
+      "client_p50": -2.19,
+      "client_p95": -2.18,
+      "server_p50": -0.07,
+      "server_p95": -0.07
+    },
+    "post_filter": {
+      "fetch": 10,
+      "k": 5,
+      "queries": 90,
+      "queries_short_of_k": 65,
+      "share_short": 0.722,
+      "avg_survivors": 3.28
+    },
+    "second_check_normal": {
+      "queries": 90,
+      "chunks_reaching_check": 450,
+      "dropped": 0,
+      "drop_rate": 0.0,
+      "retrieve_db_ms": {
+        "n": 90,
+        "p50": 790.91,
+        "p95": 1046.22,
+        "mean": 855.94
+      }
+    },
+    "second_check_fault_injection": {
+      "queries": 90,
+      "chunks_reaching_check": 450,
+      "dropped": 265,
+      "drop_rate": 0.5889,
+      "retrieve_db_ms": {
+        "n": 90,
+        "p50": 685.0,
+        "p95": 1009.27,
+        "mean": 728.83
+      }
+    }
+  },
+  "scale": {
+    "timestamp": "2026-11-12T09:29:24+00:00",
+    "environment": {
+      "region": "aws-ap-southeast-1",
+      "compute_cu_min": 0.25,
+      "compute_cu_max": 2,
+      "suspend_timeout_seconds": 0,
+      "embedding": "hash-384 (synthetic corpus)",
+      "top_k": 5
+    },
+    "corpus": {
+      "chunks": 20000,
+      "documents": 2000,
+      "chunks_table_size": "81 MB",
+      "database_size": "90 MB",
+      "load_seconds": 112.6,
+      "hnsw_build_seconds": 8.0,
+      "mix": "15% public, 45% internal, 40% confidential (10% of those user-specific)"
+    },
+    "queries_timed_per_config": 300,
+    "configs": {
+      "no_filter": {
+        "client_ms": {
+          "n": 300,
+          "p50": 116.72,
+          "p95": 147.69,
+          "mean": 123.65
+        },
+        "server_exec_ms": {
+          "n": 100,
+          "p50": 1.15,
+          "p95": 1.68,
+          "mean": 1.25
+        },
+        "hnsw_plan_share": 1.0,
+        "queries_short_of_k": 0,
+        "avg_rows": 5.0
+      },
+      "where_only": {
+        "client_ms": {
+          "n": 300,
+          "p50": 121.98,
+          "p95": 156.47,
+          "mean": 128.86
+        },
+        "server_exec_ms": {
+          "n": 100,
+          "p50": 1.18,
+          "p95": 1.48,
+          "mean": 1.35
+        },
+        "hnsw_plan_share": 1.0,
+        "queries_short_of_k": 0,
+        "avg_rows": 5.0
+      },
+      "where_and_rls": {
+        "client_ms": {
+          "n": 300,
+          "p50": 121.32,
+          "p95": 183.47,
+          "mean": 131.33
+        },
+        "server_exec_ms": {
+          "n": 100,
+          "p50": 1.26,
+          "p95": 1.48,
+          "mean": 1.32
+        },
+        "hnsw_plan_share": 1.0,
+        "queries_short_of_k": 0,
+        "avg_rows": 5.0
+      },
+      "where_and_rls_iterative_off": {
+        "client_ms": {
+          "n": 300,
+          "p50": 123.79,
+          "p95": 219.23,
+          "mean": 134.12
+        },
+        "server_exec_ms": {
+          "n": 100,
+          "p50": 1.21,
+          "p95": 1.36,
+          "mean": 1.23
+        },
+        "hnsw_plan_share": 1.0,
+        "queries_short_of_k": 1,
+        "avg_rows": 4.99
+      }
+    },
+    "overhead_where_and_rls_vs_no_filter_ms": {
+      "client_p50": 4.6,
+      "client_p95": 35.78,
+      "server_p50": 0.11,
+      "server_p95": -0.2
+    },
+    "recall_at_5_with_filter": {
+      "strict_order_ef100": {
+        "queries": 300,
+        "recall": 0.9993
+      },
+      "iterative_off_ef40": {
+        "queries": 300,
+        "recall": 0.9347
+      }
+    },
+    "post_filter": {
+      "fetch": 10,
+      "k": 5,
+      "queries": 100,
+      "queries_short_of_k": 80,
+      "share_short": 0.8,
+      "avg_survivors": 2.03
+    },
+    "without_gin_and_tenant_btree": {
+      "where_only_client_ms": {
+        "n": 300,
+        "p50": 116.18,
+        "p95": 147.74,
+        "mean": 120.56
+      },
+      "where_only_server_exec_ms": {
+        "n": 100,
+        "p50": 1.2,
+        "p95": 1.33,
+        "mean": 1.25
+      }
+    }
+  },
+  "neon": {
+    "timestamp": "2026-11-12T09:30:52+00:00",
+    "environment": {
+      "region": "aws-ap-southeast-1",
+      "compute_cu_min": 0.25,
+      "compute_cu_max": 2,
+      "suspend_timeout_seconds": 0
+    },
+    "connections": {
+      "direct": {
+        "new_connection_ms": {
+          "n": 20,
+          "p50": 671.7,
+          "p95": 770.79,
+          "mean": 691.27
+        },
+        "select1_warm_ms": {
+          "n": 100,
+          "p50": 107.89,
+          "p95": 141.49,
+          "mean": 114.54
+        }
+      },
+      "pooled": {
+        "new_connection_ms": {
+          "n": 20,
+          "p50": 670.73,
+          "p95": 742.84,
+          "mean": 687.33
+        },
+        "select1_warm_ms": {
+          "n": 100,
+          "p50": 102.14,
+          "p95": 152.37,
+          "mean": 112.94
+        }
+      }
+    },
+    "cold_starts": [
+      {
+        "via": "direct",
+        "first_query_ms": 1887.9,
+        "connect_retries": 0,
+        "suspend_took_s": 2.0
+      },
+      {
+        "via": "pooled",
+        "first_query_ms": 2193.8,
+        "connect_retries": 0,
+        "suspend_took_s": 3.8
+      },
+      {
+        "via": "direct",
+        "first_query_ms": 1458.2,
+        "connect_retries": 0,
+        "suspend_took_s": 12.0
+      },
+      {
+        "via": "pooled",
+        "first_query_ms": 1957.5,
+        "connect_retries": 0,
+        "suspend_took_s": 3.7
+      }
+    ],
+    "cold_start_first_query_ms": {
+      "n": 4,
+      "p50": 1957.5,
+      "p95": 2193.8,
+      "mean": 1874.35
+    },
+    "retry_backoff": {
+      "retries_needed_in_cold_starts": 0,
+      "note": "connect_with_retry: 4 attempts, exponential backoff from 0.5 s, connect_timeout 10 s. Cold starts completed within the first attempt. Query-level: one retry on OperationalError (D-035), which absorbed the pooler blip seen in Phase 4."
+    }
+  },
+  "access_denied": {
+    "timestamp": "2026-11-12T09:32:32+00:00",
+    "eval_questions": 78,
+    "unauthorized_asks": 102,
+    "of_which_same_tenant_persona": 24,
+    "answers_using_a_restricted_source": 0,
+    "refusals": 51,
+    "method": "service layer as the dev app role, fake LLM; a violation = any source doc of the question retrieved or cited for a persona that may not read it"
+  },
+  "security_full_cross_product": {
+    "timestamp": "2026-11-12T10:09:47+00:00",
+    "command": "SECURITY_PERSONAS_PER_QUESTION=21 python -m pytest -q -s tests/security/test_leakage.py",
+    "attack_queries_total": 330,
+    "ask_questions": 195,
+    "http_attacks": 135,
+    "requests_total": 4230,
+    "personas": [
+      "acme:admin_1",
+      "acme:employee_1",
+      "acme:employee_2",
+      "acme:engineering_1",
+      "acme:finance_1",
+      "acme:hr_1",
+      "acme:manager_1",
+      "acme:multi_1",
+      "lumen:admin_1",
+      "lumen:employee_1",
+      "lumen:employee_2",
+      "lumen:engineering_1",
+      "lumen:finance_1",
+      "lumen:hr_1",
+      "lumen:manager_1",
+      "lumen:multi_1",
+      "northwind:admin_1",
+      "northwind:employee_1",
+      "northwind:employee_2",
+      "northwind:engineering_1",
+      "northwind:finance_1",
+      "northwind:hr_1",
+      "northwind:manager_1",
+      "northwind:multi_1"
+    ],
+    "personas_attacking": 24,
+    "leaks": 0,
+    "failures": 0,
+    "positive_controls_ok": true,
+    "status_codes": {
+      "200": 4119,
+      "422": 18,
+      "401": 13,
+      "404": 77,
+      "403": 3
+    },
+    "families": {
+      "admin_probing": {
+        "queries": 75,
+        "requests": 75,
+        "leaks": 0,
+        "failures": 0
+      },
+      "canary_targeting": {
+        "queries": 42,
+        "requests": 882,
+        "leaks": 0,
+        "failures": 0
+      },
+      "cross_tenant_names": {
+        "queries": 18,
+        "requests": 378,
+        "leaks": 0,
+        "failures": 0
+      },
+      "encoded": {
+        "queries": 18,
+        "requests": 378,
+        "leaks": 0,
+        "failures": 0
+      },
+      "indirect_injection": {
+        "queries": 8,
+        "requests": 168,
+        "leaks": 0,
+        "failures": 0
+      },
+      "jailbreak_roleplay": {
+        "queries": 10,
+        "requests": 210,
+        "leaks": 0,
+        "failures": 0
+      },
+      "multilingual": {
+        "queries": 10,
+        "requests": 210,
+        "leaks": 0,
+        "failures": 0
+      },
+      "param_tampering": {
+        "queries": 36,
+        "requests": 36,
+        "leaks": 0,
+        "failures": 0
+      },
+      "privilege_escalation": {
+        "queries": 20,
+        "requests": 420,
+        "leaks": 0,
+        "failures": 0
+      },
+      "prompt_injection": {
+        "queries": 15,
+        "requests": 315,
+        "leaks": 0,
+        "failures": 0
+      },
+      "response_probing": {
+        "queries": 12,
+        "requests": 252,
+        "leaks": 0,
+        "failures": 0
+      },
+      "semantic_bait": {
+        "queries": 30,
+        "requests": 630,
+        "leaks": 0,
+        "failures": 0
+      },
+      "sql_injection_params": {
+        "queries": 11,
+        "requests": 11,
+        "leaks": 0,
+        "failures": 0
+      },
+      "sql_injection_question": {
+        "queries": 12,
+        "requests": 252,
+        "leaks": 0,
+        "failures": 0
+      },
+      "token_tampering": {
+        "queries": 13,
+        "requests": 13,
+        "leaks": 0,
+        "failures": 0
+      }
+    },
+    "duration_s": 1013.4
+  },
+  "eval": {
+    "baseline_no_acl": {
+      "overall": {
+        "n": 90,
+        "hit_at_k": 0.9487,
+        "recall_at_k": 0.8846,
+        "correct": 0.4556,
+        "citation_ok": 0.641,
+        "refusal_ok": 0.9167,
+        "false_refusal": 0.1538,
+        "foreign_tenant_rate": 0.5
+      },
+      "answer_models": {
+        "openai/gpt-oss-120b": 82,
+        "qwen/qwen3.8-27b": 8
+      },
+      "csv": "eval/results/20261110T181045Z_baseline_no_acl.csv"
+    },
+    "secured_prefilter": {
+      "overall": {
+        "n": 90,
+        "hit_at_k": 0.9744,
+        "recall_at_k": 0.9423,
+        "correct": 0.8778,
+        "citation_ok": 0.9615,
+        "refusal_ok": 1.0,
+        "false_refusal": 0.0256,
+        "foreign_tenant_rate": 0.0
+      },
+      "answer_models": {
+        "qwen/qwen3.8-27b": 75,
+        "openai/gpt-oss-20b": 10,
+        "openai/gpt-oss-120b": 5
+      },
+      "csv": "eval/results/20261110T195514Z_secured_prefilter.csv"
+    },
+    "final_secured": {
+      "overall": {
+        "n": 90,
+        "hit_at_k": 0.9744,
+        "recall_at_k": 0.9423,
+        "correct": 0.8667,
+        "citation_ok": 0.9231,
+        "refusal_ok": 1.0,
+        "false_refusal": 0.0385,
+        "foreign_tenant_rate": 0.0
+      },
+      "answer_models": {
+        "openai/gpt-oss-120b": 83,
+        "qwen/qwen3.8-27b": 7
+      },
+      "csv": "eval/results/20261112T095954Z_final_secured.csv"
+    },
+    "same_model_gpt_oss_120b": {
+      "n": 82,
+      "correct_baseline": 0.427,
+      "correct_final": 0.866,
+      "foreign_tenant_rate_baseline": 0.495,
+      "foreign_tenant_rate_final": 0.0
+    },
+    "control_clean_baseline_same_model": {
+      "n": 15,
+      "correct_baseline": 0.667,
+      "correct_final": 0.667
+    }
+  },
+  "revocation": {
+    "source": "eval/results/20261111T145408Z_revoke_latency.json (Phase 4)",
+    "revocations": 50,
+    "first_query_after_commit_denied": 50,
+    "ms_patch_return_to_first_denied_query": {
+      "p50": 751.0,
+      "p95": 842.4
+    }
+  }
+}

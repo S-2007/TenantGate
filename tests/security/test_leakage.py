@@ -29,12 +29,14 @@ def _markdown(rep: dict) -> str:
         f"personas: {len(rep['personas'])} ({rep['personas_attacking']} sent requests) | "
         f"positive controls ok: {rep['positive_controls_ok']} | duration {rep['duration_s']} s",
         "",
-        "| family | queries | requests | leaks |",
-        "|---|---:|---:|---:|",
+        "| family | queries | requests | leaks | failures |",
+        "|---|---:|---:|---:|---:|",
     ]
     for fam, v in rep["families"].items():
-        lines.append(f"| {fam} | {v['queries']} | {v['requests']} | {v['leaks']} |")
-    lines += ["", f"**LEAKS: {rep['leaks']}**", ""]
+        lines.append(
+            f"| {fam} | {v['queries']} | {v['requests']} | {v['leaks']} | {v['failures']} |"
+        )
+    lines += ["", f"**LEAKS: {rep['leaks']}** | other failures: {rep['failures']}", ""]
     return "\n".join(lines)
 
 
@@ -58,6 +60,7 @@ def test_no_leaks_for_any_persona_or_attack(api_server, security_world):
     print("\n" + md)
     assert rep["positive_controls_ok"], rep["positive_controls"]
     assert rep["leaks"] == 0, json.dumps(rep["leak_details"][:10], indent=2, default=str)
+    assert rep["failures"] == 0, json.dumps(rep["failure_details"][:10], indent=2, default=str)
 
 
 @pytest.mark.skip(

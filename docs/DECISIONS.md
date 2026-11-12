@@ -692,8 +692,65 @@ reach layer 3 and are all removed). That is defence in depth demonstrated, not j
 
 The build fails on any leak, failed control, failed mutation test or drift. CI uses the fake LLM
 and hash embeddings: no API keys, no cost, deterministic.
-**Not verified yet.** This repository has no GitHub remote, so the workflow has not run on
-GitHub. Its steps were run end to end, in the same order, on a fresh throwaway Neon branch (see
-RESULTS.md). Fork PRs are skipped, because forks can't read secrets.
+**Verified on GitHub** (S-2007/TenantGate, 2026-11-12): every step passed, the security suite
+included, and the throwaway branch was deleted. The run took about 50 minutes, close to the
+60-minute job timeout. The time is dominated by round trips from the US-hosted runner to Neon
+ap-southeast-1, so cutting round trips per request is the next CI improvement. Fork PRs are
+skipped, because forks can't read secrets.
 **Free-tier limits.** Neon has a branch-count limit and compute hours. Each run creates and
 deletes one branch, and concurrency cancels superseded runs.
+
+## D-039 How the Phase 5 numbers were measured (and what they do and don't show)
+**Isolation.**
+- Every benchmark that changes the database or its compute runs on a throwaway branch of `dev`,
+  created and deleted by `scripts/neon_branch.py`. That covers dropping indexes, the 20k corpus
+  and suspending compute.
+- Each configuration has its own connection and thread, and runs the same query list. Identity
+  and HNSW settings are bound per query with `set_config(..., true)`, and only the search
+  statement is timed.
+**Two clocks.**
+- *Client* time includes the WAN round trip, which is about 100–130 ms from the developer laptop
+  to ap-southeast-1.
+- *Server* time is `EXPLAIN (ANALYZE)` execution time. The filter's real cost only shows in
+  server time; at 184 chunks the client deltas are smaller than network jitter, and even
+  negative.
+**Findings worth stating plainly.**
+- **The ACL filter costs about +0.1 ms of server time at 20k chunks** (p50 1.15 → 1.26 ms).
+  Recall@5 with the filter stays at 0.9993 with iterative scan, and drops to 0.9347 with it off.
+- **The GIN and tenant btree indexes don't speed up this query.** The planner serves "kNN + ACL
+  filter" through HNSW in 100% of queries, so dropping them changed nothing measurable. They
+  are kept for the audit, verify and reconcile queries, and for plans without an ORDER BY on
+  distance. That is a measured result, not a claim that they help retrieval.
+- **Post-filtering is broken for real users,** not just slower: with fetch 10 / keep 5, 72%
+  (184 chunks) and 80% (20k chunks) of queries returned fewer than 5 results.
+- **Neon cold start is about 2 s** for the first query after a suspend, with no retries needed.
+  The retry/backoff code is there for transient drops, not for cold starts.
+**Not measured here.** Production latency next to the database. Moving the API into the same
+region would remove the 100–130 ms round trip from every statement, but that is deployment work.
+
+## D-040 Final evaluation protocol
+- `final_secured` is the Phase 1 eval re-run through the HTTP API, logged in as each row's
+  persona, and compared with `baseline_no_acl` (no ACL) and `secured_prefilter` (Phase 3).
+- Free-tier rate limits decide which model answers each row. Every row records `answer_model`,
+  and the comparison is reported both overall and per model.
+- Access-denied correctness is measured separately (`benchmark denied`). Every answerable eval
+  question is asked by personas who may not read its sources, and a violation is any of those
+  sources retrieved or cited. That check is retrieval-level, so it doesn't depend on the LLM.
+
+## D-041 A harness bug that could have hidden untested attacks (found and fixed)
+**What happened.** The first full cross-product run (330 queries × 24 personas, about 16 min) reported
+"LEAKS: 122". None of them was data exposure. The harness cached one token per persona, and
+tokens expire after 15 minutes, so the last part of the run got HTTP 401. Two things went wrong
+because of that:
+1. The HTTP attacks, which expected 403/404/422, were counted as leaks.
+2. More seriously, question attacks that got 401 were counted as **passes**, although they were
+   never exercised. A green run could have tested nothing.
+**Fix.**
+- Tokens are re-issued after 10 minutes.
+- Any question attack that doesn't return 200 is a **failure** ("attack not exercised").
+- The report separates `leaks` (data reached the wrong persona) from `failures` (wrong status,
+  error details, unexercised attack). The test fails on either.
+- Unit tests in `tests/unit/test_security_harness.py` cover all three.
+**Rerun:** 4,230 requests, LEAKS: 0, failures: 0, positive controls passed. The CI-sized run
+(about 4 min) was never affected, because it finishes before any token expires; the fix
+protects longer runs.
