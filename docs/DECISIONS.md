@@ -965,3 +965,40 @@ all content stay forbidden.
 **Admin listings.** The suite also checks them (users, invites, dashboard) for other companies'
 slugs. Mutant M4 removes the tenant filter, and the suite fails on another company's doc id and
 slug.
+
+## D-051 New UI design ported into the dependency-free frontend, not applied as a patch
+**Source.** The design handoff (`tenantgate-ui.patch`, plus `App.tsx` and `index.css` from a
+Figma Make export) is a React 19 + Vite + Tailwind app that uses Google Fonts and
+`lucide-react`. Applying it would have meant:
+- adding a build step and a Node toolchain;
+- loading fonts from Google, which the CSP (`default-src 'self'`, `style-src 'self'`) forbids,
+  and which we won't weaken;
+- replacing working, tested code with screens wired to hard-coded demo arrays.
+
+**What was done instead.** The design was ported into `app/web/index.html`, `style.css` and
+`app.js`:
+- **Layout.** Dark sidebar, workspace card, system status, topbar, Ask screen with an evidence
+  panel, metric cards, tables, modals, drawer on mobile.
+- **Icons.** The lucide icons became an app-owned inline SVG sprite, built in JS with
+  `createElementNS`.
+- **Fonts.** Manrope, Space Grotesk and IBM Plex Mono are listed first, with system fallbacks.
+  Nothing is downloaded.
+- **Demo data.** Every sample value in the reference (metrics, users, sources, "99.99%
+  uptime", "Verified against 3 sources", fake timeouts) was replaced by real API data or
+  removed. Claims shown are only those the backend supports: the evidence panel says "only
+  documents you may read were searched" because the API returns only authorized chunks; it
+  never shows "N omitted", which the API doesn't return.
+
+**Backend change.** One small additive endpoint, `GET /auth/workspace`. It returns the caller's
+own company name and slug for the sidebar, with the tenant taken from the verified token.
+`/auth/me` is unchanged because tests pin its exact shape.
+
+**Found while testing.**
+- **Stale responses overwrote fresh ones.** Two overlapping reloads of the same list (for
+  example, opening People while a role change reloads it) could render the older response
+  last. Every loader now has a sequence guard.
+- **A replaced file's row didn't update.** A replace keeps status `ready`, so nothing looked
+  "processing" and the row wasn't refreshed. The UI now polls until the row's `updated_at`
+  changes.
+- **The slug field's browser validation never ran.** Its `pattern` was an invalid regex under
+  the `v` flag that modern browsers use; the server always validated anyway.

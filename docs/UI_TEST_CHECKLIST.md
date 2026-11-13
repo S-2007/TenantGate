@@ -46,3 +46,20 @@ Notes:
 | 19 | Admin uploads an HR-only file; maya asks twice | Answers with citation ("2.4 million", "every April") | pass |
 | 20 | Admin → Security tab | 2 questions, 1 person, 0 refused, 0 blocked; the HR-only doc listed **by id** (admin isn't HR), reader maya ×2; uploads per day; events: registered → invite created → accepted → upload | pass |
 | 21 | Account → Sign out of all devices (a second "device" signed in) | Back to sign-in with a message; the other device's token: 200 before, 401 after | pass |
+
+## UI redesign run (2026-11-13, built-in browser, desktop and 375 px mobile, company "Northstar Robotics" registered in the run)
+
+| # | Step | Result |
+|---|------|--------|
+| 22 | Sign in, register (new auth screens) | pass. Sidebar shows the real company name and slug (`/auth/workspace`), status "API and database healthy · Database round trip 394 ms" from `/health` |
+| 23 | Documents → Upload document (modal, drop zone, internal file; confidential HR-only file) | pass. File name and size shown, the ACL box only for confidential, processing → ready by polling, the HR-only file absent from the admin's readable list |
+| 24 | People → Invite person (modal) → copy link → Escape closes | pass |
+| 25 | Open the link in a fresh page load → preview → set password | pass. Signed in as maya (employee, hr); nav shows only Ask / Documents / Settings |
+| 26 | Ask (Ctrl+Enter): HR salary question; unrelated question | pass. Loading skeleton; answer with 1 cited source; refusal state; evidence panel: cited doc, CONFIDENTIAL badge, similarity, request id, model, latency |
+| 27 | Admin → Security (7 days) | pass. Real counts, uploads-per-day bars, HR-only doc listed by id only, reader maya ×2, events |
+| 28 | People → Edit roles (with an overlapping reload) | pass after the stale-response fix (first run showed old roles) |
+| 29 | Audit log → lookup + ACL change | pass. 2 retrievals listed; "confidential [hr] → confidential [admin, hr], 1 chunks updated, version 2" |
+| 30 | Replace, delete | pass. Delete OK; the replace row refreshed by itself after the `updated_at` polling fix (first run needed a manual reload) |
+| 31 | Settings → change password; sign out of all devices | pass. Other device 200 → 401; back at sign-in with a message |
+| 32 | Mobile 375 px: every page | pass. 0 px horizontal overflow on all 6 pages; drawer opens; closes by ×, scrim, Escape and nav; focus returns to the menu button |
+| 33 | CSP header after the redesign | unchanged (`default-src 'self'; script-src 'self'; style-src 'self' …`) |

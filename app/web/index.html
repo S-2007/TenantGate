@@ -8,244 +8,453 @@
   <script src="/static/app.js" defer></script>
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand"><span class="logo">⛨</span> TenantGate <span class="sub">permission-aware RAG</span></div>
-    <div id="whoami" class="whoami hidden">
-      <span id="who-email"></span>
-      <span id="who-tenant" class="pill"></span>
-      <span id="who-roles"></span>
-      <button id="account-btn" class="ghost">Account</button>
-      <button id="logout" class="ghost">Log out</button>
-    </div>
-  </header>
+  <!-- App-owned icon sprite (no external icon library: the CSP allows only our own files). -->
+  <svg class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-mark" viewBox="0 0 40 40" fill="none">
+      <path d="M20 3.75 33 8.7v9.55c0 8.4-5.35 14.68-13 18-7.65-3.32-13-9.6-13-18V8.7L20 3.75Z" fill="currentColor" opacity=".14"/>
+      <path d="M20 4.75 32 9.32v8.93c0 7.7-4.8 13.54-12 16.82-7.2-3.28-12-9.12-12-16.82V9.32L20 4.75Z" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M14 25.5V14.25h12V25.5M17.75 25.5v-7.75h4.5v7.75M12.5 25.5h15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="20" cy="21.25" r="1" fill="currentColor"/>
+    </symbol>
+    <symbol id="i-ask" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-activity" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1 7 17M17 7l2.1-2.1"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
+    <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-bot" viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2M20 14h2M9 13v2M15 13v2"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.7 12.3 21 2M18 5l3 3M15 8l2 2"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol>
+    <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-panel" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M15 3v18"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2 21h20z"/><path d="M12 10v5M12 18h.01"/></symbol>
+  </svg>
 
-  <main>
-    <!-- LOGIN -->
-    <section id="login-view" class="card narrow">
+  <!-- ================================================================= SIGN IN / REGISTER / INVITE -->
+  <div id="auth-shell" class="auth-shell">
+    <div class="auth-brand">
+      <span class="brand-mark"><svg><use href="#i-mark"/></svg></span>
+      <div><div class="brand-name">TenantGate</div><div class="brand-subtitle">Permission-aware retrieval</div></div>
+    </div>
+
+    <section id="login-view" class="auth-card">
       <h1>Sign in</h1>
-      <p class="muted">Every answer is limited to the documents <em>you</em> may read. Try the same
-        question as different users to see the difference.</p>
+      <p class="muted">Every answer is limited to the documents <em>you</em> may read. Ask the same
+        question as different people to see the difference.</p>
       <form id="login-form" autocomplete="off">
-        <label>Email <input id="email" type="email" required placeholder="employee_1@acme.example"></label>
-        <label>Password <input id="password" type="password" required placeholder="dev password from data/seed_users.json"></label>
-        <button type="submit" class="primary">Sign in</button>
-        <p id="login-error" class="error hidden"></p>
+        <label class="field">Email <input id="email" type="email" required placeholder="employee_1@acme.example"></label>
+        <label class="field">Password <input id="password" type="password" required placeholder="Your password"></label>
+        <button type="submit" class="primary-button wide">Sign in</button>
+        <p id="login-error" class="msg error hidden" role="alert"></p>
       </form>
-      <div class="demo-users">
-        <p class="muted small">Demo users (click to fill the email). The dev password is in
-          <code>data/seed_users.json</code>.</p>
+      <details class="demo-users">
+        <summary>Demo users (seeded dev data)</summary>
+        <p class="muted small">Click to fill the email. The dev password is in <code>data/seed_users.json</code>.</p>
         <div id="user-chips" class="chips"></div>
-      </div>
-      <p class="small" id="register-link-row">New company? <a href="#" id="show-register">Register your company</a></p>
+      </details>
+      <p class="small auth-switch">New company? <a href="#" id="show-register">Register your company</a></p>
     </section>
 
-    <!-- ACCEPT INVITE (Phase 7) -->
-    <section id="invite-view" class="card narrow hidden">
+    <section id="invite-view" class="auth-card hidden">
       <h1>Join your company</h1>
       <p id="invite-info" class="muted"></p>
-      <p id="invite-bad" class="error hidden">This invite link is invalid, already used, revoked or
+      <p id="invite-bad" class="msg error hidden" role="alert">This invite link is invalid, already used, revoked or
         expired. Ask your admin for a new one.</p>
       <form id="invite-form" class="hidden" autocomplete="off">
-        <label>Choose a password <input id="inv-password" type="password" required minlength="12"
-               placeholder="at least 12 characters"></label>
-        <label>Repeat it <input id="inv-password2" type="password" required minlength="12"></label>
-        <button type="submit" class="primary">Create my account</button>
-        <p id="invite-error" class="error hidden"></p>
+        <label class="field">Choose a password <input id="inv-password" type="password" required minlength="12" placeholder="At least 12 characters"></label>
+        <label class="field">Repeat it <input id="inv-password2" type="password" required minlength="12"></label>
+        <button type="submit" class="primary-button wide">Create my account</button>
+        <p id="invite-error" class="msg error hidden" role="alert"></p>
       </form>
     </section>
 
-    <!-- REGISTER (Phase 6) -->
-    <section id="register-view" class="card narrow hidden">
+    <section id="register-view" class="auth-card hidden">
       <h1>Register your company</h1>
-      <p class="muted">Creates a new, isolated tenant and its first admin. Nothing in it is
-        visible to any other company, and you can't see theirs.</p>
-      <p id="register-closed" class="error hidden">Registration is currently disabled on this server.</p>
+      <p class="muted">Creates a new, isolated workspace and its first admin. Nothing in it is
+        visible to any other company.</p>
+      <p id="register-closed" class="msg error hidden">Registration is currently disabled on this server.</p>
       <form id="register-form" autocomplete="off">
-        <label>Company name <input id="reg-name" required minlength="2" maxlength="80" placeholder="Gamma Labs"></label>
-        <label>Short id (slug) <input id="reg-slug" required minlength="3" maxlength="40"
-               pattern="[a-z0-9][a-z0-9-]{1,38}[a-z0-9]" placeholder="gamma-labs"></label>
-        <label>Admin email <input id="reg-email" type="email" required placeholder="admin@gamma.example"></label>
-        <label>Admin password <input id="reg-password" type="password" required minlength="12"
-               placeholder="at least 12 characters"></label>
-        <label id="reg-code-row" class="hidden">Registration code <input id="reg-code" maxlength="200"></label>
-        <button type="submit" class="primary">Create company</button>
-        <p id="register-error" class="error hidden"></p>
+        <label class="field">Company name <input id="reg-name" required minlength="2" maxlength="80" placeholder="Gamma Labs"></label>
+        <label class="field">Short id (slug) <input id="reg-slug" required minlength="3" maxlength="40"
+               pattern="[a-z0-9][a-z0-9\-]{1,38}[a-z0-9]" placeholder="gamma-labs"></label>
+        <label class="field">Admin email <input id="reg-email" type="email" required placeholder="admin@gamma.example"></label>
+        <label class="field">Admin password <input id="reg-password" type="password" required minlength="12" placeholder="At least 12 characters"></label>
+        <label id="reg-code-row" class="field hidden">Registration code <input id="reg-code" maxlength="200"></label>
+        <button type="submit" class="primary-button wide">Create company</button>
+        <p id="register-error" class="msg error hidden" role="alert"></p>
       </form>
-      <p class="small"><a href="#" id="show-login">Back to sign in</a></p>
+      <p class="small auth-switch"><a href="#" id="show-login">Back to sign in</a></p>
     </section>
+  </div>
 
-    <!-- APP -->
-    <section id="app-view" class="hidden">
-      <nav class="tabs">
-        <button class="tab active" data-tab="chat">Ask</button>
-        <button class="tab" data-tab="docs">My documents</button>
-        <button class="tab admin-only hidden" data-tab="users">Users</button>
-        <button class="tab admin-only hidden" data-tab="security">Security</button>
-        <button class="tab admin-only hidden" data-tab="admin">Admin</button>
+  <!-- ================================================================= APP -->
+  <div id="app-view" class="app-shell hidden">
+    <button id="scrim" class="sidebar-scrim hidden" type="button" aria-label="Close menu"></button>
+    <aside id="sidebar" class="sidebar" aria-label="Sidebar">
+      <div class="brand-row">
+        <span class="brand-mark"><svg><use href="#i-mark"/></svg></span>
+        <div><div class="brand-name">TenantGate</div><div class="brand-subtitle">Secure retrieval</div></div>
+        <button id="menu-close" class="icon-button mobile-close" type="button" aria-label="Close menu"><svg class="ic"><use href="#i-x"/></svg></button>
+      </div>
+
+      <div class="workspace-card">
+        <div id="ws-avatar" class="workspace-avatar">··</div>
+        <div class="workspace-copy"><strong id="ws-name">Workspace</strong><span id="ws-slug"></span></div>
+      </div>
+
+      <nav class="main-nav" aria-label="Main navigation">
+        <p class="nav-label">Workspace</p>
+        <button class="nav-item tab" data-tab="chat" type="button"><svg class="ic"><use href="#i-ask"/></svg><span>Ask</span></button>
+        <button class="nav-item tab" data-tab="docs" type="button"><svg class="ic"><use href="#i-book"/></svg><span>Documents</span><span id="nav-doc-count" class="nav-count hidden"></span></button>
+        <button class="nav-item tab admin-only hidden" data-tab="security" type="button"><svg class="ic"><use href="#i-shield"/></svg><span>Security</span></button>
+        <button class="nav-item tab admin-only hidden" data-tab="users" type="button"><svg class="ic"><use href="#i-users"/></svg><span>People &amp; access</span></button>
+        <p class="nav-label nav-label-secondary">System</p>
+        <button class="nav-item tab admin-only hidden" data-tab="audit" type="button"><svg class="ic"><use href="#i-activity"/></svg><span>Audit log</span></button>
+        <button class="nav-item tab" data-tab="account" type="button"><svg class="ic"><use href="#i-settings"/></svg><span>Settings</span></button>
       </nav>
 
-      <div id="tab-chat" class="tabpane">
-        <div class="card">
-          <form id="ask-form" class="ask">
-            <input id="question" type="text" maxlength="2000" required
-                   placeholder="Ask about your company's documents, e.g. How many PTO days do I get per year?">
-            <button type="submit" class="primary" id="ask-btn">Ask</button>
-          </form>
-          <div id="examples" class="chips"></div>
+      <div class="sidebar-bottom">
+        <div class="system-health admin-only hidden" id="health" role="status">
+          <div class="health-title"><span><i id="health-dot"></i><span id="health-text">Checking status…</span></span></div>
         </div>
-        <div id="answers"></div>
+        <button id="profile-btn" class="profile" type="button" title="Settings">
+          <span id="profile-avatar" class="profile-avatar">··</span>
+          <span class="profile-copy"><strong id="who-email"></strong><span id="who-roles-text"></span></span>
+          <svg class="ic"><use href="#i-chevron"/></svg>
+        </button>
       </div>
+    </aside>
 
-      <div id="tab-docs" class="tabpane hidden">
-        <div class="card">
-          <h2>Documents you can read</h2>
-          <p class="muted small">Filtered by your tenant and roles (SQL + row-level security +
-            policy check). Other users see a different list.</p>
-          <div id="doc-counts" class="chips"></div>
-          <table class="table"><thead><tr><th>Title</th><th>Classification</th><th>Doc id</th></tr></thead>
-            <tbody id="doc-rows"></tbody></table>
+    <div class="app-main">
+      <header class="topbar">
+        <div class="topbar-title">
+          <button id="menu-open" class="icon-button menu-button" type="button" aria-label="Open menu" aria-controls="sidebar"><svg class="ic"><use href="#i-menu"/></svg></button>
+          <div><h1 id="page-title">Ask</h1><p id="page-sub"></p></div>
         </div>
-        <div class="card upload-only hidden">
-          <h2>Upload a document</h2>
-          <p class="muted small" id="upload-hint"></p>
-          <form id="upload-form">
-            <div class="row">
-              <input id="up-file" type="file" required>
-              <input id="up-title" maxlength="200" placeholder="Title (defaults to the file name)">
-            </div>
-            <div class="row">
-              <select id="up-class">
-                <option value="internal">internal (all employees)</option>
-                <option value="public">public (everyone in your company)</option>
-                <option value="confidential">confidential (only the roles / users below)</option>
-              </select>
-            </div>
-            <div id="up-roles" class="checks"></div>
-            <div id="up-users" class="checks hidden"></div>
-            <button class="primary" type="submit" id="up-btn">Upload</button>
-            <progress id="up-progress" max="100" value="0" class="hidden"></progress>
-            <p id="up-out"></p>
-          </form>
+        <div class="topbar-actions">
+          <div class="secure-chip" title="Every retrieval is filtered by tenant and role in the vector query, by row-level security and by a recheck in code."><span></span><svg class="ic sm"><use href="#i-shield"/></svg>Access-filtered retrieval</div>
+          <div id="who-roles" class="topbar-roles"></div>
+          <button id="logout" class="icon-button" type="button" aria-label="Sign out" title="Sign out"><svg class="ic"><use href="#i-logout"/></svg></button>
         </div>
-        <div class="card upload-only hidden">
-          <h2>My uploads</h2>
-          <p class="muted small">Status updates automatically. A document is searchable only when it is
-            <strong>ready</strong>. Replacing keeps the old version searchable until the new one is ready.</p>
-          <table class="table"><thead><tr><th>Title</th><th>Status</th><th>Access</th><th>Chunks</th><th>Size</th><th></th></tr></thead>
-            <tbody id="mine-rows"></tbody></table>
-          <input id="replace-file" type="file" class="hidden">
-        </div>
-      </div>
+      </header>
 
-      <div id="tab-users" class="tabpane hidden">
-        <div class="card">
-          <h2>Invite a person</h2>
-          <p class="muted small">They get a one-time link and choose their own password. You never
-            see it. The link works once and expires; only a hash of it is stored.</p>
-          <form id="invite-create">
-            <div class="row"><input id="iv-email" type="email" required placeholder="new.person@yourcompany.example"></div>
-            <div id="iv-roles" class="checks"></div>
-            <button class="primary" type="submit">Create invite link</button>
-          </form>
-          <div id="iv-out"></div>
-          <table class="table"><thead><tr><th>Email</th><th>Roles</th><th>Status</th><th>Expires</th><th></th></tr></thead>
-            <tbody id="invite-rows"></tbody></table>
-        </div>
-        <div class="card">
-          <h2>Add a user with a password</h2>
-          <p class="muted small">For scripts and demos. Prefer an invite for real people.</p>
-          <form id="user-form">
-            <div class="row">
-              <input id="nu-email" type="email" required placeholder="new.user@yourcompany.example">
-              <input id="nu-password" type="password" required minlength="12" placeholder="initial password (12+ chars)">
+      <!-- ------------------------------------------------------------- ASK -->
+      <div id="tab-chat" class="page ask-layout">
+        <main class="ask-main">
+          <section class="ask-intro">
+            <div class="eyebrow"><svg class="ic sm"><use href="#i-bot"/></svg>Permission-aware search</div>
+            <h2>Ask TenantGate</h2>
+            <p id="ask-sub">Search your company's documents. Results are filtered to your current access.</p>
+          </section>
+          <form id="ask-form" class="composer-card">
+            <textarea id="question" maxlength="2000" required aria-label="Ask a question"
+                      placeholder="Ask a question about your company's documents…"></textarea>
+            <div class="composer-footer">
+              <div class="scope-control"><svg class="ic sm"><use href="#i-db"/></svg><span>Only documents you may read</span></div>
+              <div class="composer-action">
+                <span class="kbd-hint"><kbd>↵</kbd> send · <kbd>Shift</kbd><kbd>↵</kbd> new line</span>
+                <button id="ask-btn" class="send-button" type="submit" aria-label="Send question"><svg class="ic"><use href="#i-arrow-up"/></svg></button>
+              </div>
             </div>
-            <div id="nu-roles" class="checks"></div>
-            <button class="primary" type="submit">Create user</button>
-            <p id="nu-out"></p>
           </form>
-        </div>
-        <div class="card">
-          <h2>Users in your company</h2>
-          <table class="table"><thead><tr><th>Email</th><th>Roles</th><th>Status</th><th></th></tr></thead>
-            <tbody id="user-rows"></tbody></table>
-        </div>
-      </div>
-
-      <div id="tab-security" class="tabpane hidden">
-        <div class="card">
-          <div class="row spread">
-            <h2>Security overview</h2>
-            <select id="sec-days"><option value="1">last 24 hours</option><option value="7" selected>last 7 days</option>
-              <option value="30">last 30 days</option></select>
+          <div class="suggestions"><span>Examples</span><span id="examples" class="chips-inline"></span></div>
+          <div class="conversation-divider"><span>Answers</span></div>
+          <div id="answers" class="answers" aria-live="polite">
+            <div id="ask-empty" class="empty">
+              <svg class="ic lg"><use href="#i-ask"/></svg>
+              <strong>No questions yet</strong>
+              <span>Answers appear here with the sources they cite and the context the model was given.</span>
+            </div>
           </div>
-          <p class="muted small">Computed by the database from your company's audit log only.
-            Confidential documents you can't read appear by id, never by title.</p>
-          <div id="sec-stats" class="stats"></div>
+        </main>
+        <button id="show-sources" class="show-sources hidden" type="button"><svg class="ic sm"><use href="#i-file"/></svg>Show sources</button>
+        <aside id="context-panel" class="context-panel" aria-label="Retrieval evidence">
+          <div class="context-header">
+            <div><span>Evidence</span><h3>Retrieved for this answer</h3></div>
+            <button id="hide-sources" class="icon-button" type="button" aria-label="Hide source panel"><svg class="ic"><use href="#i-panel"/></svg></button>
+          </div>
+          <div id="ctx-body">
+            <p class="muted small">Ask a question to see which of your documents were used.</p>
+          </div>
+        </aside>
+      </div>
+
+      <!-- ------------------------------------------------------------- DOCUMENTS -->
+      <main id="tab-docs" class="page page-content hidden">
+        <div class="page-heading">
+          <div>
+            <div class="eyebrow"><svg class="ic sm"><use href="#i-book"/></svg>Knowledge base</div>
+            <h2>Documents</h2>
+            <p>Documents you can read right now, filtered by your company and roles.</p>
+          </div>
+          <button id="open-upload" class="primary-button upload-only hidden" type="button"><svg class="ic sm"><use href="#i-upload"/></svg>Upload document</button>
+        </div>
+        <div id="doc-stats" class="stat-grid"></div>
+        <section class="data-card">
+          <div class="table-tools">
+            <label class="search-box"><svg class="ic sm"><use href="#i-search"/></svg>
+              <input id="doc-search" type="search" placeholder="Search documents you can read…" aria-label="Search documents"></label>
+            <select id="doc-filter" class="filter-button" aria-label="Filter by classification">
+              <option value="">All classifications</option><option value="public">Public</option>
+              <option value="internal">Internal</option><option value="confidential">Confidential</option>
+            </select>
+          </div>
+          <div class="table-scroll">
+            <table><thead><tr><th>Document</th><th>Classification</th><th>Document id</th></tr></thead>
+              <tbody id="doc-rows"></tbody></table>
+          </div>
+          <div class="table-footer"><span id="doc-footer"></span></div>
+        </section>
+
+        <section class="data-card spaced upload-only hidden">
+          <div class="card-title">
+            <div><span>Your uploads</span><h3>Processing and status</h3></div>
+            <span class="muted small">Only <strong>ready</strong> documents are searchable. Replacing keeps the old version searchable until the new one is ready.</span>
+          </div>
+          <p id="up-out" class="msg" role="status"></p>
+          <div class="table-scroll">
+            <table><thead><tr><th>Document</th><th>Status</th><th>Access</th><th>Chunks</th><th>Size</th><th><span class="sr">Actions</span></th></tr></thead>
+              <tbody id="mine-rows"></tbody></table>
+          </div>
+          <input id="replace-file" type="file" class="hidden" aria-label="Replacement file">
+        </section>
+
+        <div id="upload-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="upload-title">
+          <form id="upload-form" class="modal">
+            <div class="modal-head">
+              <div><span>Add to knowledge base</span><h3 id="upload-title">Upload document</h3></div>
+              <button class="icon-button modal-close" type="button" aria-label="Close"><svg class="ic"><use href="#i-x"/></svg></button>
+            </div>
+            <label id="drop-zone" class="drop-zone" for="up-file">
+              <span class="drop-icon"><svg class="ic"><use href="#i-upload"/></svg></span>
+              <strong id="drop-label">Drop a file here, or click to browse</strong>
+              <span id="upload-hint"></span>
+              <input id="up-file" type="file" required class="visually-hidden">
+            </label>
+            <label class="field">Title <input id="up-title" maxlength="200" placeholder="Defaults to the file name"></label>
+            <label class="field">Classification
+              <select id="up-class">
+                <option value="internal">Internal: all employees</option>
+                <option value="public">Public: everyone in your company</option>
+                <option value="confidential">Confidential: only the roles or people below</option>
+              </select>
+            </label>
+            <div id="up-acl" class="acl-box hidden">
+              <span class="field-caption">Roles that may read it</span>
+              <div id="up-roles" class="checks"></div>
+              <div id="up-users" class="checks hidden"></div>
+            </div>
+            <div class="modal-note"><svg class="ic"><use href="#i-shield"/></svg>
+              <p><strong>Safe by default.</strong> The file is type-checked and size-limited on the
+                server, and stays unsearchable until extraction and indexing finish.</p></div>
+            <progress id="up-progress" max="100" value="0" class="hidden"></progress>
+            <div class="modal-actions">
+              <button class="secondary-button modal-close" type="button">Cancel</button>
+              <button id="up-btn" class="primary-button" type="submit">Upload and process</button>
+            </div>
+          </form>
+        </div>
+      </main>
+
+      <!-- ------------------------------------------------------------- SECURITY -->
+      <main id="tab-security" class="page page-content hidden">
+        <div class="page-heading">
+          <div>
+            <div class="eyebrow"><svg class="ic sm"><use href="#i-shield"/></svg>Security</div>
+            <h2>Access overview</h2>
+            <p>Computed by the database from your company's audit log only.</p>
+          </div>
+          <select id="sec-days" class="filter-button" aria-label="Time range">
+            <option value="1">Last 24 hours</option><option value="7" selected>Last 7 days</option><option value="30">Last 30 days</option>
+          </select>
+        </div>
+        <div id="sec-stats" class="stat-grid"></div>
+        <div class="security-grid">
+          <section class="data-card">
+            <div class="card-title"><div><span>Knowledge base activity</span><h3>Uploads per day</h3></div><svg class="ic"><use href="#i-activity"/></svg></div>
+            <div class="chart-legend"><span><i class="g"></i>Uploaded</span><span><i class="b"></i>Replaced</span><span><i class="a"></i>Failed</span></div>
+            <div id="sec-uploads" class="bar-chart"></div>
+          </section>
+          <section class="data-card">
+            <div class="card-title"><div><span>How access is enforced</span><h3>Three independent checks</h3></div><svg class="ic"><use href="#i-shield"/></svg></div>
+            <div class="layer-row"><span>01</span><div><strong>Filter inside the vector query</strong><small>Tenant and role predicate in the same SQL as the similarity search</small></div></div>
+            <div class="layer-row"><span>02</span><div><strong>Postgres row-level security</strong><small>Forced per transaction; no identity, no rows</small></div></div>
+            <div class="layer-row"><span>03</span><div><strong>Recheck before the prompt</strong><small>Each chunk re-verified against its document; failures appear as blocked chunks above</small></div></div>
+          </section>
         </div>
         <div class="grid2">
-          <div class="card"><h3>Most-read confidential documents</h3><div id="sec-conf"></div></div>
-          <div class="card"><h3>Top readers of confidential documents</h3><div id="sec-readers"></div></div>
-          <div class="card"><h3>Refused or failed questions by user</h3><div id="sec-denied"></div></div>
-          <div class="card"><h3>Uploads per day</h3><div id="sec-uploads"></div></div>
+          <section class="data-card"><div class="card-title"><div><span>Confidential</span><h3>Most-read documents</h3></div></div><div id="sec-conf" class="card-body"></div></section>
+          <section class="data-card"><div class="card-title"><div><span>Confidential</span><h3>Top readers</h3></div></div><div id="sec-readers" class="card-body"></div></section>
+          <section class="data-card"><div class="card-title"><div><span>Requests</span><h3>Refused or failed, by person</h3></div></div><div id="sec-denied" class="card-body"></div></section>
+          <section class="data-card"><div class="card-title"><div><span>Admin and account</span><h3>Recent events</h3></div></div><div id="sec-events" class="card-body"></div></section>
         </div>
-        <div class="card"><h3>Recent admin and account events</h3><div id="sec-events"></div></div>
-      </div>
+      </main>
 
-      <div id="tab-account" class="tabpane hidden">
-        <div class="card">
-          <h2>Change password</h2>
-          <p class="muted small">Every other signed-in browser is signed out; this one stays in.</p>
-          <form id="pw-form" autocomplete="off">
-            <label>Current password <input id="pw-current" type="password" required></label>
-            <label>New password <input id="pw-new" type="password" required minlength="12"></label>
-            <button class="primary" type="submit">Change password</button>
-            <p id="pw-out"></p>
-          </form>
+      <!-- ------------------------------------------------------------- PEOPLE -->
+      <main id="tab-users" class="page page-content hidden">
+        <div class="page-heading">
+          <div>
+            <div class="eyebrow"><svg class="ic sm"><use href="#i-users"/></svg>Identity and access</div>
+            <h2>People &amp; access</h2>
+            <p>Roles are re-read from the database on every request, so changes apply immediately.</p>
+          </div>
+          <button id="open-invite" class="primary-button" type="button"><svg class="ic sm"><use href="#i-plus"/></svg>Invite person</button>
         </div>
-        <div class="card">
-          <h2>Sign out everywhere</h2>
-          <p class="muted small">Ends every session of your account, including this one, at once.
-            Use it if you signed in on a shared or lost device.</p>
-          <button id="logout-all" class="ghost danger" type="button">Sign out of all devices</button>
-        </div>
-      </div>
+        <p id="nu-out" class="msg" role="status"></p>
+        <section class="data-card spaced">
+          <div class="table-tools">
+            <label class="search-box"><svg class="ic sm"><use href="#i-search"/></svg>
+              <input id="people-search" type="search" placeholder="Search people…" aria-label="Search people"></label>
+            <select id="people-role" class="filter-button" aria-label="Filter by role"><option value="">All roles</option></select>
+          </div>
+          <div id="user-rows" class="people-list"></div>
+        </section>
 
-      <div id="tab-admin" class="tabpane hidden">
-        <div class="card">
-          <h2>Who retrieved a document?</h2>
-          <form id="audit-form" class="row">
-            <input id="audit-doc" list="doc-ids" placeholder="doc id, e.g. acme-salary-bands" required>
-            <select id="audit-days"><option value="1">last 1 day</option><option value="7">last 7 days</option>
-              <option value="30" selected>last 30 days</option></select>
-            <button class="primary" type="submit">Look up</button>
-          </form>
-          <div id="audit-out"></div>
-        </div>
-        <div class="card">
-          <h2>Change who can read a document</h2>
-          <p class="muted small">Applied atomically to the document and all its chunks; the very next
-            query of every user sees the change.</p>
-          <form id="acl-form">
+        <section class="data-card spaced">
+          <div class="card-title"><div><span>Invites</span><h3>Pending and past invites</h3></div></div>
+          <div id="iv-out" class="card-body"></div>
+          <div class="table-scroll">
+            <table><thead><tr><th>Email</th><th>Roles</th><th>Status</th><th>Expires</th><th><span class="sr">Actions</span></th></tr></thead>
+              <tbody id="invite-rows"></tbody></table>
+          </div>
+        </section>
+
+        <details class="data-card spaced collapsible">
+          <summary class="card-title"><div><span>For scripts and demos</span><h3>Add a user with a password</h3></div><svg class="ic"><use href="#i-chevron"/></svg></summary>
+          <form id="user-form" class="card-body">
+            <p class="muted small">Prefer an invite for real people: they choose their own password.</p>
             <div class="row">
-              <input id="acl-doc" list="doc-ids" placeholder="doc id" required>
-              <select id="acl-class">
-                <option value="confidential">confidential (only the roles below)</option>
-                <option value="internal">internal (all employees)</option>
-                <option value="public">public (everyone in your company)</option>
-              </select>
+              <label class="field grow">Email <input id="nu-email" type="email" required placeholder="new.user@yourcompany.example"></label>
+              <label class="field grow">Initial password <input id="nu-password" type="password" required minlength="12" placeholder="12+ characters"></label>
+            </div>
+            <div id="nu-roles" class="checks"></div>
+            <button class="primary-button" type="submit">Create user</button>
+          </form>
+        </details>
+
+        <div id="invite-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="invite-title">
+          <form id="invite-create" class="modal">
+            <div class="modal-head">
+              <div><span>Identity and access</span><h3 id="invite-title">Invite a person</h3></div>
+              <button class="icon-button modal-close" type="button" aria-label="Close"><svg class="ic"><use href="#i-x"/></svg></button>
+            </div>
+            <p class="muted small">They get a one-time link and choose their own password. You never see it.
+              The link works once and expires; only a hash of it is stored.</p>
+            <label class="field">Email <input id="iv-email" type="email" required placeholder="new.person@yourcompany.example"></label>
+            <span class="field-caption">Roles</span>
+            <div id="iv-roles" class="checks"></div>
+            <div id="iv-result" class="hidden"></div>
+            <div class="modal-actions">
+              <button class="secondary-button modal-close" type="button">Close</button>
+              <button id="iv-btn" class="primary-button" type="submit">Create invite link</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="roles-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="roles-title">
+          <form id="roles-form" class="modal">
+            <div class="modal-head">
+              <div><span>Change access</span><h3 id="roles-title">Edit roles</h3></div>
+              <button class="icon-button modal-close" type="button" aria-label="Close"><svg class="ic"><use href="#i-x"/></svg></button>
+            </div>
+            <p id="roles-who" class="muted small"></p>
+            <div id="roles-checks" class="checks"></div>
+            <p class="muted small">Takes effect on that person's next request. A company always keeps at least one active admin.</p>
+            <p id="roles-out" class="msg" role="status"></p>
+            <div class="modal-actions">
+              <button class="secondary-button modal-close" type="button">Cancel</button>
+              <button class="primary-button" type="submit">Save roles</button>
+            </div>
+          </form>
+        </div>
+      </main>
+
+      <!-- ------------------------------------------------------------- AUDIT LOG -->
+      <main id="tab-audit" class="page page-content hidden">
+        <div class="page-heading">
+          <div>
+            <div class="eyebrow"><svg class="ic sm"><use href="#i-activity"/></svg>Audit log</div>
+            <h2>Retrievals and access changes</h2>
+            <p>Who retrieved a document, and change who can read it. Changes are atomic and apply on the next query.</p>
+          </div>
+        </div>
+        <section class="data-card spaced">
+          <div class="card-title"><div><span>Retrieval audit</span><h3>Who retrieved a document?</h3></div></div>
+          <form id="audit-form" class="card-body row">
+            <label class="field grow">Document id <input id="audit-doc" list="doc-ids" placeholder="e.g. acme-salary-bands" required></label>
+            <label class="field">Window <select id="audit-days"><option value="1">Last 1 day</option><option value="7">Last 7 days</option>
+              <option value="30" selected>Last 30 days</option></select></label>
+            <button class="primary-button" type="submit">Look up</button>
+          </form>
+          <div id="audit-out" class="card-body"></div>
+        </section>
+        <section class="data-card spaced">
+          <div class="card-title"><div><span>Access control</span><h3>Change who can read a document</h3></div></div>
+          <form id="acl-form" class="card-body">
+            <div class="row">
+              <label class="field grow">Document id <input id="acl-doc" list="doc-ids" placeholder="Document id" required></label>
+              <label class="field grow">Classification
+                <select id="acl-class">
+                  <option value="confidential">Confidential: only the roles below</option>
+                  <option value="internal">Internal: all employees</option>
+                  <option value="public">Public: everyone in your company</option>
+                </select></label>
             </div>
             <div id="acl-roles" class="checks"></div>
-            <button class="primary" type="submit">Save access</button>
+            <button class="primary-button" type="submit">Save access</button>
           </form>
-          <div id="acl-out"></div>
-        </div>
+          <div id="acl-out" class="card-body"></div>
+        </section>
         <datalist id="doc-ids"></datalist>
-      </div>
-    </section>
-  </main>
+      </main>
 
-  <footer class="muted small">
-    API docs: <a href="/docs">/docs</a> · health: <a href="/health">/health</a> · metrics: <a href="/metrics">/metrics</a>
-  </footer>
+      <!-- ------------------------------------------------------------- SETTINGS -->
+      <main id="tab-account" class="page page-content hidden">
+        <div class="page-heading">
+          <div>
+            <div class="eyebrow"><svg class="ic sm"><use href="#i-settings"/></svg>Settings</div>
+            <h2>Your account</h2>
+            <p id="acct-line">Signed in.</p>
+          </div>
+        </div>
+        <div class="grid2 top">
+          <section class="data-card">
+            <div class="card-title"><div><span>Security</span><h3>Change password</h3></div><svg class="ic"><use href="#i-key"/></svg></div>
+            <form id="pw-form" class="card-body" autocomplete="off">
+              <p class="muted small">Every other signed-in browser is signed out; this one stays in.</p>
+              <label class="field">Current password <input id="pw-current" type="password" required></label>
+              <label class="field">New password <input id="pw-new" type="password" required minlength="12" placeholder="12+ characters"></label>
+              <button class="primary-button" type="submit">Change password</button>
+              <p id="pw-out" class="msg" role="status"></p>
+            </form>
+          </section>
+          <section class="data-card">
+            <div class="card-title"><div><span>Sessions</span><h3>Sign out everywhere</h3></div><svg class="ic"><use href="#i-logout"/></svg></div>
+            <div class="card-body">
+              <p class="muted small">Ends every session of your account at once, including this one. Use it if you
+                signed in on a shared or lost device.</p>
+              <button id="logout-all" class="danger-button" type="button">Sign out of all devices</button>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
 </body>
 </html>

@@ -257,3 +257,16 @@ def test_security_summary_is_tenant_scoped(fresh, client):
     assert c not in other_s.text and out["slug"] not in other_s.text
     assert client.get("/admin/security/summary", headers=hs["hr"]).status_code == 403
     assert client.get("/admin/security/summary?days=0", headers=hs["admin"]).status_code == 422
+
+
+def test_workspace_is_own_company_only(fresh, client):
+    a = register(client).json()
+    b = register(client).json()
+    ws = client.get("/auth/workspace", headers=_h(a["access_token"]))
+    assert ws.status_code == 200 and ws.json()["tenant_id"] == a["tenant_id"]
+    assert ws.json()["slug"] == a["slug"] and b["slug"] not in ws.text
+    assert client.get("/auth/workspace").status_code == 401
+    r = client.get(
+        "/auth/workspace", headers=_h(a["access_token"]), params={"tenant_id": b["tenant_id"]}
+    )
+    assert r.json()["tenant_id"] == a["tenant_id"]  # a query-string tenant is ignored

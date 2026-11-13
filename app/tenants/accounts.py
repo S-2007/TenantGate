@@ -284,3 +284,26 @@ def security_summary(
         return call_definer(admin, "SELECT security_summary(:d)", {"d": days})
     except AclChangeError as exc:
         raise _http(exc) from exc
+
+
+# ------------------------------------------------------------------ UI: own workspace
+class WorkspaceOut(BaseModel):
+    tenant_id: uuid.UUID
+    name: str
+    slug: str
+
+
+@router.get("/auth/workspace", response_model=WorkspaceOut)
+def my_workspace(user: AuthUser = Depends(get_current_user)) -> WorkspaceOut:  # noqa: B008
+    """The caller's OWN company (name for the UI). The tenant comes from the verified identity."""
+    from sqlalchemy import select
+
+    from app.db.models import Tenant
+
+    with transaction() as s:
+        row = s.execute(
+            select(Tenant.id, Tenant.name, Tenant.slug).where(Tenant.id == user.tenant_id)
+        ).one_or_none()
+    if row is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "not found")
+    return WorkspaceOut(tenant_id=row.id, name=row.name, slug=row.slug)

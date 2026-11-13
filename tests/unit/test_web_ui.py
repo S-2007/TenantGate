@@ -66,3 +66,32 @@ def test_upload_info_requires_auth(client):
     assert client.get("/documents/upload-info").status_code == 401
     assert client.get("/documents/mine").status_code == 401
     assert client.post("/documents/upload").status_code == 401
+
+
+def test_redesign_keeps_csp_safe_assets():
+    """The redesign (React/Tailwind reference ported to plain files) adds no remote assets."""
+    css = (WEB / "style.css").read_text(encoding="utf-8")
+    html = (WEB / "index.html").read_text(encoding="utf-8")
+    js = (WEB / "app.js").read_text(encoding="utf-8")
+    assert "@import" not in css and "url(" not in css, "no web fonts or remote CSS"
+    assert not re.search(r"\sstyle=", html), "inline style attributes would violate style-src"
+    assert 'id="i-mark"' in html and "createElementNS" in js  # app-owned SVG icons
+    assert "fonts.googleapis" not in html + css + js and "lucide" not in html + js
+
+
+def test_redesign_navigation_and_mobile_drawer():
+    html = (WEB / "index.html").read_text(encoding="utf-8")
+    for tab in ("chat", "docs", "security", "users", "audit", "account"):
+        assert f'data-tab="{tab}"' in html and f'id="tab-{tab}"' in html
+    for admin_tab in ("security", "users", "audit"):  # hidden until /auth/me says admin
+        assert re.search(rf'class="nav-item tab admin-only hidden" data-tab="{admin_tab}"', html)
+    for control in ('id="menu-open"', 'id="menu-close"', 'id="scrim"', 'aria-label="Close menu"'):
+        assert control in html
+    js = (WEB / "app.js").read_text(encoding="utf-8")
+    assert (
+        "PAGES[name].admin && !isAdmin()" in js
+    )  # admin pages also refused in code, not only hidden
+
+
+def test_workspace_endpoint_requires_auth(client):
+    assert client.get("/auth/workspace").status_code == 401
