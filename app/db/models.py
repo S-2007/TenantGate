@@ -67,6 +67,8 @@ class User(Base):
     password_hash: Mapped[str] = mapped_column(Text, nullable=False)
     roles: Mapped[list[str]] = mapped_column(ARRAY(Text), nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False)
+    # Phase 7 (migration 0008): copied into every JWT as "tv"; bumping it revokes all sessions
+    token_version: Mapped[int] = mapped_column(Integer, nullable=False, server_default="1")
     created_at: Mapped[dt.datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )

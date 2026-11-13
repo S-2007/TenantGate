@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Demo scenarios against a running API (seeded dev branch): (a)-(e) always; (f)-(g) when the
+# Demo scenarios against a running API (seeded dev branch): (a)-(e) always; (f)-(h) when the
 # API runs with REGISTRATION_ENABLED=true (Phase 6: a new company registers and uploads).
 # Read-only for the seeded tenants except scenario (e), which changes one ACL and ALWAYS
 # restores it (trap), even if the script is interrupted. (f) leaves a small "demo-<run>"
@@ -140,10 +140,26 @@ if [[ "$(curl -s "$API/tenants/registration-info" | json "d['enabled']")" == "Tr
   CODE=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$API/documents/upload" -H "Authorization: Bearer $NEMP" \
     -F "file=@$TMP/pay.txt" -F "classification=internal")
   [[ "$CODE" == "403" ]] && pass "an employee may not upload -> 403" || fail "employee upload got $CODE"
+
+  title "(h) Accounts: invite link, single use, sign out everywhere, security tab"
+  INV=$(curl -s -X POST "$API/admin/invites" -H "Authorization: Bearer $NADM" -H 'content-type: application/json'     -d "{\"email\":\"maya@$SLUG.example\",\"roles\":[\"hr\",\"employee\"]}")
+  ITOK=$(echo "$INV" | json "d['invite_url'].split('#invite=')[1]")   # never printed
+  CODE=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$API/auth/accept-invite" -H 'content-type: application/json'     -d "{\"token\":\"$ITOK\",\"password\":\"$NPW\"}")
+  [[ "$CODE" == "201" ]] && pass "maya accepted the invite and chose her own password" || fail "accept got $CODE"
+  CODE=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$API/auth/accept-invite" -H 'content-type: application/json'     -d "{\"token\":\"$ITOK\",\"password\":\"$NPW\"}")
+  [[ "$CODE" == "410" ]] && pass "the same link a second time -> 410" || fail "replay got $CODE"
+  MAYA1=$(nlogin maya); MAYA2=$(nlogin maya)
+  curl -s -o /dev/null -X POST "$API/auth/logout-all" -H "Authorization: Bearer $MAYA1"
+  CODE=$(curl -s -o /dev/null -w '%{http_code}' "$API/auth/me" -H "Authorization: Bearer $MAYA2")
+  [[ "$CODE" == "401" ]] && pass "sign out everywhere: her other session is dead too" || fail "other session got $CODE"
+  SUM=$(curl -s "$API/admin/security/summary?days=1" -H "Authorization: Bearer $NADM")
+  echo "$SUM" | json "'  dashboard: ' + str(d['asks']) + ' questions, ' + str(len(d['admin_events'])) + ' admin events'"
+  [[ "$SUM" != *"acme"* ]] && pass "the dashboard shows only this company" || fail "dashboard mentions another company"
+  N=8
   curl -s -o /dev/null -X DELETE "$API/documents/$NDOC" -H "Authorization: Bearer $NADM"
   rm -rf "$TMP"
 else
-  title "(f)-(g) self-service: SKIPPED (start the API with REGISTRATION_ENABLED=true to run them)"
+  title "(f)-(h) self-service + accounts: SKIPPED (start the API with REGISTRATION_ENABLED=true to run them)"
 fi
 
 title "Result"

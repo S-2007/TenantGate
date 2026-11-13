@@ -37,6 +37,7 @@ def _claims(user, **over):  # type: ignore[no-untyped-def]
         "sub": str(user.id),
         "tenant_id": str(user.tenant_id),
         "roles": list(user.roles),
+        "tv": user.token_version,
         "iat": now,
         "exp": now + 600,
         "jti": str(uuid.uuid4()),
@@ -271,3 +272,47 @@ def test_health_and_login_are_public(client, repo):
         == 401
     )
     assert client.get("/health").status_code in (200, 503)  # public; DB may be unreachable here
+
+
+# ---------------------------------------------------------------- Phase 7: token version
+@pytest.mark.parametrize(
+    "tv,reason",
+    [
+        (None, "missing_claim"),
+        (0, "invalid_claims"),
+        ("1", "invalid_claims"),
+        (True, "invalid_claims"),
+    ],
+)
+def test_tv_claim_required_and_strict(tv, reason):
+    s = get_settings()
+    claims = _claims(make_user())
+    if tv is None:
+        claims.pop("tv")
+    else:
+        claims["tv"] = tv
+    with pytest.raises(TokenError) as e:
+        decode_access_token(jwt.encode(claims, s.jwt_secret, algorithm="HS256"), settings=s)
+    assert e.value.reason == reason
+
+
+def test_token_with_old_version_is_rejected(client, repo):
+    """A bumped token_version (logout-all / password change) kills every older token."""
+    from dataclasses import replace
+
+    user = make_user(token_version=3)
+    repo.put(user)
+    old = token_for(user, token_version=2)
+    cur = token_for(user, token_version=3)
+    assert client.get("/auth/me", headers=bearer(old)).status_code == 401
+    assert client.get("/auth/me", headers=bearer(cur)).status_code == 200
+    repo.put(replace(user, token_version=4))
+    assert client.get("/auth/me", headers=bearer(cur)).status_code == 401
+
+
+def test_login_issues_current_token_version(client, repo):
+    user = make_user(token_version=7)
+    repo.put(user)
+    r = client.post("/auth/login", json={"email": user.email, "password": PASSWORD})
+    s = get_settings()
+    assert decode_access_token(r.json()["access_token"], settings=s).tv == 7

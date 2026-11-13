@@ -125,6 +125,11 @@ class Settings(BaseSettings):
     max_documents_per_tenant: int = Field(default=200, ge=1)
     max_chunks_per_tenant: int = Field(default=20_000, ge=1)
 
+    # --- invites and sessions (Phase 7) ---
+    invite_ttl_hours: int = Field(default=72, ge=1, le=720)
+    invite_accept_rate_per_hour: int = Field(default=20, ge=1)  # per IP, preview + accept
+    password_change_rate_per_hour: int = Field(default=10, ge=1)
+
     # --- uploads (Phase 6) ---
     max_upload_mb: float = Field(default=5.0, gt=0, le=50)
     allowed_upload_types: str = "txt,md,pdf,docx"

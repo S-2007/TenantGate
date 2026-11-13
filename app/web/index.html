@@ -14,6 +14,7 @@
       <span id="who-email"></span>
       <span id="who-tenant" class="pill"></span>
       <span id="who-roles"></span>
+      <button id="account-btn" class="ghost">Account</button>
       <button id="logout" class="ghost">Log out</button>
     </div>
   </header>
@@ -36,6 +37,21 @@
         <div id="user-chips" class="chips"></div>
       </div>
       <p class="small" id="register-link-row">New company? <a href="#" id="show-register">Register your company</a></p>
+    </section>
+
+    <!-- ACCEPT INVITE (Phase 7) -->
+    <section id="invite-view" class="card narrow hidden">
+      <h1>Join your company</h1>
+      <p id="invite-info" class="muted"></p>
+      <p id="invite-bad" class="error hidden">This invite link is invalid, already used, revoked or
+        expired. Ask your admin for a new one.</p>
+      <form id="invite-form" class="hidden" autocomplete="off">
+        <label>Choose a password <input id="inv-password" type="password" required minlength="12"
+               placeholder="at least 12 characters"></label>
+        <label>Repeat it <input id="inv-password2" type="password" required minlength="12"></label>
+        <button type="submit" class="primary">Create my account</button>
+        <p id="invite-error" class="error hidden"></p>
+      </form>
     </section>
 
     <!-- REGISTER (Phase 6) -->
@@ -64,6 +80,7 @@
         <button class="tab active" data-tab="chat">Ask</button>
         <button class="tab" data-tab="docs">My documents</button>
         <button class="tab admin-only hidden" data-tab="users">Users</button>
+        <button class="tab admin-only hidden" data-tab="security">Security</button>
         <button class="tab admin-only hidden" data-tab="admin">Admin</button>
       </nav>
 
@@ -122,7 +139,21 @@
 
       <div id="tab-users" class="tabpane hidden">
         <div class="card">
-          <h2>Add a user</h2>
+          <h2>Invite a person</h2>
+          <p class="muted small">They get a one-time link and choose their own password. You never
+            see it. The link works once and expires; only a hash of it is stored.</p>
+          <form id="invite-create">
+            <div class="row"><input id="iv-email" type="email" required placeholder="new.person@yourcompany.example"></div>
+            <div id="iv-roles" class="checks"></div>
+            <button class="primary" type="submit">Create invite link</button>
+          </form>
+          <div id="iv-out"></div>
+          <table class="table"><thead><tr><th>Email</th><th>Roles</th><th>Status</th><th>Expires</th><th></th></tr></thead>
+            <tbody id="invite-rows"></tbody></table>
+        </div>
+        <div class="card">
+          <h2>Add a user with a password</h2>
+          <p class="muted small">For scripts and demos. Prefer an invite for real people.</p>
           <form id="user-form">
             <div class="row">
               <input id="nu-email" type="email" required placeholder="new.user@yourcompany.example">
@@ -137,6 +168,45 @@
           <h2>Users in your company</h2>
           <table class="table"><thead><tr><th>Email</th><th>Roles</th><th>Status</th><th></th></tr></thead>
             <tbody id="user-rows"></tbody></table>
+        </div>
+      </div>
+
+      <div id="tab-security" class="tabpane hidden">
+        <div class="card">
+          <div class="row spread">
+            <h2>Security overview</h2>
+            <select id="sec-days"><option value="1">last 24 hours</option><option value="7" selected>last 7 days</option>
+              <option value="30">last 30 days</option></select>
+          </div>
+          <p class="muted small">Computed by the database from your company's audit log only.
+            Confidential documents you can't read appear by id, never by title.</p>
+          <div id="sec-stats" class="stats"></div>
+        </div>
+        <div class="grid2">
+          <div class="card"><h3>Most-read confidential documents</h3><div id="sec-conf"></div></div>
+          <div class="card"><h3>Top readers of confidential documents</h3><div id="sec-readers"></div></div>
+          <div class="card"><h3>Refused or failed questions by user</h3><div id="sec-denied"></div></div>
+          <div class="card"><h3>Uploads per day</h3><div id="sec-uploads"></div></div>
+        </div>
+        <div class="card"><h3>Recent admin and account events</h3><div id="sec-events"></div></div>
+      </div>
+
+      <div id="tab-account" class="tabpane hidden">
+        <div class="card">
+          <h2>Change password</h2>
+          <p class="muted small">Every other signed-in browser is signed out; this one stays in.</p>
+          <form id="pw-form" autocomplete="off">
+            <label>Current password <input id="pw-current" type="password" required></label>
+            <label>New password <input id="pw-new" type="password" required minlength="12"></label>
+            <button class="primary" type="submit">Change password</button>
+            <p id="pw-out"></p>
+          </form>
+        </div>
+        <div class="card">
+          <h2>Sign out everywhere</h2>
+          <p class="muted small">Ends every session of your account, including this one, at once.
+            Use it if you signed in on a shared or lost device.</p>
+          <button id="logout-all" class="ghost danger" type="button">Sign out of all devices</button>
         </div>
       </div>
 

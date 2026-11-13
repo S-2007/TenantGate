@@ -42,9 +42,15 @@ class AclInvalid(AclChangeError):
 
 
 class AclConflict(AclChangeError):
-    """Phase 6: duplicate (23505) or a quota / cap reached (54000)."""
+    """Phase 6: duplicate (23505) or a quota / cap reached (54000). Phase 7: TG409."""
 
     status = 409
+
+
+class AclGone(AclChangeError):
+    """Phase 7: an invite that is invalid, used, revoked or expired (one uniform answer)."""
+
+    status = 410
 
 
 _SQLSTATE = {
@@ -54,11 +60,14 @@ _SQLSTATE = {
     "23514": AclInvalid,
     "23505": AclConflict,
     "54000": AclConflict,
+    "TG409": AclConflict,  # Phase 7: e.g. "a company must keep at least one active admin"
+    "TG410": AclGone,
 }
 _PUBLIC_MESSAGES = {
     AclForbidden: "admin role required",
     AclNotFound: "not found",
     AclConflict: "already exists",
+    AclGone: "invite is invalid or has expired",
 }
 
 
@@ -72,6 +81,9 @@ def _map(exc: DBAPIError, *, forbidden_detail: bool = False) -> AclChangeError:
         diag = getattr(exc.orig, "diag", None)
         msg = getattr(diag, "message_primary", None) if code == "22023" else None
         return AclInvalid(msg or "the requested ACL is not valid")
+    if code == "TG409":  # our own message, safe to show
+        diag = getattr(exc.orig, "diag", None)
+        return AclConflict(getattr(diag, "message_primary", None) or "conflict")
     if code == "54000":  # our own quota message ("document quota reached for this company")
         diag = getattr(exc.orig, "diag", None)
         return AclConflict(getattr(diag, "message_primary", None) or "quota reached")

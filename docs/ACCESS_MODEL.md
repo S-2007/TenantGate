@@ -100,3 +100,17 @@ even when the ACL excludes them. Content is never shown this way.
 - Upload: roles in `UPLOAD_ROLES` (default `admin`).
 - Replace or delete: the uploader, or an admin of the same company.
 - Everyone else, and every other company, gets 404.
+
+## Phase 7 additions
+
+**Admin audit views (D-050).** In the per-document audit endpoint and the security dashboard,
+an admin sees the *ids* of their own company's documents, including confidential ones they
+can't read, plus counts and the emails of their own company's users. Titles of unreadable
+documents and any content are never shown.
+
+**Invites (D-047).**
+- The invited person gets exactly the roles in the invite, in the inviting company.
+- `contractor` can't be invited, matching direct creation.
+
+**Sessions (D-048).** A token is valid only while its `tv` equals the user's current
+`token_version`.

@@ -130,6 +130,8 @@ def test_env_example_and_env_list_the_same_variables():
         "MAX_DOCUMENTS_PER_TENANT", "MAX_CHUNKS_PER_TENANT", "MAX_UPLOAD_MB",
         "ALLOWED_UPLOAD_TYPES", "UPLOAD_ROLES", "MAX_PDF_PAGES", "MAX_EXTRACTED_CHARS",
         "MAX_DOCX_UNCOMPRESSED_MB", "UI_ORIGIN",
+        # Phase 7
+        "INVITE_TTL_HOURS", "INVITE_ACCEPT_RATE_PER_HOUR", "PASSWORD_CHANGE_RATE_PER_HOUR",
     }  # fmt: skip
     assert names(".env.example") == expected | phase6
     if Path(".env").exists():

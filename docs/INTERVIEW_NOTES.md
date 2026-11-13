@@ -141,3 +141,40 @@ layers still hides it. `reconcile_acls --fix` deletes such chunks.
 - **Quotas.** They are counts. Storage-byte quotas and per-tenant cost accounting are next.
 
 RESULTS.md has the measured upload-to-ready latency and the 10-tenant benchmark.
+
+## Phase 7: accounts
+
+**18. Why invites instead of letting the admin set a password?**
+If the admin sets the password, the admin knows it, and it travels through chat. With an invite,
+the person chooses their own password.
+- The link carries a 256-bit token in the URL *fragment*, which browsers never send to servers
+  or in Referer headers. The database stores only its SHA-256.
+- The link is single-use, expires and can be revoked.
+- Every unusable state returns the same 410.
+- Mutation M3 lets a used link be accepted again, and the suite fails.
+
+**19. How do you log someone out everywhere with stateless JWTs?**
+- I don't keep a deny-list. Each user has a `token_version`, copied into the token as `tv`.
+- Every request already re-reads the user row for roles, so comparing the version costs
+  nothing.
+- Logout-everywhere, a password change or an admin's revoke bump the version, and every older
+  token dies on its next use. Mutation M1 removes the comparison and the suite fails.
+
+**20. Tell me about a concurrency bug you found.**
+- **The bug.** Two admins could demote each other at the same moment and leave the company with
+  zero admins. Each request passed its own check, because neither saw the other's uncommitted
+  change.
+- **How I proved it.** I reproduced it deterministically with two real transactions: the result
+  was `['ok', 'ok']` and 0 admins.
+- **The fix.** A per-tenant advisory lock, plus a "keep one active admin" check that runs after
+  the lock, so it sees the committed state. The same test now leaves exactly one admin, and the
+  mutation test proves the suite catches the old version.
+
+**21. An admin dashboard over the audit log: what can go wrong?**
+- **Cross-tenant aggregation.** It's an aggregate query, so forgetting the tenant filter leaks
+  other companies' data in totals and top-N lists. The aggregates run in one definer function
+  that reads only the bound tenant.
+- **Titles.** It can reveal titles of confidential documents the admin may not read. Those
+  appear by id only.
+- **Tests.** The suite checks every admin listing for other companies' slugs and ids. Mutation
+  M4 drops the tenant filter and the suite fails.

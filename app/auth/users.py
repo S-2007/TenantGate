@@ -22,6 +22,7 @@ class UserRecord:
     password_hash: str
     roles: tuple[str, ...]
     is_active: bool
+    token_version: int = 1  # Phase 7: must equal the token's "tv" claim
 
 
 class UserRepository(Protocol):
@@ -40,6 +41,7 @@ def _record(u: User) -> UserRecord:
         password_hash=u.password_hash,
         roles=tuple(sorted(u.roles)),
         is_active=u.is_active,
+        token_version=u.token_version,
     )
 
 

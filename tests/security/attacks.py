@@ -36,6 +36,9 @@ class HttpAttack:
     same_body_as: str | None = None  # name of another attack whose body must be identical
     files: dict | None = None  # Phase 6: multipart upload {"file": (name, bytes, ctype)}
     data: dict | None = None  # Phase 6: multipart form fields
+    # Phase 7: strings that must never appear in the response (e.g. other companies' slugs in
+    # an admin listing). A hit counts as a leak ("forbidden string").
+    forbid: tuple[str, ...] = ()
 
 
 # ---------------------------------------------------------------- /ask attack families

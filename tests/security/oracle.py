@@ -56,6 +56,13 @@ class Persona:
     # they uploaded themselves, even when the ACL doesn't let them read the content. Applies to
     # GET /documents/mine only; content and canaries stay forbidden.
     uploaded_docs: frozenset[str] = frozenset()
+    # Phase 7 policy (D-047): in audit views (per-document audit, security dashboard) an admin
+    # sees the IDS of their own company's documents, never titles or content of ones they can't
+    # read. Other companies' ids stay forbidden.
+    tenant_docs: frozenset[str] = frozenset()
+
+    def for_admin_audit_view(self) -> Persona:
+        return dataclasses.replace(self, forbidden_docs=self.forbidden_docs - self.tenant_docs)
 
     def for_own_uploads_listing(self, titles: dict[str, str]) -> Persona:
         own = self.uploaded_docs

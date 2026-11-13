@@ -75,6 +75,11 @@ class DynamicWorld:
     docs: dict[str, DynDoc]  # live documents only
     retired: list[dict]  # canaries that must no longer be retrievable by anyone
     concurrency_s: float = 0.0
+    # Phase 7: per company, invite tokens by state and their ids, and tokens that were valid
+    # once but whose sessions were revoked (logout-all, password change, admin revoke)
+    invite_tokens: dict[str, dict[str, str]] = dataclasses.field(default_factory=dict)
+    invite_ids: dict[str, dict[str, str]] = dataclasses.field(default_factory=dict)
+    stale_tokens: dict[str, dict[str, str]] = dataclasses.field(default_factory=dict)
 
 
 def _ok(r: httpx.Response, *codes: int) -> dict:
@@ -232,8 +237,59 @@ def build_dynamic_world(base_url: str) -> DynamicWorld:
                 canary=canary,
             )  # fmt: skip
     _wait_ready(c, admin_tok)
+    _phase7_accounts(c, w, admin_tok)
     c.close()
     return w
+
+
+def _login(c: httpx.Client, email: str, password: str) -> str:
+    return _ok(c.post("/auth/login", json={"email": email, "password": password}))["access_token"]
+
+
+def _phase7_accounts(c: httpx.Client, w: DynamicWorld, admin_tok: dict[str, str]) -> None:
+    """Invites in every state, an invited persona, and three kinds of revoked sessions."""
+    from app.db.session import admin_transaction
+
+    for key, _ in COMPANIES:
+        slug, ha = w.slugs[key], _h(admin_tok[key])
+
+        def inv(who: str, slug: str = slug, ha: dict = ha) -> tuple[str, str]:
+            r = _ok(c.post("/admin/invites", headers=ha,
+                           json={"email": f"{who}@{slug}.example", "roles": ["employee"]}), 201)  # fmt: skip
+            return r["invite_url"].split("#invite=", 1)[1], r["invite_id"]
+
+        tokens, ids = {}, {}
+        for state in ("used", "pending", "revoked", "expired"):
+            tokens[state], ids[state] = inv(f"invite-{state}")
+        acc = _ok(
+            c.post("/auth/accept-invite", json={"token": tokens["used"], "password": w.password}),
+            201,
+        )
+        me = _ok(c.get("/auth/me", headers=_h(acc["access_token"])))
+        w.people[f"{key}:invitee"] = (f"invite-used@{slug}.example", AuthUser(
+            id=uuid.UUID(me["id"]), tenant_id=w.tenant_ids[key], roles=frozenset({"employee"})))  # fmt: skip
+        _ok(c.delete(f"/admin/invites/{ids['revoked']}", headers=ha))
+        with admin_transaction() as s:
+            s.execute(text("UPDATE invites SET expires_at = now() - interval '1 minute' WHERE id = :i"),
+                      {"i": ids["expired"]})  # fmt: skip
+        w.invite_tokens[key], w.invite_ids[key] = tokens, ids
+
+        # revoked sessions: logout-all (emp), password change and back (eng), admin revoke (finance)
+        stale = {}
+        t = _login(c, w.people[f"{key}:emp"][0], w.password)
+        _ok(c.post("/auth/logout-all", headers=_h(t)))
+        stale["logout_all"] = t
+        t = _login(c, w.people[f"{key}:eng"][0], w.password)
+        tmp = "Tmp-" + secrets.token_urlsafe(12)
+        t2 = _ok(c.post("/auth/change-password", headers=_h(t),
+                        json={"current_password": w.password, "new_password": tmp}))["access_token"]  # fmt: skip
+        _ok(c.post("/auth/change-password", headers=_h(t2),
+                   json={"current_password": tmp, "new_password": w.password}))  # fmt: skip
+        stale["password_change"] = t
+        t = _login(c, w.people[f"{key}:finance"][0], w.password)
+        _ok(c.post(f"/admin/users/{w.people[f'{key}:finance'][1].id}/revoke-sessions", headers=ha))
+        stale["admin_revoke"] = t
+        w.stale_tokens[key] = stale
 
 
 def _wait_ready(c: httpx.Client, tokens: dict[str, str], timeout_s: float = 300) -> None:
@@ -277,6 +333,7 @@ def extend_oracle(o: Oracle, w: DynamicWorld) -> Oracle:
             password=pw,
             uploaded_docs=frozenset(d.doc_id for d in w.docs.values()
                                     if key == f"{d.tenant}:admin"),  # the builder uploads as admin
+            tenant_docs=frozenset(i for i, a in acls.items() if a.tenant_id == user.tenant_id),
         )  # fmt: skip
     return dataclasses.replace(
         o, personas=personas,
@@ -473,3 +530,101 @@ def check_integrity(w: DynamicWorld) -> list[str]:
             if any(ch in n for ch in "/\\<>\x00\u202e") or len(n) > 120:
                 problems.append(f"unsafe stored filename {n[:40]!r}")
     return problems
+
+
+# --------------------------------------------------------------------- Phase 7 account families
+def account_attacks(o: Oracle, w: DynamicWorld) -> list[HttpAttack]:
+    out: list[HttpAttack] = []
+    keys = [k for k, _ in COMPANIES]
+    other = {k: keys[(i + 1) % 3] for i, k in enumerate(keys)}
+    # (1) invite abuse: every unusable token looks the same (uniform 410)
+    first = None
+    for k in keys:
+        tok = w.invite_tokens[k]
+        for state in ("used", "revoked", "expired"):
+            for path, body in (("/auth/accept-invite", {"token": tok[state], "password": "Long-enough-pw-1"}),
+                               ("/auth/invite-preview", {"token": tok[state]})):  # fmt: skip
+                name = f"invite_{state}_{path.rsplit('/', 1)[-1]}_{k}"
+                out.append(HttpAttack("invite_abuse", name, "POST", path, None, (410,), token="none",
+                                      json=body, same_body_as=first))  # fmt: skip
+                first = first or name
+        for field_, val in (("tenant_id", str(w.tenant_ids[other[k]])), ("roles", ["admin"]),
+                            ("email", f"admin@{w.slugs[other[k]]}.example")):  # fmt: skip
+            out.append(HttpAttack("invite_abuse", f"accept_smuggle_{field_}_{k}", "POST", "/auth/accept-invite",
+                                  None, (422,), token="none",
+                                  json={"token": tok["pending"], "password": "Long-enough-pw-1", field_: val}))  # fmt: skip
+        out.append(HttpAttack("invite_abuse", f"revoke_foreign_invite_{k}", "DELETE",
+                              f"/admin/invites/{w.invite_ids[other[k]]['pending']}", f"{k}:admin", (404,)))  # fmt: skip
+        for who in ("emp", "hr", "contractor", "invitee"):
+            out.append(HttpAttack("invite_abuse", f"create_invite_as_{who}_{k}", "POST", "/admin/invites",
+                                  f"{k}:{who}", (403,), json={"email": f"z-{who}@{w.slugs[k]}.example",
+                                                              "roles": ["admin"]}))  # fmt: skip
+        out.append(HttpAttack("invite_abuse", f"invite_contractor_role_{k}", "POST", "/admin/invites",
+                              f"{k}:admin", (422,), json={"email": f"c@{w.slugs[k]}.example", "roles": ["contractor"]}))  # fmt: skip
+        out.append(HttpAttack("invite_abuse", f"list_invites_{k}", "GET", "/admin/invites", f"{k}:admin", (200,),
+                              forbid=(w.slugs[other[k]], w.slugs[other[other[k]]])))  # fmt: skip
+    for i, junk in enumerate(("A" * 43, "' OR 1=1 --" + "x" * 32, "../../" + "a" * 40)):
+        out.append(HttpAttack("invite_abuse", f"invite_random_{i}", "POST", "/auth/accept-invite", None, (410,),
+                              token="none", json={"token": junk, "password": "Long-enough-pw-1"},
+                              same_body_as=first))  # fmt: skip
+
+    # (2) revoked sessions: a token issued before logout-all / password change / admin revoke
+    for k in keys:
+        for why, tok in w.stale_tokens[k].items():
+            for method, path, body in (("GET", "/auth/me", None), ("POST", "/ask", {"question": "What is our handbook?"}),
+                                       ("GET", "/documents", None), ("GET", "/documents/mine", None)):  # fmt: skip
+                out.append(HttpAttack("session_revocation", f"stale_{why}_{path.strip('/').replace('/', '_')}_{k}",
+                                      method, path, None, (401,), token="none", json=body,
+                                      headers={"Authorization": f"Bearer {tok}"}))  # fmt: skip
+        emp_id = w.people[f"{k}:emp"][1].id
+        out.append(HttpAttack("session_revocation", f"revoke_foreign_sessions_{k}", "POST",
+                              f"/admin/users/{w.people[f'{other[k]}:emp'][1].id}/revoke-sessions", f"{k}:admin", (404,)))  # fmt: skip
+        out.append(HttpAttack("session_revocation", f"revoke_sessions_as_hr_{k}", "POST",
+                              f"/admin/users/{emp_id}/revoke-sessions", f"{k}:hr", (403,)))  # fmt: skip
+
+    # (3) last admin: the only admin can't demote or deactivate themself
+    for k in keys:
+        adm = w.people[f"{k}:admin"][1].id
+        out.append(HttpAttack("last_admin", f"self_demote_{k}", "PATCH", f"/admin/users/{adm}/roles",
+                              f"{k}:admin", (409, 422), json={"roles": ["employee"]}))  # fmt: skip
+        out.append(HttpAttack("last_admin", f"self_deactivate_{k}", "PATCH", f"/admin/users/{adm}/status",
+                              f"{k}:admin", (409, 422), json={"is_active": False}))  # fmt: skip
+        out.append(HttpAttack("last_admin", f"demote_foreign_admin_{k}", "PATCH",
+                              f"/admin/users/{w.people[f'{other[k]}:admin'][1].id}/roles", f"{k}:admin", (404,),
+                              json={"roles": ["employee"]}))  # fmt: skip
+
+    # (4) dashboard: tenant-scoped (ids of own docs only, D-047), admin only, validated input
+    # seeded tenants only (tenant_names also holds the dynamic keys after extend_oracle)
+    seed_slugs = tuple(sorted(set(o.tenant_names) - set(w.slugs)))
+    for k in keys:
+        others = tuple(w.slugs[x] for x in keys if x != k) + seed_slugs
+        for days in ("1", "7", "90"):
+            out.append(HttpAttack("dashboard_scoping", f"summary_{days}_{k}", "GET", "/admin/security/summary",
+                                  f"{k}:admin", (200,), params={"days": days}, forbid=others))  # fmt: skip
+        for who in ("hr", "emp", "invitee"):
+            out.append(HttpAttack("dashboard_scoping", f"summary_as_{who}_{k}", "GET", "/admin/security/summary",
+                                  f"{k}:{who}", (403,)))  # fmt: skip
+        for bad in ("0", "1; DROP TABLE users", "-5", "99999"):
+            out.append(HttpAttack("dashboard_scoping", f"summary_bad_days_{bad[:6]}_{k}", "GET",
+                                  "/admin/security/summary", f"{k}:admin", (422,), params={"days": bad}))  # fmt: skip
+        out.append(HttpAttack("dashboard_scoping", f"list_users_{k}", "GET", "/admin/users", f"{k}:admin", (200,),
+                              forbid=others))  # fmt: skip
+    for k in ("acme", "northwind", "lumen"):
+        out.append(HttpAttack("dashboard_scoping", f"summary_seed_{k}", "GET", "/admin/security/summary",
+                              f"{k}:admin_1", (200,), forbid=tuple(w.slugs.values())))  # fmt: skip
+    # harness self-check: a forbidden string must never be part of the caller's own identity
+    for h in out:
+        if h.forbid and h.persona:
+            own = h.persona.split(":")[0]
+            own_slug = w.slugs.get(own, own)
+            assert not any(x in own_slug or own_slug in x for x in h.forbid), (h.name, h.forbid)
+    return out
+
+
+def account_controls(w: DynamicWorld) -> list[tuple[str, str, str]]:
+    """The invited persona answers from its company's documents like anyone else."""
+    out = []
+    for key, _ in COMPANIES:
+        d = next(x for x in w.docs.values() if x.tenant == key and "Employee Handbook" in x.title)
+        out.append((f"{key}:invitee", f"{d.title}: {d.text}", d.doc_id))
+    return out

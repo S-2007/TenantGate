@@ -41,6 +41,8 @@ os.environ.update(
         "LOGIN_RATE_PER_MINUTE": "100000",
         "REGISTER_RATE_PER_HOUR": "100000",
         "UPLOAD_RATE_PER_MINUTE": "100000",
+        "INVITE_ACCEPT_RATE_PER_HOUR": "100000",
+        "PASSWORD_CHANGE_RATE_PER_HOUR": "100000",
     }
 )
 

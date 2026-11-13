@@ -42,6 +42,15 @@ def client_ip(request: Request) -> str:
     return request.client.host if request.client else "?"
 
 
+def session_still_valid(token_version_claim: int, current_version: int) -> bool:
+    """Phase 7: a token is valid only for the user's CURRENT token_version.
+
+    Bumped by "log out everywhere", a password change or an admin's "revoke sessions".
+    Kept as a named function so the mutation test can prove the suite notices its removal.
+    """
+    return token_version_claim == current_version
+
+
 def get_current_user(
     request: Request,
     creds: HTTPAuthorizationCredentials | None = Depends(_bearer),  # noqa: B008
@@ -78,6 +87,11 @@ def get_current_user(
             rec.id,
             claims.tenant_id,
             rec.tenant_id,
+        )
+        raise _UNAUTHORIZED
+    if not session_still_valid(claims.tv, rec.token_version):  # Phase 7 (logout-all etc.)
+        security_log.warning(
+            "auth_rejected reason=token_revoked user=%s path=%s", rec.id, request.url.path
         )
         raise _UNAUTHORIZED
     if set(claims.roles) != set(rec.roles):

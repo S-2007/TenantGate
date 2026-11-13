@@ -78,7 +78,11 @@ def login(
             headers={"WWW-Authenticate": "Bearer"},
         )
     token, ttl = issue_access_token(
-        user_id=rec.id, tenant_id=rec.tenant_id, roles=rec.roles, settings=get_settings()
+        user_id=rec.id,
+        tenant_id=rec.tenant_id,
+        roles=rec.roles,
+        settings=get_settings(),
+        token_version=rec.token_version,
     )
     security_log.info("login_ok user=%s tenant=%s", rec.id, rec.tenant_id)
     return TokenResponse(access_token=token, expires_in=ttl)

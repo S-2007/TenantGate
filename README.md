@@ -210,6 +210,8 @@ Measured (copied from [docs/RESULTS.md](docs/RESULTS.md)):
 | Phase 6 (self-service) | Result |
 |---|---|
 | Leak suite, seeded + 3 companies registered at test time | **631** attack queries, 25 families (10 new upload/registration families), 45 personas, 1,687 requests: **LEAKS: 0** |
+| Leak suite after Phase 7 (invites, sessions, admins, dashboard) | **769** attack queries, 29 families, 48 personas, 1,843 requests: **LEAKS: 0** |
+| Phase 7 mutation tests M1–M4 + the two-admin race | all four fail the suite; without the guard two admins demoting each other left 0 admins, with it 1 |
 | Mutation tests (i) trust form tenant_id, (ii) skip same-tenant allowed_users, (iii) ready filter off | all three make the suite fail; ready filter in any one layer alone: 0 leaks |
 | Upload → ready, p50 (laptop API, CPU embedding, Neon over WAN) | 2.1 s (2 KB txt), 6.9 s (50 KB docx), 39 s (470 KB pdf, 203 chunks) |
 | Ready → first retrieval | one /ask round trip (about 2 s) for documents that ranked in the top 5 |
@@ -222,6 +224,33 @@ Settings (all in `.env.example`): `REGISTRATION_ENABLED` (default **false**),
 `REGISTRATION_CODE`, `MAX_TENANTS`, per-company quotas, rate limits, `MAX_UPLOAD_MB`,
 `ALLOWED_UPLOAD_TYPES`, `UPLOAD_ROLES`, PDF and DOCX limits, and `UI_ORIGIN` (CORS, empty by
 default).
+
+## Accounts: invites, sessions, admins, security dashboard (Phase 7)
+
+- **Invite links instead of admin-chosen passwords** (D-047). *Users → Invite a person* creates
+  a one-time link. The person opens it, sees which company and roles, and chooses their own
+  password.
+  - The link works once, expires and can be revoked.
+  - Only a hash of it is stored.
+  - Every unusable link gets the same answer.
+- **Sign out everywhere** (D-048).
+  - *Account → Sign out of all devices* ends every session at once.
+  - A password change ends every other session.
+  - An admin can do the same for any user of their company (*Users → Sign out everywhere*).
+- **A company always keeps an admin** (D-049). Two admins demoting each other at the same
+  moment used to leave zero admins. It is now serialised in the database, and the race is
+  reproduced in a test.
+- **Security tab** (D-050): questions asked, refused requests, chunks blocked by the post-check,
+  most-read confidential documents and who read them, uploads per day, recent admin events.
+  - It covers your company only, computed by the database.
+  - Confidential documents you can't read appear by id, never by title.
+
+| Endpoint | Who |
+|---|---|
+| `POST/GET /admin/invites`, `DELETE /admin/invites/{id}` | admin |
+| `POST /auth/invite-preview`, `POST /auth/accept-invite` | the person with the link (rate-limited) |
+| `POST /auth/logout-all`, `POST /auth/change-password` | any signed-in user |
+| `POST /admin/users/{id}/revoke-sessions`, `GET /admin/security/summary?days=7` | admin |
 
 ## Design decisions
 

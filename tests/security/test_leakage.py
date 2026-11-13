@@ -16,6 +16,8 @@ import pytest
 from tests.security.attacks import ask_attacks, http_attacks, positive_controls
 from tests.security.dynamic import (
     ALL_PERSONA_FAMILIES,
+    account_attacks,
+    account_controls,
     check_integrity,
     dynamic_ask_attacks,
     dynamic_controls,
@@ -51,8 +53,8 @@ def test_no_leaks_for_any_persona_or_attack(api_server, dynamic_world):
     """Seeded tenants + companies registered at test time (Phase 6), one oracle for all."""
     w, o = dynamic_world
     asks = ask_attacks(o) + dynamic_ask_attacks(w)
-    https = http_attacks(o) + upload_attacks(o, w)
-    controls = positive_controls(o) + dynamic_controls(w)
+    https = http_attacks(o) + upload_attacks(o, w) + account_attacks(o, w)  # + Phase 7
+    controls = positive_controls(o) + dynamic_controls(w) + account_controls(w)
     upload_fams = {h.family for h in https if h.family.startswith(("upload", "registration"))}
     assert len(asks) + len(https) >= 400, len(asks) + len(https)
     assert len(upload_fams) >= 6, upload_fams

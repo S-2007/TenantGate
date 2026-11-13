@@ -81,3 +81,16 @@ button.danger { color: var(--bad); border-color: var(--bad); }
 progress { width: 100%; height: 8px; margin-top: 10px; accent-color: var(--accent); }
 .checks input:disabled + span { color: var(--muted); }
 input[type="file"] { padding: 6px; }
+
+/* Phase 7: security tab, invites */
+.row.spread { justify-content: space-between; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 10px; }
+.stat { border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+.stat .num { font-size: 26px; font-weight: 700; }
+.stat.warn .num { color: var(--warn); } .stat.ok .num { color: var(--ok); }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.grid2 .card { margin: 0; }
+.barwrap { display: flex; align-items: center; min-width: 90px; }
+.bar { display: inline-block; height: 8px; border-radius: 4px; background: var(--accent); }
+input.mono { font-family: ui-monospace, Consolas, monospace; font-size: 12.5px; flex: 3; }
+h3 { margin: 0 0 6px; font-size: 15px; }

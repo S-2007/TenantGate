@@ -1,6 +1,8 @@
 """Access tokens: short-lived HS256 JWTs (PyJWT). See docs/DECISIONS.md D-021 for RS256.
 
-Issued claims: sub (user id), tenant_id, roles, iat, exp, jti, iss, aud. ``roles`` is
+Issued claims: sub (user id), tenant_id, roles, tv (token version, Phase 7), iat, exp, jti, iss,
+aud. A token whose ``tv`` differs from the user's current ``token_version`` is rejected, which
+is how "log out everywhere", password changes and admin session revocation work. ``roles`` is
 informational only: authorization always re-reads roles from Postgres (D-022).
 
 Verification is strict and fails closed:
@@ -23,7 +25,7 @@ import jwt
 from app.config import Settings
 
 ALLOWED_ALGORITHMS = frozenset({"HS256"})
-REQUIRED_CLAIMS = ("sub", "tenant_id", "roles", "iat", "exp", "jti", "iss", "aud")
+REQUIRED_CLAIMS = ("sub", "tenant_id", "roles", "tv", "iat", "exp", "jti", "iss", "aud")
 LEEWAY_S = 10
 
 
@@ -45,6 +47,7 @@ class TokenClaims:
     jti: str
     iat: int
     exp: int
+    tv: int = 1
 
 
 def issue_access_token(
@@ -53,6 +56,7 @@ def issue_access_token(
     tenant_id: uuid.UUID,
     roles: tuple[str, ...] | list[str],
     settings: Settings,
+    token_version: int = 1,
     now: float | None = None,
 ) -> tuple[str, int]:
     """Signed token and its lifetime in seconds."""
@@ -64,6 +68,7 @@ def issue_access_token(
         "sub": str(user_id),
         "tenant_id": str(tenant_id),
         "roles": sorted(set(roles)),
+        "tv": int(token_version),
         "iat": iat,
         "exp": iat + lifetime,
         "jti": str(uuid.uuid4()),
@@ -116,6 +121,9 @@ def decode_access_token(token: str, *, settings: Settings) -> TokenClaims:
     roles = payload["roles"]
     if not isinstance(roles, list) or not all(isinstance(r, str) for r in roles):
         raise TokenError("invalid_claims")
+    tv = payload["tv"]
+    if not isinstance(tv, int) or isinstance(tv, bool) or tv < 1:
+        raise TokenError("invalid_claims")
     try:
         sub = uuid.UUID(str(payload["sub"]))
         tenant_id = uuid.UUID(str(payload["tenant_id"]))
@@ -128,4 +136,5 @@ def decode_access_token(token: str, *, settings: Settings) -> TokenClaims:
         jti=str(payload["jti"]),
         iat=int(iat),
         exp=int(payload["exp"]),
+        tv=tv,
     )

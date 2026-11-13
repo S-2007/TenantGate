@@ -886,3 +886,82 @@ MAX_CHUNKS_PER_TENANT=2000, which comes to about 280 MB.
 
 The audit table grows with every `/ask` and has no retention job yet (future work: partition by
 month, then drop or archive old partitions).
+
+## D-047 Invites instead of admin-chosen passwords (Phase 7)
+**Before.** POST /admin/users made the admin choose a new user's password. The admin then knew
+it, and it had to travel through chat or email.
+
+**Now.** The admin invites an email with roles and gets a one-time link. The person opens it
+and chooses their own password. Direct creation stays for scripts and demos.
+
+**How the link is protected.**
+- **The token.** It is 256 random bits, carried in the URL **fragment** (`/#invite=…`), which
+  browsers never send to a server or in a Referer header. The UI removes it from the address
+  bar as soon as it is read.
+- **Storage.** The database stores only its SHA-256, so a database dump doesn't contain usable
+  links.
+- **Requests.** Preview and accept are POSTs, so the token never appears in a URL the server
+  logs, and both are rate-limited per IP.
+
+**Lifetime and quota.**
+- Single-use (`used_at`), expiring (INVITE_TTL_HOURS, default 72) and revocable.
+- A new invite for the same email replaces the pending one.
+- Pending invites count against the user quota.
+
+**One answer for every unusable state.** Never existed, used, revoked and expired all return
+the same 410 body, so the link can't be probed.
+
+**Identity.** The accepted user is created in the *inviting* company, with the invite's roles.
+Extra fields (`tenant_id`, `roles`, `email`) get a 422.
+
+**Known limitation (as in D-042).** Inviting an email that already has an account anywhere
+returns 409. Emails are globally unique because login is by email, so an admin can learn that
+*some* account uses an email.
+
+## D-048 Session revocation through a token version (Phase 7)
+`users.token_version` is copied into every JWT as `tv` (now a required claim) and compared on
+every request (`session_still_valid`). These actions bump it, so every older token stops
+working on its next use:
+- "log out everywhere";
+- a password change (which also requires the current password; the new token keeps this
+  browser signed in);
+- an admin's "revoke sessions" (same tenant only).
+
+**Why not a token deny-list?** The user row is already read on every request (D-022), so this
+costs no extra query and needs no store or expiry handling. It is per user, not per token.
+
+**Migration effect.** Tokens issued before migration 0008 lack `tv` and are rejected. Users
+sign in again once, which is acceptable with 15-minute tokens.
+
+## D-049 Last-admin protection is serialised in the database (Phase 7)
+**The race.** 0006 refused only *self*-demotion. Two admins demoting each other at the same
+moment both passed their checks and left the company with **zero admins**. Mutant M2 reproduces
+this deterministically: two open transactions end `['ok', 'ok']` with 0 admins.
+
+**The fix.** `admin_set_user` takes a per-tenant advisory lock before the change. It then
+refuses (TG409 → 409) any change that would leave no active admin, counting the *committed*
+state after the lock.
+
+**Why it can only be tested as a race.** Sequentially this state is unreachable: the actor is
+always an admin, and self-demotion was already blocked. That is why the test opens two real
+transactions.
+
+## D-050 Security dashboard: aggregates computed in the database, ids not titles (Phase 7)
+`security_summary(days)` is one definer function:
+- It checks that the caller is an active admin.
+- It reads only `retrieval_audit` rows of the caller's tenant.
+- It returns aggregates: questions, refused or failed, chunks blocked by the post-check,
+  most-read confidential documents, top confidential readers, uploads per day, recent admin
+  events.
+
+**Ids, not titles.** A confidential document's **title** appears only if the admin may read it
+(`app_can_read`); otherwise only its id. This is the same information the per-document audit
+endpoint already gives.
+
+**Oracle rule.** In audit views the oracle allows an admin their own company's document *ids*
+(`Persona.for_admin_audit_view`). Other companies' ids, every title the admin can't read, and
+all content stay forbidden.
+
+**Admin listings.** The suite also checks them (users, invites, dashboard) for other companies'
+slugs. Mutant M4 removes the tenant filter, and the suite fails on another company's doc id and
+slug.

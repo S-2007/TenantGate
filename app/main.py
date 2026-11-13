@@ -195,6 +195,7 @@ def create_app() -> FastAPI:
     from app.api import router  # noqa: E402
     from app.audit.api import router as audit_router  # noqa: E402
     from app.auth.router import router as auth_router  # noqa: E402
+    from app.tenants.accounts import router as accounts_router  # noqa: E402
     from app.tenants.api import router as tenants_router  # noqa: E402
     from app.uploads.api import router as uploads_router  # noqa: E402
 
@@ -203,6 +204,7 @@ def create_app() -> FastAPI:
     app.include_router(audit_router)
     app.include_router(admin_router)
     app.include_router(tenants_router)
+    app.include_router(accounts_router)
     app.include_router(uploads_router)
 
     # Minimal web UI: static files only, no external scripts, strict CSP.

@@ -34,3 +34,15 @@ Notes:
   with a `DataTransfer` object from the page's console; the upload itself went through the
   normal form, XHR and server path.
 - The LLM answers came from the dev server's real chain (Groq `openai/gpt-oss-120b`).
+
+## Phase 7 run (2026-11-12, same setup, company "Kestrel Labs" registered in the run)
+
+| # | Step | Expected | Result |
+|---|------|----------|--------|
+| 15 | Users → Invite a person (maya, hr + employee) | Link shown once (`/#invite=<43-char token>`), invite listed as pending | pass |
+| 16 | Open the link in a fresh page load | "You were invited to Kestrel Labs as maya… (employee, hr)"; token removed from the address bar | pass |
+| 17 | Choose a password → Create my account | Signed in as maya with employee + hr; no Users / Security / Admin tabs | pass |
+| 18 | Use the same link again | 410 "invite is invalid or has expired" | pass |
+| 19 | Admin uploads an HR-only file; maya asks twice | Answers with citation ("2.4 million", "every April") | pass |
+| 20 | Admin → Security tab | 2 questions, 1 person, 0 refused, 0 blocked; the HR-only doc listed **by id** (admin isn't HR), reader maya ×2; uploads per day; events: registered → invite created → accepted → upload | pass |
+| 21 | Account → Sign out of all devices (a second "device" signed in) | Back to sign-in with a message; the other device's token: 200 before, 401 after | pass |

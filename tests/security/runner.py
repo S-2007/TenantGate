@@ -88,7 +88,7 @@ class Tokens:
         p = self.oracle.personas[key] if key else None
 
         def claims(**over):  # type: ignore[no-untyped-def]
-            base = {"sub": str(p.user.id), "tenant_id": str(p.user.tenant_id), "roles": sorted(p.user.roles),
+            base = {"sub": str(p.user.id), "tenant_id": str(p.user.tenant_id), "roles": sorted(p.user.roles), "tv": 1,
                     "iat": now, "exp": now + 600, "jti": str(uuid.uuid4()), "iss": s.jwt_issuer,
                     "aud": s.jwt_audience}  # fmt: skip
             return base | over
@@ -193,9 +193,13 @@ def run_suite(
             for m in SQL_ERROR_MARKERS
             if m in low and r.status_code != 200
         ]
+        problems += [f"forbidden string {x!r} in response" for x in atk.forbid
+                     if x.casefold() in low]  # fmt: skip
         persona = oracle.personas.get(key) if key else None
         if persona is not None and atk.path == "/documents/mine":  # uploader metadata (D-045)
             persona = persona.for_own_uploads_listing(oracle.doc_titles)
+        if persona is not None and atk.path.startswith("/admin/security/"):  # D-047
+            persona = persona.for_admin_audit_view()
         if persona is not None:
             if atk.path == "/ask" and r.status_code == 200:
                 problems += _check_ask(persona, r)
